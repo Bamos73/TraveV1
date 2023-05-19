@@ -1,0 +1,6 @@
+Api key: aep6S9Zrz8OmQ8UJWnRjvCwpz
+Api key secret: Mr7DhA7BQfskqeQvZVAZbkkFmvpPEbeugIR8mJuEJmQ9vGEdkd
+beared token AAAAAAAAAAAAAAAAAAAAAD76nAEAAAAAmOz6FcFacHrtVA4koilIa527wys%3DbDf0Pq6yfOSp2n7sp35z9rTvPpNQOEQ0gJTyCGk2mfXeaQ7HxY
+
+Cliend ID: cnpFOGtzM0R3NTV2WWhZRGQ2X1U6MTpjaQ
+Client Secret: 5AEDM5kibpXBhNd_lxxcYbwKnDuQf__Ge0kU7TWR2mDvgQKuWB

@@ -1,0 +1,9 @@
+SocialCard(
+                        icon: "assets/icons/google-icon.svg",
+                        press:() async{
+                          await FirebaseServices().signInWithGoogle();
+                          final user =UserGoogle(name: FirebaseAuth.instance.currentUser!.displayName.toString(), phonenumber: FirebaseAuth.instance.currentUser!.phoneNumber.toString(), email: '', uid: '');
+                          addUserGoogle(user);
+                          Navigator.pushNamed(context, HomeScreen.routeName);
+                        },
+                      ),

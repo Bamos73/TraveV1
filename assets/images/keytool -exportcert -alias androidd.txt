@@ -1,0 +1,3 @@
+Authentification : L'API de Twitter sera utilisée pour permettre aux utilisateurs de notre application de s'inscrire et de se connecter en utilisant leurs comptes Twitter. Les données d'authentification, telles que les jetons d'accès, seront utilisées pour valider les identités des utilisateurs.
+
+Collecte de données utilisateur : Votre application pourra également collecter des données publiques sur les utilisateurs Twitter qui se connectent à notre application, telles que leur nom, leur photo de profil . Ces données seront utilisées pour personnaliser l'expérience utilisateur dans votre application.
