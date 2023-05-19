@@ -82,8 +82,6 @@ class _CustomNavBarState extends State<CustomNavBar> {
         .collection(userId!)
         .doc(product['code'].toString());
 
-
-
     final userCardDoc = await userCardRef.get();
 
     if (userCardDoc.exists) {
@@ -112,7 +110,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
         // La taille du produit est différente de celle de la base
         await userCardCollectionRef.set({
           'userID': FirebaseAuth.instance.currentUser?.uid,
-          'code': userCardData['code']+'b',
+          'code': product['code'],
           'title': product['title'],
           'image': product['images'][0],
           'color': product['color'],
@@ -133,7 +131,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
       print("Le document n'existe pas");
       await userCardRef.set({
         'userID': FirebaseAuth.instance.currentUser?.uid,
-        'code': product['code']+'a',
+        'code': product['code'],
         'title': product['title'],
         'image': product['images'][0],
         'color': product['color'],

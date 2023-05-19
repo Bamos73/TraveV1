@@ -22,6 +22,7 @@ class MyAppState {
 
 
 class _ColorDotsState extends State<ColorDots> {
+
   // Récupère l'utilisateur actif
   User? user = FirebaseAuth.instance.currentUser;
   int selectedColor=0;

@@ -22,6 +22,8 @@ class HeaderCard extends StatefulWidget {
 class _HeaderCardState extends State<HeaderCard> {
   String dropdownValue = 'NOUVEAUTÉS'; // valeur par défaut
 
+
+
   @override
   Widget build(BuildContext context) {
     return Column(

@@ -2,17 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shopapp/components/default_button.dart';
-import 'package:shopapp/components/main_screens.dart';
 import 'package:shopapp/constants.dart';
 import 'package:shopapp/screens/cart/components/cart_empty.dart';
 import 'package:shopapp/screens/cart/components/cart_item_card.dart';
-import 'package:shopapp/screens/category/category_screen.dart';
-import 'package:shopapp/screens/details_categorie/components/filtre.dart';
+import 'package:shopapp/screens/cart/components/header_cart.dart';
 import 'package:shopapp/size_config.dart';
-
-
-
 import '../../../components/shimmer_box.dart';
 
 class Body extends StatefulWidget {
@@ -30,10 +24,7 @@ class _BodyState extends State<Body> {
         padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(15)),
         child: Column(
           children: [
-            header_card_filtre(
-              titleCenter: 'MON PANIER',
-              titleRight: 'MODIFIER',
-            ),
+            HeaderCart(),
             Divider(thickness: 1, height: 1),
             StreamBuilder(
               stream: FirebaseFirestore.instance
@@ -98,7 +89,8 @@ class _BodyState extends State<Body> {
                           cardColors: cardData['color'],
                           cardTailles: cardData['taille'],
                           cardQuantites: cardData['quantite'],
-                          cardPrices: cardData['price'],
+                          cardCodes: cardData['code'],
+                          cardPrices: cardData['price'], documentId: cardData['code'],
                         ),
                       );
                     },
