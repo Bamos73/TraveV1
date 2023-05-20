@@ -206,12 +206,12 @@ class _CardProductState extends State<CardProduct> {
                             // SizedBox(width: getProportionateScreenWidth(1)),
                             IconButton(
                               icon: Icon(
-                                widget.cardQuantites == 0 ? Icons.delete : Icons.remove,
+                                widget.cardQuantites == 1 ? Icons.delete : Icons.remove,
                                 size: getProportionateScreenWidth(20),
                                 color: kTextColor,
                               ),
                               onPressed: () {
-                                if (widget.cardQuantites == 0) {
+                                if (widget.cardQuantites == 1) {
                                   showCustomDialog(context);
                                 } else {
                                   int newQuantity = widget.cardQuantites - 1;

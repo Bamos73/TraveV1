@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopapp/components/default_button.dart';
 import 'package:shopapp/constants.dart';
+import 'package:shopapp/screens/payment/payment_screen.dart';
 import 'package:shopapp/size_config.dart';
 
 class CheckOurCard extends StatefulWidget {
@@ -113,7 +114,9 @@ class _CheckOurCardState extends State<CheckOurCard> {
                     ),
                     SizedBox(
                       width: getProportionateScreenWidth(190),
-                      child: DefaultButton(text: "Check Out", press: () {}),
+                      child: DefaultButton(text: "Check Out", press: () {
+                        nextScreenReplace(context, PaymentScreen());
+                      }),
                     )
                   ],
                 ),

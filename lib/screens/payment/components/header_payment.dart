@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopapp/components/button_close.dart';
-import '../../../size_config.dart';
+import '../../../../size_config.dart';
 
 class HeaderCart extends StatelessWidget {
   const HeaderCart({
@@ -18,7 +18,7 @@ class HeaderCart extends StatelessWidget {
               child: ButtonClose()),
         ),
         Text(
-          "MON PANIER",
+          "PAIEMENT SECURISE",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: getProportionateScreenWidth(15),
@@ -28,7 +28,7 @@ class HeaderCart extends StatelessWidget {
         Expanded(
           child: Align(
             alignment: Alignment.centerRight,
-            child: Icon(Icons.favorite,color: Color(0xFFDBDEE4),fill:null),
+            child: Icon(Icons.favorite,color: Color(0xFFDBDEE4),),
           ),
         ),
       ],

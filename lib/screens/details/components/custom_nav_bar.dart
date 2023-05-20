@@ -49,7 +49,9 @@ class _CustomNavBarState extends State<CustomNavBar> {
                       onTap: () {
                         _lastSelectedSizeIndex = index;
                         addToCard(widget.product, index);
+
                       }
+
                   ),
                   Divider(thickness: 1, height: 1),
                   // séparateur en bas de la tuile
@@ -60,6 +62,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
         ),
       );
     }
+
   }
 
   void addToCard(DocumentSnapshot<Map<String, dynamic>>? product, int index) async {
@@ -95,6 +98,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
           });
           print("quantité modifié");
         }
+        Navigator.of(context).pop();
       } else {
         /* La taille du produit est différente de celle de la base alors on creer un autre document
         * avec le nom du code */
@@ -127,6 +131,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
           print("quantité modifié");
         }
       }
+      Navigator.of(context).pop();
     } else {
       print("Le document n'existe pas");
       await userCardRef.set({
@@ -140,6 +145,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
         'taille': product['tailles'][index],
         'quantite': quantiteSelectionnee,// Ajouter la quantité contenu dans le Intent
       });
+      Navigator.of(context).pop();
     }
   }
 
@@ -155,6 +161,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
           child: DefaultButton(
             text: "AJOUTER AU PANIER",
             press: () => _showDialogTaille(widget.product),
+
           ),
         ),
       ),
