@@ -87,7 +87,19 @@ class _CardProductState extends State<CardProduct> {
                       child: TextButton(
                         child: Text('Oui',style: TextStyle(color: Colors.red,fontWeight:FontWeight.bold,fontSize: getProportionateScreenWidth(14)),),
                         onPressed: () {
-                          // Effectuer l'action de suppression ici
+                          // Action à effectuer lorsque l'icône est "Icons.delete"
+
+                          FirebaseFirestore.instance
+                              .collection('Card')
+                              .doc(FirebaseAuth.instance.currentUser?.uid)
+                              .collection(FirebaseAuth.instance.currentUser!.uid)
+                              .where('code', isEqualTo: widget.cardCodes) // Filtrez par le champ 'code'
+                              .get()
+                              .then((querySnapshot) {
+                            querySnapshot.docs.forEach((document) {
+                              document.reference.delete(); // Supprimez le document correspondant
+                            });
+                          });
                           Navigator.of(context).pop();
                         },
                       ),
