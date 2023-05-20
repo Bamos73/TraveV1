@@ -18,7 +18,7 @@ class HeaderCart extends StatelessWidget {
               child: ButtonClose()),
         ),
         Text(
-          "Mon Panier",
+          "MON PANIER",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: getProportionateScreenWidth(15),
