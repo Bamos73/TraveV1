@@ -15,31 +15,34 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        PanierPayment(),
-        Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(
-                  vertical: getProportionateScreenHeight(10),
-                horizontal: getProportionateScreenWidth(20)
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          PanierPayment(),
+          Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: getProportionateScreenHeight(10),
+                  horizontal: getProportionateScreenWidth(20)
+                ),
+                child: Text("ETAPES DE PAIEMENT",style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: getProportionateScreenHeight(14),
+                  color: Colors.black87,
+                ),),
               ),
-              child: Text("ETAPES DE PAIEMENT",style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: getProportionateScreenHeight(14),
-                color: Colors.black87,
-              ),),
-            ),
-          ],
-        ),
-        ListPaymentAdresse(),
-        Divider(height: 1,thickness: 1,),
-        ListPaymentLivraison(),
-        Divider(height: 1,thickness: 1,),
-        ListPaymentPaiement()
-      ],
+            ],
+          ),
+          ListPaymentAdresse(),
+          Divider(height: 1,thickness: 1,),
+          ListPaymentLivraison(),
+          Divider(height: 1,thickness: 1,),
+          ListPaymentPaiement(),
+
+        ],
+      ),
     );
   }
 }
