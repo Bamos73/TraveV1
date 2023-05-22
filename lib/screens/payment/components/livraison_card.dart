@@ -1,23 +1,23 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopapp/constants.dart';
 import 'package:shopapp/size_config.dart';
 
 class ListPaymentLivraison extends StatefulWidget {
   const ListPaymentLivraison({
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<ListPaymentLivraison> createState() => _ListPaymentLivraisonState();
 }
 
-
 class _ListPaymentLivraisonState extends State<ListPaymentLivraison> {
+  String _selectedOption = "";
+
   @override
   Widget build(BuildContext context) {
-    String _selectedOption="";
-
-
     return Container(
       color: Colors.white,
       height: getProportionateScreenHeight(65),
@@ -48,9 +48,8 @@ class _ListPaymentLivraisonState extends State<ListPaymentLivraison> {
                       const SizedBox(height: 5,),
                       Row(
                         children: [
-                          Text( _selectedOption == ""
-                              ?"REGULIER"
-                              :_selectedOption,
+                          Text(
+                            _selectedOption.isEmpty ? "REGULIER" : _selectedOption,
                             maxLines: 2,
                             style: TextStyle(
                               color: kTextColor,
@@ -80,8 +79,15 @@ class _ListPaymentLivraisonState extends State<ListPaymentLivraison> {
     );
   }
 
-  void showCustomDialog(BuildContext context) {
-    String _selectedOption="";
+  Future<void> showCustomDialog(BuildContext context) async {
+
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      final userCardRef = FirebaseFirestore.instance.collection('Livraison').doc('Mode_Livraison');
+      final userCardDoc = await userCardRef.get();
+      if (userCardDoc.exists) {
+        final userCardData = userCardDoc.data();
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -98,15 +104,18 @@ class _ListPaymentLivraisonState extends State<ListPaymentLivraison> {
                   'MODE DE LIVRAISON',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      fontSize: getProportionateScreenWidth(14),
-                      color: Colors.black87,
-                      fontWeight: FontWeight.bold
+                    fontSize: getProportionateScreenWidth(14),
+                    color: Colors.black87,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 SizedBox(height: getProportionateScreenHeight(10)),
-                Divider(thickness: 1,height: 1,),
+                Divider(thickness: 1, height: 1),
                 RadioListTile(
-                  title: Text("Livraison régulière"),
+                  title: Text("Livraison régulière (${userCardData!['Regulier']} FCFA)"
+                    ,style: TextStyle(
+                      fontSize: getProportionateScreenWidth(13),
+                    ),),
                   subtitle: Text('1 à 3 jours ouvrables'),
                   value: 'REGULIER',
                   groupValue: _selectedOption,
@@ -115,30 +124,42 @@ class _ListPaymentLivraisonState extends State<ListPaymentLivraison> {
                       _selectedOption = value as String;
                     });
                     Navigator.of(context).pop();
-                    print(_selectedOption);
+                    UpdateselectedOption(_selectedOption);
                   },
                 ),
                 RadioListTile(
-                  title: Text("Livraison express"),
+                  title: Text("Livraison express (${userCardData['Express']} FCFA)",
+                    style: TextStyle(
+                    fontSize: getProportionateScreenWidth(13),
+                  ),),
                   value: 'EXPRESS',
-
                   subtitle: Text('2 à 8 heures'),
                   groupValue: _selectedOption,
                   onChanged: (value) {
                     setState(() {
-                      _selectedOption=value as String;
+                      _selectedOption = value as String;
                     });
                     Navigator.of(context).pop();
-                    print(_selectedOption);
+                    UpdateselectedOption(_selectedOption);
                   },
                 ),
-
               ],
             ),
           ),
         );
       },
     );
+      }
+    }
   }
 
+  void UpdateselectedOption(String optionTake) async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      final userCardRef = FirebaseFirestore.instance.collection('users').doc(userId);
+      await userCardRef.set({
+        'mode de livraison': optionTake,
+      }, SetOptions(merge: true));
+    }
+  }
 }

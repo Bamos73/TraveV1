@@ -38,11 +38,40 @@ class _PanierPaymentState extends State<PanierPayment> {
                         ),
                       ),
                       SizedBox(width: getProportionateScreenWidth(20)),
-                      Text(
-                        "2 ARTICLE",
-                        style: TextStyle(
-                          color: kTextColor,
-                          fontSize: getProportionateScreenHeight(14),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _isListViewVisible = !_isListViewVisible;
+                          });
+                        },
+                        child: StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection('Card')
+                              .doc(FirebaseAuth.instance.currentUser?.uid)
+                              .collection(FirebaseAuth.instance.currentUser!.uid)
+                              .snapshots(),
+                          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (snapshot.hasData) {
+                              final cardDataList = snapshot.data!.docs.map((doc) => doc.data()).toList();
+                              return Text(
+                                "${cardDataList.length} ${cardDataList.length > 1
+                                    ? 'ARTICLES'
+                                    : 'ARTICLE'}",
+                                style: TextStyle(
+                                  color: kTextColor,
+                                  fontSize: getProportionateScreenHeight(14),
+                                ),
+                              );
+                            } else {
+                              return Text(
+                                "0 ARTICLE",
+                                style: TextStyle(
+                                  color: kTextColor,
+                                  fontSize: getProportionateScreenHeight(14),
+                                ),
+                              );
+                            }
+                          },
                         ),
                       ),
                     ],
@@ -67,7 +96,6 @@ class _PanierPaymentState extends State<PanierPayment> {
         Visibility(
           visible: _isListViewVisible,
           child: StreamBuilder(
-            // Replace `List<PanierItem>` with your actual stream type
             stream: FirebaseFirestore.instance
                 .collection('Card')
                 .doc(FirebaseAuth.instance.currentUser?.uid)
@@ -165,10 +193,7 @@ class _PanierPaymentState extends State<PanierPayment> {
                             ),
                           ),
                         ),
-                        Divider(
-                          height: 1,
-                          thickness: 1,
-                        ),
+                        Divider(height: 1, thickness: 1,),
                       ],
                     );
                   },

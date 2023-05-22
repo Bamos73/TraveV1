@@ -55,7 +55,7 @@ class _ColorDotsState extends State<ColorDots> {
     setState(() {
   MyAppState.nmbreArticleState = NmbreArticle;
     });
-  // Naviguez vers l'écran suivant ou appelez une autre méthode
+
   }
   }
 
