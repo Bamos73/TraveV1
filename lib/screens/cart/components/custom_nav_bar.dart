@@ -132,14 +132,21 @@ class _CheckOurCardState extends State<CheckOurCard> {
     final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId != null) {
       final userCardRefLiv = FirebaseFirestore.instance.collection('Livraison').doc('Mode_Livraison');
-      final userCardDoc = await userCardRefLiv.get();
+      final userCardDocLiv = await userCardRefLiv.get();
 
-      if (userCardDoc.exists) {
-        final userCardData = userCardDoc.data();
+
+      if (userCardDocLiv.exists) {
+        final userCardData = userCardDocLiv.data();
+        //Changement du mode de Livraison par defaut a Régulier
       final userCardRefMode = FirebaseFirestore.instance.collection('users').doc(userId);
       await userCardRefMode.set({
         'mode_de_livraison': userCardData!['Regulier'],
       }, SetOptions(merge: true));
+          //Changement du mode de paiement par defaut a Expèces
+        final userCardRefPaie = FirebaseFirestore.instance.collection('users').doc(userId);
+        await userCardRefPaie.set({
+          'mode_de_paiement': 'Espèces',
+        }, SetOptions(merge: true));
 
   }
 }

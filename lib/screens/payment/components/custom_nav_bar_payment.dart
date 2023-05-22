@@ -22,9 +22,9 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
 
   double _getContainerHeight() {
     if (_isListViewVisible) {
-      return getProportionateScreenHeight(230);
+      return getProportionateScreenHeight(195);
     } else {
-      return getProportionateScreenHeight(150);
+      return getProportionateScreenHeight(115);
     }
   }
 
