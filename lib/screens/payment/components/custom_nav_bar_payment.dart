@@ -1,7 +1,13 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:shopapp/components/default_button.dart';
+import 'package:shopapp/components/default_button_ronded.dart';
+import 'package:shopapp/components/main_screens.dart';
+import 'package:shopapp/constants.dart';
 import 'package:shopapp/size_config.dart';
 
 class CustomNavBarPayment extends StatefulWidget {
@@ -178,10 +184,10 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
                   ),
                   Divider(height: 1, thickness: 1),
                   Container(
-                    height: getProportionateScreenHeight(105),
+                    height: getProportionateScreenHeight(70),
                     width: double.infinity,
                     padding: EdgeInsets.symmetric(
-                      horizontal: getProportionateScreenWidth(20),
+                      horizontal: getProportionateScreenWidth(30),
                     ),
                     color: Colors.white,
                     child: Column(
@@ -190,34 +196,29 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              "TOTAL",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: getProportionateScreenHeight(15),
-                                color: Colors.black87,
+                            Text.rich(
+                              TextSpan(
+                                text: "Total:\n",
+                                children: [
+                                  TextSpan(
+                                    text: "${userModeLivraison+total} FCFA",
+                                    style: TextStyle(
+                                      fontSize: getProportionateScreenWidth(16),
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            Text(
-                              "${userModeLivraison+total} FCFA",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: getProportionateScreenHeight(15),
-                                color: Colors.black87,
-                              ),
+                            SizedBox(
+                              width: getProportionateScreenWidth(190),
+                              child: DefaultButton(text: "Commande", press: () {}
                             ),
+                              )
                           ],
                         ),
-                        SizedBox(height: getProportionateScreenHeight(15)),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: getProportionateScreenWidth(20),
-                          ),
-                          child: DefaultButton(
-                            text: "PASSER LA COMMANDE",
-                            press: () {},
-                          ),
-                        ),
+                        SizedBox(height: getProportionateScreenHeight(5)),
+
                       ],
                     ),
                   ),
@@ -230,3 +231,4 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
     );
   }
 }
+
