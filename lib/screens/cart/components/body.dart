@@ -45,8 +45,7 @@ class _BodyState extends State<Body> {
                 } else if (snapshot.data!.docs.isEmpty) {
                   return EmptyCart();
                 }
-                final cardDataList =
-                snapshot.data!.docs.map((doc) => doc.data()).toList();
+                final cardDataList = snapshot.data!.docs.map((doc) => doc.data()).toList();
                 return Expanded(
                   child: ListView.builder(
                     itemCount: cardDataList.length,
