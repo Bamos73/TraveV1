@@ -44,7 +44,7 @@ class ListPaymentPaiement extends StatelessWidget {
                             maxLines: 2,
                             style: TextStyle(
                               color: kTextColor,
-                              fontSize: getProportionateScreenHeight(10),
+                              fontSize: getProportionateScreenHeight(13),
                             ),
                           ),
                         ],
@@ -56,6 +56,7 @@ class ListPaymentPaiement extends StatelessWidget {
             ) ,
             GestureDetector(
               onTap: () {
+
               },
               child: Container(
                 width: getProportionateScreenWidth(80),
