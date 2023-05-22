@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shopapp/constants.dart';
+import 'package:shopapp/screens/cart/cart_screen.dart';
 import 'package:shopapp/screens/payment/components/body.dart';
 import 'package:shopapp/screens/payment/components/custom_nav_bar_payment.dart';
 import 'package:shopapp/size_config.dart';
@@ -22,7 +24,12 @@ class PaymentScreen extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        leading: Icon(Icons.arrow_back_ios, weight: 100),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            nextScreenReplace(context, CartScreen()) ;
+          },
+        ),
       ),
       body: Body(),
       bottomNavigationBar: CustomNavBarPayment(),

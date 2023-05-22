@@ -116,6 +116,7 @@ class _CheckOurCardState extends State<CheckOurCard> {
                       width: getProportionateScreenWidth(190),
                       child: DefaultButton(text: "Check Out", press: () {
                         nextScreenReplace(context, PaymentScreen());
+                        UpdateselectedOption();
                       }),
                     )
                   ],
@@ -126,5 +127,21 @@ class _CheckOurCardState extends State<CheckOurCard> {
         );
       },
     );
+  }
+  void UpdateselectedOption() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      final userCardRefLiv = FirebaseFirestore.instance.collection('Livraison').doc('Mode_Livraison');
+      final userCardDoc = await userCardRefLiv.get();
+
+      if (userCardDoc.exists) {
+        final userCardData = userCardDoc.data();
+      final userCardRefMode = FirebaseFirestore.instance.collection('users').doc(userId);
+      await userCardRefMode.set({
+        'mode_de_livraison': userCardData!['Regulier'],
+      }, SetOptions(merge: true));
+
+  }
+}
   }
 }

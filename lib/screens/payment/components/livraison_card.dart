@@ -49,7 +49,7 @@ class _ListPaymentLivraisonState extends State<ListPaymentLivraison> {
                       Row(
                         children: [
                           Text(
-                            _selectedOption.isEmpty ? "REGULIER" : _selectedOption,
+                            _selectedOption.isEmpty ? "REGULIER" : _selectedOption.toUpperCase(),
                             maxLines: 2,
                             style: TextStyle(
                               color: kTextColor,
@@ -117,14 +117,14 @@ class _ListPaymentLivraisonState extends State<ListPaymentLivraison> {
                       fontSize: getProportionateScreenWidth(13),
                     ),),
                   subtitle: Text('1 à 3 jours ouvrables'),
-                  value: 'REGULIER',
+                  value: 'Regulier',
                   groupValue: _selectedOption,
                   onChanged: (value) {
                     setState(() {
                       _selectedOption = value as String;
                     });
                     Navigator.of(context).pop();
-                    UpdateselectedOption(_selectedOption);
+                    UpdateselectedOption(userCardData['Regulier']);
                   },
                 ),
                 RadioListTile(
@@ -132,7 +132,7 @@ class _ListPaymentLivraisonState extends State<ListPaymentLivraison> {
                     style: TextStyle(
                     fontSize: getProportionateScreenWidth(13),
                   ),),
-                  value: 'EXPRESS',
+                  value: 'Express',
                   subtitle: Text('2 à 8 heures'),
                   groupValue: _selectedOption,
                   onChanged: (value) {
@@ -140,7 +140,7 @@ class _ListPaymentLivraisonState extends State<ListPaymentLivraison> {
                       _selectedOption = value as String;
                     });
                     Navigator.of(context).pop();
-                    UpdateselectedOption(_selectedOption);
+                    UpdateselectedOption(userCardData['Express']);
                   },
                 ),
               ],
@@ -153,12 +153,12 @@ class _ListPaymentLivraisonState extends State<ListPaymentLivraison> {
     }
   }
 
-  void UpdateselectedOption(String optionTake) async {
+  void UpdateselectedOption(int optionTake) async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId != null) {
       final userCardRef = FirebaseFirestore.instance.collection('users').doc(userId);
       await userCardRef.set({
-        'mode de livraison': optionTake,
+        'mode_de_livraison': optionTake,
       }, SetOptions(merge: true));
     }
   }
