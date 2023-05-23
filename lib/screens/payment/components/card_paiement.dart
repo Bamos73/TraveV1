@@ -91,7 +91,10 @@ class _ListPaymentPaiementState extends State<ListPaymentPaiement> {
               borderRadius: BorderRadius.circular(15),
             ),
             child: Container(
-              padding: EdgeInsets.all(15),
+              padding: EdgeInsets.symmetric(
+                horizontal: getProportionateScreenWidth(1),
+                vertical: getProportionateScreenHeight(10),
+              ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -129,6 +132,7 @@ class _ListPaymentPaiementState extends State<ListPaymentPaiement> {
                       height: 30,
                     ),
                   ),
+                  Divider(thickness: 1, height: 1),
                   RadioListTile(
                     title: Text(
                       "MTN Money",

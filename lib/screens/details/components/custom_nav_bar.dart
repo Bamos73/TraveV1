@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -49,9 +48,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
                       onTap: () {
                         _lastSelectedSizeIndex = index;
                         addToCard(widget.product, index);
-
                       }
-
                   ),
                   Divider(thickness: 1, height: 1),
                   // séparateur en bas de la tuile

@@ -96,7 +96,10 @@ class _ListPaymentLivraisonState extends State<ListPaymentLivraison> {
             borderRadius: BorderRadius.circular(15),
           ),
           child: Container(
-            padding: EdgeInsets.all(15),
+            padding: EdgeInsets.symmetric(
+              horizontal: getProportionateScreenWidth(1),
+              vertical: getProportionateScreenHeight(10),
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -127,6 +130,7 @@ class _ListPaymentLivraisonState extends State<ListPaymentLivraison> {
                     UpdateselectedOption(userCardData['Regulier']);
                   },
                 ),
+                Divider(thickness: 1, height: 1),
                 RadioListTile(
                   title: Text("Livraison express (${userCardData['Express']} FCFA)",
                     style: TextStyle(

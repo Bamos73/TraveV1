@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopapp/constants.dart';
 import 'package:shopapp/screens/complete_profile/complete_profile_screen.dart';
+import 'package:shopapp/screens/payment/components/adresse_list_livraison.dart';
 import 'package:shopapp/screens/sign_up/sign_up_screen.dart';
 import 'package:shopapp/size_config.dart';
 
@@ -55,7 +56,7 @@ class ListPaymentAdresse extends StatelessWidget {
             ) ,
             GestureDetector(
               onTap: () {
-                nextScreenReplace(context, CompleteProfileScreen());
+                nextScreenReplace(context, AdresseLivraison());
               },
               child: Text("MODIFIER",style: TextStyle(
                 fontSize: getProportionateScreenHeight(13),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:shopapp/screens/payment/components/adresse_card.dart';
-import 'package:shopapp/screens/payment/components/livraison_card.dart';
-import 'package:shopapp/screens/payment/components/number_card.dart';
-import 'package:shopapp/screens/payment/components/paiement_card.dart';
-import 'package:shopapp/screens/payment/components/panier_card.dart';
+import 'package:shopapp/screens/payment/components/card_adresse.dart';
+import 'package:shopapp/screens/payment/components/card_livraison.dart';
+import 'package:shopapp/screens/payment/components/card_number.dart';
+import 'package:shopapp/screens/payment/components/card_paiement.dart';
+import 'package:shopapp/screens/payment/components/card_panier.dart';
 import 'package:shopapp/size_config.dart';
 
 class Body extends StatefulWidget {

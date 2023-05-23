@@ -1,13 +1,8 @@
-import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:shopapp/components/default_button.dart';
-import 'package:shopapp/components/default_button_ronded.dart';
-import 'package:shopapp/components/main_screens.dart';
-import 'package:shopapp/constants.dart';
+
 import 'package:shopapp/size_config.dart';
 
 class CustomNavBarPayment extends StatefulWidget {
@@ -19,12 +14,13 @@ class CustomNavBarPayment extends StatefulWidget {
 
 class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
   bool _isListViewVisible = false;
+  String uid = FirebaseAuth.instance.currentUser?.uid ?? '';
 
   double _getContainerHeight() {
     if (_isListViewVisible) {
-      return getProportionateScreenHeight(195);
+      return getProportionateScreenHeight(197);
     } else {
-      return getProportionateScreenHeight(115);
+      return getProportionateScreenHeight(117);
     }
   }
 
@@ -33,8 +29,8 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('Card')
-          .doc(FirebaseAuth.instance.currentUser?.uid)
-          .collection(FirebaseAuth.instance.currentUser!.uid)
+          .doc(uid)
+          .collection(uid)
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) {

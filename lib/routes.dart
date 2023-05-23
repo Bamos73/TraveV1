@@ -13,6 +13,7 @@ import 'package:shopapp/screens/home/home_screen.dart';
 import 'package:shopapp/screens/login_success/login_success_screen.dart';
 import 'package:shopapp/screens/my_account/my_account_screen.dart';
 import 'package:shopapp/screens/otp/otp_screen.dart';
+import 'package:shopapp/screens/payment/components/adresse_list_livraison.dart';
 import 'package:shopapp/screens/payment/payment_screen.dart';
 import 'package:shopapp/screens/profil/profil_screen.dart';
 import 'package:shopapp/screens/sign_in/sign_in_screen.dart';
@@ -39,5 +40,7 @@ final Map<String, WidgetBuilder> routes = {
         DetailCtgScreen.routeName:(context) => DetailCtgScreen(),
         FiltresScreen.routeName:(context) => FiltresScreen(),
         PaymentScreen.routeName:(context) => PaymentScreen(),
+        AdresseLivraison.routeName:(context) => AdresseLivraison(),
+        AdresseLivraison.routeName:(context) => AdresseLivraison(),
 
 };

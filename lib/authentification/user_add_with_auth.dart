@@ -28,7 +28,7 @@ class UserAuth {
       'Lastname': lastname,
       'Phonenumber': phonenumber,
       'Address': address,
-      'Email': email,
+      'email': email,
       'UID': uid,
     };
   }
@@ -41,7 +41,7 @@ class UserAuth {
       lastname: json['Lastname'],
       phonenumber: json['Phonenumber'],
       address: json['Address'],
-      email: json['Email'],
+      email: json['email'],
       uid: json['UID'],
     );
   }
@@ -56,8 +56,7 @@ Future addUser(UserAuth user) async {
     user.email = currentUser.email!;
     user.uid=currentUser.uid;
 
-    final docUser = FirebaseFirestore.instance.collection("users").doc();
-    user.id = docUser.id;
+    final docUser = FirebaseFirestore.instance.collection("users").doc(user.uid);
 
     await docUser.set(user.toJson());
   }
@@ -72,11 +71,11 @@ Future updateUser(UserAuth user) async {
 
     final snapshot = await FirebaseFirestore.instance
         .collection("users")
-        .where("Email", isEqualTo: currentUser.email)
+        .where("uid", isEqualTo: currentUser.uid)
         .get();
-    final docId = snapshot.docs[0].id;
+
     final docUser =
-    FirebaseFirestore.instance.collection("users").doc(docId);
+    FirebaseFirestore.instance.collection("users").doc(user.uid);
 
     await docUser.update(user.toJson());
   }
