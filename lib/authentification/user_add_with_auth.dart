@@ -84,3 +84,5 @@ Future updateUser(UserAuth user) async {
   Future <void> updateUserRecord(UserAuth user) async{
       await FirebaseFirestore.instance.collection("users").doc(user.id);
   }
+
+
