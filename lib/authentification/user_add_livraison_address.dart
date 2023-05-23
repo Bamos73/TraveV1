@@ -3,35 +3,33 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserAuth {
-  late String nom;
-  late String prenom;
-  late String phonenumber;
-  late String commune;
-  late String quartier;
+   String nom;
+   String prenom;
+   String phonenumber;
+   String commune;
+   String quartier;
   String code;
 
 
   UserAuth({
     this.code = '',
-    required this.nom,
-    required this.prenom,
-    required this.phonenumber,
-    required this.commune,
-    required this.quartier,
+    this.nom = '',
+     this.prenom = '',
+     this.phonenumber = '',
+     this.commune = '',
+     this.quartier = '',
 
   });
 
   // conversion les objets en collection FireBase
   Map<String, dynamic> toJson() {
     return {
-
       'Nom': nom,
       'Prenom': prenom,
-      'Numero': phonenumber,
+      'numero_de_livraison': phonenumber,
       'Commune': commune,
       'Quartier': quartier,
       'Code': code,
-
     };
   }
 
@@ -40,7 +38,7 @@ class UserAuth {
     return UserAuth(
       nom: json['Nom'],
       prenom: json['Prenom'],
-      phonenumber: json['Numero'],
+      phonenumber: json['numero_de_livraison'],
       commune:  json['Commune'],
       quartier:  json['Quartier'],
       code: json['Code'],
@@ -81,6 +79,22 @@ Future<void> addUser(UserAuth user) async {
     await setNbr(nbr); // Sauvegarder la nouvelle valeur de Nbr
   }
 }
+
+// Sauvegarder la nouvelle valeur du numero de livraison
+Future<void> addUserNumber(UserAuth user) async {
+  final currentUser = FirebaseAuth.instance.currentUser?.uid;
+  if (currentUser != null) {
+    final docUser = FirebaseFirestore.instance
+        .collection("users")
+        .doc(currentUser);
+
+    await docUser.set(user.toJson(), SetOptions(merge: true));
+
+  }
+}
+
+
+
 //modifier les données de l'utilisateur dans la page My Account
 
 Future updateUser(UserAuth user) async {

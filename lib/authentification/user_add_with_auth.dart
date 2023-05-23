@@ -29,7 +29,7 @@ class UserAuth {
       'Phonenumber': phonenumber,
       'Address': address,
       'email': email,
-      'UID': uid,
+      'uid': uid,
     };
   }
 
@@ -42,7 +42,7 @@ class UserAuth {
       phonenumber: json['Phonenumber'],
       address: json['Address'],
       email: json['email'],
-      uid: json['UID'],
+      uid: json['uid'],
     );
   }
 

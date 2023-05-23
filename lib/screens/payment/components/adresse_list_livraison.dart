@@ -70,9 +70,8 @@ class _AdresseLivraisonState extends State<AdresseLivraison> {
             return Center(child: Text('Erreur de chargement des adresses.'));
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return Container();
           }
-
           List<Address> addresses = snapshot.data!.docs.map((doc) {
             Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
             return Address(
@@ -109,7 +108,7 @@ class _AdresseLivraisonState extends State<AdresseLivraison> {
                             fontSize: getProportionateScreenWidth(13),
                           ),
                         ),
-                        value: address.code,
+                        value: "${address.commune}, ${address.quartier}",
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -117,12 +116,13 @@ class _AdresseLivraisonState extends State<AdresseLivraison> {
                             Text(address.numero),
                           ],
                         ),
-                        secondary: Text("MODIFIER"),
+                        secondary: Icon(Icons.delete_forever),
                         groupValue: _selectedOption,
                         onChanged: (value) {
                           setState(() {
                             _selectedOption = value as String;
                           });
+                          UpdateselectedOption(_selectedOption,address.numero);
                           nextScreenReplace(context, PaymentScreen());
                         },
                       ),
@@ -149,5 +149,16 @@ class _AdresseLivraisonState extends State<AdresseLivraison> {
         ),
       ),
     );
+  }
+
+  void UpdateselectedOption(String optionTake,numero) async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      final userCardRef = FirebaseFirestore.instance.collection('users').doc(userId);
+      await userCardRef.set({
+        'adresse_de_livraison': optionTake,
+        'numero_de_livraison': numero,
+      }, SetOptions(merge: true));
+    }
   }
 }

@@ -137,11 +137,15 @@ class _CheckOurCardState extends State<CheckOurCard> {
 
       if (userCardDocLiv.exists) {
         final userCardData = userCardDocLiv.data();
+
         //Changement du mode de Livraison par defaut a Régulier
       final userCardRefMode = FirebaseFirestore.instance.collection('users').doc(userId);
       await userCardRefMode.set({
-        'mode_de_livraison': userCardData!['Regulier'],
+        'frais_de_livraison': userCardData!['Regulier'],
       }, SetOptions(merge: true));
+
+
+
           //Changement du mode de paiement par defaut a Expèces
         final userCardRefPaie = FirebaseFirestore.instance.collection('users').doc(userId);
         await userCardRefPaie.set({

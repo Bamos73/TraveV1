@@ -88,6 +88,7 @@ class _ListPaymentLivraisonState extends State<ListPaymentLivraison> {
       if (userCardDoc.exists) {
         final userCardData = userCardDoc.data();
 
+    // ignore: use_build_context_synchronously
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -162,7 +163,7 @@ class _ListPaymentLivraisonState extends State<ListPaymentLivraison> {
     if (userId != null) {
       final userCardRef = FirebaseFirestore.instance.collection('users').doc(userId);
       await userCardRef.set({
-        'mode_de_livraison': optionTake,
+        'frais_de_livraison': optionTake,
       }, SetOptions(merge: true));
     }
   }

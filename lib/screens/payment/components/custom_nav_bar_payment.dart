@@ -34,16 +34,12 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) {
-          return Container();
+            return Container();
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return Container();
         } else if (snapshot.data!.docs.isEmpty) {
-          return Container(
-            height: 0,
-            width: 0,
-          );
+          return Container();
         }
-
         final docs = snapshot.data!.docs;
         num total = 0;
         // Calculer la somme des prix
@@ -69,9 +65,12 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
                 ConnectionState.waiting) {
               return Container();
             }
+            else if (!userSnapshot.data!.exists || userSnapshot.data!.get('frais_de_livraison') == null) {
+              return Container();
+            }
 
             final userModeLivraison =
-                userSnapshot.data?.get('mode_de_livraison') as int? ?? 1000;
+                userSnapshot.data?.get('frais_de_livraison') as int? ?? 1000;
 
             return Container(
               height: _getContainerHeight(),
