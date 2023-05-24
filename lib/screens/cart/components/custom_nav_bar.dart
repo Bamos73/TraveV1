@@ -130,7 +130,7 @@ class _CheckOurCardState extends State<CheckOurCard> {
                   ],
                 ),
                 SizedBox(height: getProportionateScreenHeight(20),),
-                buildAnimatedContainer(),
+                buildAnimatedContainer(total),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -165,20 +165,20 @@ class _CheckOurCardState extends State<CheckOurCard> {
     );
   }
 
-  AnimatedContainer buildAnimatedContainer() {
+  AnimatedContainer buildAnimatedContainer(num total) {
     return AnimatedContainer(
                 duration: Duration(seconds: 3),
                 width: _showContainer ? double.infinity : 0,
-                height: _showContainer ? getProportionateScreenHeight(100) : 0,
+                height: _showContainer ? getProportionateScreenHeight(140) : 0,
                 // color: Colors.redAccent,
                 child: Form(
                   key: _formKey,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Expanded(
@@ -208,8 +208,9 @@ class _CheckOurCardState extends State<CheckOurCard> {
                           SizedBox(width: 20,),
                           GestureDetector(
                             onTap: () {
+
                               if (_formKey.currentState!.validate()) {
-                                print('code ajouté');
+                                verifyPromoCode(_ctrcodepromo.text.trim(),total);
                               }
                             },
                               child: Text("AJOUTER"),
@@ -217,12 +218,7 @@ class _CheckOurCardState extends State<CheckOurCard> {
                         ],
                       ),
                       SizedBox(height: 5,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          FormError(errors: errors),
-                        ],
-                      ),
+                      FormError(errors: errors),
                     ],
                   ),
                 ),
@@ -255,6 +251,80 @@ class _CheckOurCardState extends State<CheckOurCard> {
         }
       }
         }
+
+  void verifyPromoCode(String promoCode, num total) async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+
+
+    // Get the promo code data from Firestore
+    final promoCodeData = await FirebaseFirestore.instance
+        .collection('CodesPromo')
+        .doc(promoCode)
+        .get();
+
+    final promolistRef = await FirebaseFirestore.instance
+        .collection('CodesPromo')
+        .doc(promoCode)
+        .collection('list_user')
+        .doc(userId)
+        .get();
+
+    final promoCodeDate = promoCodeData['date_limite'];
+
+    // Check if the promo code is valid
+    if (!promoCodeData.exists) {
+      // Promo code is not valid
+      addError(error: "Promo code is not valid");
+      return;
+    }else{
+      removeError(error: "Promo code is not valid");
+    }
+
+
+    // Check if the promo code is still active
+    if (promoCodeData['Actif']==false) {
+      // Promo code is not active
+      addError(error: "Promo code is not active");
+      return;
+    }else{
+      removeError(error: "Promo code is not active");
+    }
+
+
+    // Check if the promo code date has not passed
+    if (!promoCodeDate.toDate().isAfter(DateTime.now())) {
+      // Promo code date has passed
+      addError(error: "Promo code date has passed");
+      return;
+    }else{
+      removeError(error: "Promo code date has passed");
+    }
+
+
+    if (promoCodeData['minimum_achat']>total) {
+      // miminum d'achat
+      addError(error: "Le montant minimum d'achat pour utiliser \nce code promo est de ${promoCodeData['minimum_achat']} FCFA");
+      return;
+    }else{
+      removeError(error: "Le montant minimum d'achat pour utiliser \nce code promo est de ${promoCodeData['minimum_achat']} FCFA");
+    }
+
+
+    if (promolistRef.exists) {
+      addError(error: "coupon code already used");
+      return;
+    }else{
+      removeError(error: "coupon code already used");
+    }
+
+    print('code ajouté');
+
+    // Apply the promo code
+    // ...
+  }
+}
+
 
 
 }
