@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopapp/components/default_button.dart';
+import 'package:shopapp/components/form_error.dart';
 import 'package:shopapp/constants.dart';
 import 'package:shopapp/size_config.dart';
 
@@ -9,8 +10,8 @@ import '../../../authentification/user_add_livraison_address.dart';
 
 class ListPaymentNumber extends StatefulWidget {
   const ListPaymentNumber({
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<ListPaymentNumber> createState() => _ListPaymentNumberState();
@@ -18,6 +19,24 @@ class ListPaymentNumber extends StatefulWidget {
 
 class _ListPaymentNumberState extends State<ListPaymentNumber> {
   final _ctrphonenumber = TextEditingController();
+  final List<String?> errors = [];
+  final _formKey = GlobalKey<FormState>();
+
+  void addError({required String error}) {
+    if (!errors.contains(error)) {
+      setState(() {
+        errors.add(error);
+      });
+    }
+  }
+
+  void removeError({required String error}) {
+    if (errors.contains(error)) {
+      setState(() {
+        errors.remove(error);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +50,7 @@ class _ListPaymentNumberState extends State<ListPaymentNumber> {
           children: [
             Row(
               children: [
-                Icon(Icons.check_circle,size: getProportionateScreenWidth(18),),
+                Icon(Icons.check_circle, size: getProportionateScreenWidth(18)),
                 SizedBox(width: getProportionateScreenWidth(12)),
                 Container(
                   width: getProportionateScreenWidth(180),
@@ -41,14 +60,17 @@ class _ListPaymentNumberState extends State<ListPaymentNumber> {
                     children: [
                       Row(
                         children: [
-                          Text("NUMERO DE TELEPHONE",style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: getProportionateScreenHeight(14),
-                            color: Colors.black87,
-                          ),),
+                          Text(
+                            "NUMERO DE TELEPHONE",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: getProportionateScreenHeight(14),
+                              color: Colors.black87,
+                            ),
+                          ),
                         ],
                       ),
-                      SizedBox(height: 5,),
+                      SizedBox(height: 5),
                       Row(
                         children: [
                           StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
@@ -56,7 +78,8 @@ class _ListPaymentNumberState extends State<ListPaymentNumber> {
                                 .collection('users')
                                 .doc(FirebaseAuth.instance.currentUser!.uid)
                                 .snapshots(),
-                            builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> userSnapshot) {
+                            builder: (BuildContext context,
+                                AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> userSnapshot) {
                               if (!userSnapshot.hasData) {
                                 return Container();
                               } else if (userSnapshot.connectionState == ConnectionState.waiting) {
@@ -64,7 +87,8 @@ class _ListPaymentNumberState extends State<ListPaymentNumber> {
                               }
 
                               final userDoc = userSnapshot.data!;
-                              if (!userDoc.exists || !userDoc.data()!.containsKey('numero_de_livraison')) {
+                              if (!userDoc.exists ||
+                                  !userDoc.data()!.containsKey('numero_de_livraison')) {
                                 return Text(
                                   'Veuillez ajouter un numero.',
                                   maxLines: 2,
@@ -92,16 +116,18 @@ class _ListPaymentNumberState extends State<ListPaymentNumber> {
                   ),
                 ),
               ],
-            ) ,
+            ),
             GestureDetector(
               onTap: () {
                 showCustomDialog(context);
               },
-              child: Text("MODIFIER",
+              child: Text(
+                "MODIFIER",
                 style: TextStyle(
-                fontSize: getProportionateScreenHeight(13),
-                color: Colors.black87,
-              ),),
+                  fontSize: getProportionateScreenHeight(13),
+                  color: Colors.black87,
+                ),
+              ),
             ),
           ],
         ),
@@ -110,7 +136,6 @@ class _ListPaymentNumberState extends State<ListPaymentNumber> {
   }
 
   Future<void> showCustomDialog(BuildContext context) async {
-
     final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId != null) {
       final userCardRef = FirebaseFirestore.instance.collection('Livraison').doc('Mode_Livraison');
@@ -131,34 +156,42 @@ class _ListPaymentNumberState extends State<ListPaymentNumber> {
                   horizontal: getProportionateScreenWidth(1),
                   vertical: getProportionateScreenHeight(10),
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'NUMERO DE TELEPHONE',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: getProportionateScreenWidth(14),
-                        color: Colors.black87,
-                        fontWeight: FontWeight.bold,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'NUMERO DE TELEPHONE',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: getProportionateScreenWidth(14),
+                          color: Colors.black87,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: getProportionateScreenHeight(30)),
-                    buildNumber(),
-                    SizedBox(height: getProportionateScreenHeight(30)),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(50)),
-                      child: DefaultButton(text: "Modifier", press: (){
+                      SizedBox(height: getProportionateScreenHeight(30)),
+                      buildNumber(),
+                      SizedBox(height: getProportionateScreenHeight(30)),
+                      FormError(errors: errors),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(50)),
+                        child: DefaultButton(
+                          text: "Modifier",
+                          press: () {
 
-                        final user = UserAuth(
-                          phonenumber: _ctrphonenumber.text.trim(),
-                        );
-                        addUserNumber(user);
-                        Navigator.of(context).pop();
-                      }),
-                    ),
-
-                  ],
+                            if (_formKey.currentState!.validate()) {
+                              final user = UserNum(
+                                phonenumber: _ctrphonenumber.text.trim(),
+                              );
+                              addUserNumber(user);
+                              Navigator.of(context).pop();
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );
@@ -168,19 +201,31 @@ class _ListPaymentNumberState extends State<ListPaymentNumber> {
     }
   }
 
-
-
   Padding buildNumber() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
       child: TextFormField(
         controller: _ctrphonenumber,
         keyboardType: TextInputType.number,
+        onChanged: (value) {
+          if (value.isNotEmpty) {
+            removeError(error: kPhoneNumberNullError);
+          } else {
+            addError(error: kPhoneNumberNullError);
+          }
+        },
+        validator: (value) {
+          if (value!.isEmpty) {
+            addError(error: kPhoneNumberNullError);
+            return "";
+          }
+          return null;
+        },
         decoration: const InputDecoration(
           labelText: "Numéro",
-          hintText: "Entrer votre numero de téléphone",
+          hintText: "Entrer votre numéro de téléphone",
           floatingLabelBehavior: FloatingLabelBehavior.always,
-          suffixIcon: Icon(Icons.call),
+          suffixIcon: Icon(Icons.call,color: kPrimaryColor,),
         ),
       ),
     );

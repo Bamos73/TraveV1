@@ -80,18 +80,7 @@ Future<void> addUser(UserAuth user) async {
   }
 }
 
-// Sauvegarder la nouvelle valeur du numero de livraison
-Future<void> addUserNumber(UserAuth user) async {
-  final currentUser = FirebaseAuth.instance.currentUser?.uid;
-  if (currentUser != null) {
-    final docUser = FirebaseFirestore.instance
-        .collection("users")
-        .doc(currentUser);
 
-    await docUser.set(user.toJson(), SetOptions(merge: true));
-
-  }
-}
 
 
 
@@ -118,5 +107,47 @@ Future updateUser(UserAuth user) async {
     final currentUser = FirebaseAuth.instance.currentUser?.uid;
       await FirebaseFirestore.instance.collection("users").doc(currentUser);
   }
+
+
+
+
+
+
+class UserNum {
+
+  String phonenumber;
+
+  UserNum({
+    this.phonenumber = '',
+  });
+
+  // conversion les objets en collection FireBase
+  Map<String, dynamic> toJson() {
+    return {
+      'numero_de_livraison': phonenumber,
+    };
+  }
+
+  // conversion la collection FireBase en objet
+  factory UserNum.fromJson(Map<String, dynamic> json) {
+    return UserNum(
+      phonenumber: json['numero_de_livraison'],
+    );
+  }
+
+}
+
+
+// Sauvegarder la nouvelle valeur du numero de livraison
+Future<void> addUserNumber(UserNum user) async {
+  final currentUser = FirebaseAuth.instance.currentUser?.uid;
+  if (currentUser != null) {
+    final docUser = FirebaseFirestore.instance
+        .collection("users")
+        .doc(currentUser);
+    await docUser.set(user.toJson(), SetOptions(merge: true));
+
+  }
+}
 
 

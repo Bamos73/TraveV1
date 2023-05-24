@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopapp/components/default_button.dart';
+import 'package:shopapp/components/form_error.dart';
 import 'package:shopapp/constants.dart';
 import 'package:shopapp/screens/payment/payment_screen.dart';
 import 'package:shopapp/size_config.dart';
@@ -17,6 +18,28 @@ class CheckOurCard extends StatefulWidget {
 }
 
 class _CheckOurCardState extends State<CheckOurCard> {
+  bool _showContainer = false;
+  final List<String?> errors = [];
+  final _formKey = GlobalKey<FormState>();
+  final _ctrcodepromo = TextEditingController();
+
+  void addError({required String error}) {
+    if (!errors.contains(error)) {
+      setState(() {
+        errors.add(error);
+      });
+    }
+  }
+
+  void removeError({required String error}) {
+    if (errors.contains(error)) {
+      setState(() {
+        errors.remove(error);
+      });
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -83,18 +106,31 @@ class _CheckOurCardState extends State<CheckOurCard> {
                       child: SvgPicture.asset("assets/icons/receipt.svg",color: kPrimaryColor,),
                     ),
                     Spacer(),
-                    Text("Ajouter un code promo"),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _showContainer = true;
+                        });
+                      },
+                      child: _showContainer == true
+                          ? GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _showContainer = false;
+                              });
+                            },
+                            child: Icon(Icons.close,color: kPrimaryColor,size: 30,))
+                          : Text("Ajouter un code promo")
+                      ,
+                    ),
                     const SizedBox(width: 10),
-                    Icon(
-                      Icons.arrow_forward_ios,
-                      size: 12,
-                      color: kTextColor,
-                    )
+                    _showContainer == true
+                        ? Text("")
+                        :Icon(Icons.arrow_forward_ios, size: 12, color: kTextColor,)
                   ],
                 ),
-                SizedBox(
-                  height: getProportionateScreenHeight(20),
-                ),
+                SizedBox(height: getProportionateScreenHeight(20),),
+                buildAnimatedContainer(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -114,7 +150,7 @@ class _CheckOurCardState extends State<CheckOurCard> {
                     ),
                     SizedBox(
                       width: getProportionateScreenWidth(190),
-                      child: DefaultButton(text: "Check Out", press: () {
+                      child: DefaultButton(text: "Caisse", press: () {
                         nextScreenReplace(context, PaymentScreen());
                         UpdateselectedOption();
                       }),
@@ -127,6 +163,70 @@ class _CheckOurCardState extends State<CheckOurCard> {
         );
       },
     );
+  }
+
+  AnimatedContainer buildAnimatedContainer() {
+    return AnimatedContainer(
+                duration: Duration(seconds: 3),
+                width: _showContainer ? double.infinity : 0,
+                height: _showContainer ? getProportionateScreenHeight(100) : 0,
+                // color: Colors.redAccent,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: _ctrcodepromo,
+                              onChanged: (value) {
+                                if (value.isNotEmpty) {
+                                  removeError(error: "Veuillez saisir le code");
+                                } else {
+                                  addError(error: "Veuillez saisir le code");
+                                }
+                              },
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  addError(error: "Veuillez saisir le code");
+                                  return "Erreur";
+                                }
+                                return null;
+                              },
+                              decoration: const InputDecoration(
+                                hintText: "CODE PROMO",
+                                floatingLabelBehavior: FloatingLabelBehavior.always,
+                                  contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20)
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 20,),
+                          GestureDetector(
+                            onTap: () {
+                              if (_formKey.currentState!.validate()) {
+                                print('code ajouté');
+                              }
+                            },
+                              child: Text("AJOUTER"),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 5,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          FormError(errors: errors),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              );
   }
   void UpdateselectedOption() async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
@@ -152,7 +252,9 @@ class _CheckOurCardState extends State<CheckOurCard> {
           'mode_de_paiement': 'Espèces',
         }, SetOptions(merge: true));
 
-  }
-}
-  }
+        }
+      }
+        }
+
+
 }

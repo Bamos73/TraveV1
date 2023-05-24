@@ -24,6 +24,24 @@ class _CustomNavBarState extends State<CustomNavBar> {
   int _lastSelectedSizeIndex = -1;
   User? user = FirebaseAuth.instance.currentUser;
 
+  @override
+  Widget build(BuildContext context) {
+    return BottomAppBar(
+      color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(45)),
+          height: getProportionateScreenHeight(40),
+          child: DefaultButton(
+            text: "AJOUTER AU PANIER",
+            press: () => _showDialogTaille(widget.product),
+
+          ),
+        ),
+      ),
+    );
+  }
   void _showDialogTaille(DocumentSnapshot<Map<String, dynamic>>? product) async{
     if (product != null) {
       slideDialog.showSlideDialog(
@@ -66,7 +84,6 @@ class _CustomNavBarState extends State<CustomNavBar> {
     if (product == null) {
       return;
     }
-
     final userId = user?.uid;
     // Utilisez la valeur de quantiteSelectionnee comme vous le souhaitez
     int quantiteSelectionnee = MyAppState.nmbreArticleState;
@@ -144,25 +161,6 @@ class _CustomNavBarState extends State<CustomNavBar> {
       });
       Navigator.of(context).pop();
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomAppBar(
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(45)),
-          height: getProportionateScreenHeight(40),
-          child: DefaultButton(
-            text: "AJOUTER AU PANIER",
-            press: () => _showDialogTaille(widget.product),
-
-          ),
-        ),
-      ),
-    );
   }
 }
 

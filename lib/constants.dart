@@ -57,6 +57,8 @@ const String kWrongEmailOrPassError = "Adresse e-mail ou mot de passe incorrect"
 const String kEmailNotExistError = "Vous n'avez pas de compte avec cette adresse e-mail";
 const String kTooManyRequestError = "L'utilisateur a été désactivé en raison de trop de tentatives de connexion échouées.";
 
+
+
 final otpInputDecoration = InputDecoration(
   contentPadding:
       EdgeInsets.symmetric(vertical: getProportionateScreenWidth(15)),

@@ -34,7 +34,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) {
-            return Container();
+          return Container();
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return Container();
         } else if (snapshot.data!.docs.isEmpty) {
@@ -65,7 +65,8 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
                 ConnectionState.waiting) {
               return Container();
             }
-            else if (!userSnapshot.data!.exists || userSnapshot.data!.get('frais_de_livraison') == null) {
+            else if (!userSnapshot.data!.exists ||
+                userSnapshot.data!.get('frais_de_livraison') == null) {
               return Container();
             }
 
@@ -196,7 +197,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
                                 text: "Total:\n",
                                 children: [
                                   TextSpan(
-                                    text: "${userModeLivraison+total} FCFA",
+                                    text: "${userModeLivraison + total} FCFA",
                                     style: TextStyle(
                                       fontSize: getProportionateScreenWidth(16),
                                       color: Colors.black,
@@ -207,13 +208,15 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
                             ),
                             SizedBox(
                               width: getProportionateScreenWidth(190),
-                              child: DefaultButton(text: "Commande", press: () {}
-                            ),
-                              )
+                              child: DefaultButton(
+                                  text: "Commande", press: () {
+                                addToOrder();
+                              }
+                              ),
+                            )
                           ],
                         ),
                         SizedBox(height: getProportionateScreenHeight(5)),
-
                       ],
                     ),
                   ),
@@ -225,5 +228,66 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
       },
     );
   }
+
+  void addToOrder() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      final userOrderRef = FirebaseFirestore.instance
+          .collection('Order')
+          .doc(userId);
+
+      final userCardRef = FirebaseFirestore.instance
+          .collection('Card')
+          .doc(userId)
+          .collection(userId);
+
+      final userRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId);
+
+      final userOrderDoc = await userOrderRef.get();
+      if (userOrderDoc.exists) {
+        final userOrderData = userOrderDoc.data();
+        print("l'utilisateur as une commande");
+    }else{
+        print("l'utilisateur n'as pas de commande");
+
+        final userDoc = await userRef.get();
+        //On verifie si uid de l'utilisateur est dans la collection users
+        if (userDoc.exists) {
+          final userData = userDoc.data();
+          //on verifie si le champs uid existe dans la collection users
+          if (userData != null && userData['uid'] == userId)  {
+            //on verifie si le champs nom et prenom existe dans la collection users
+            if (userData['adresse_de_livraison'] !=null && userData['nom_de_livraison'] !=null)  {
+              //on verifie si numero est ajouté
+              if (userData['numero_de_livraison'] !=null )  {
+                //on verifie s'il y'a des commandes dans le panier
+                final userCardSnapshot = await userCardRef.get();
+                if (userCardSnapshot.docs.isNotEmpty) {
+                  print('enregistrement de la commande');
+                }else{
+                  print('le panier est vide');
+                }
+
+              }else{
+                print('veuillez ajouter un numero de telephone');
+              }
+
+            }else{
+              print('veuillez choisir ou ajouter une adresse de livraison');
+            }
+          }
+
+        }else{
+          print('l\'utilisateur n\'a pas de compte');
+        }
+
+
+      }
+
+      }
+    }
+
 }
 

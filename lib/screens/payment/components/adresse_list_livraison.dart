@@ -143,7 +143,7 @@ class _AdresseLivraisonState extends State<AdresseLivraison> {
                           setState(() {
                             _selectedOption = value as String;
                           });
-                          UpdateselectedOption(_selectedOption, address.numero as String);
+                          UpdateselectedOption(_selectedOption, address.numero as String,address.nom as String,address.prenom as String);
                           nextScreenReplace(context, PaymentScreen());
                         },
                       ),
@@ -172,13 +172,14 @@ class _AdresseLivraisonState extends State<AdresseLivraison> {
     );
   }
 
-  void UpdateselectedOption(String optionTake,String numero) async {
+  void UpdateselectedOption(String optionTake,String numero,String nom,String prenom) async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId != null) {
       final userCardRef = FirebaseFirestore.instance.collection('users').doc(userId);
       await userCardRef.set({
         'adresse_de_livraison': optionTake,
         'numero_de_livraison': numero,
+        'nom_de_livraison': '$nom $prenom',
       }, SetOptions(merge: true));
     }
   }
@@ -238,7 +239,6 @@ class _AdresseLivraisonState extends State<AdresseLivraison> {
                               .doc(documentId) // Utilisez le documentId pour spécifier le document à supprimer
                               .delete()
                               .then((_) {
-                            print('Document supprimé avec succès!');
                           }).catchError((error) {
                             print('Erreur lors de la suppression du document: $error');
                           });
