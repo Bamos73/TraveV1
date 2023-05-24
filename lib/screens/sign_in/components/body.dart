@@ -34,27 +34,20 @@ class _BodyState extends State<Body> {
             child: Column(
               children: [
                 SizedBox(
-                  height: SizeConfig.screenHeight * 0.06,
+                  height: SizeConfig.screenHeight * 0.01,
                 ),
-                Text(
-                  "Bienvenue",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: getProportionateScreenWidth(28),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SvgPicture.asset(
-                  'assets/icons/logo_svg_white.svg',
-                  width: 50,
-                  height: 50,
+
+                Image.asset(
+                  "assets/images/1.png",
+                  width: getProportionateScreenWidth(150),
+                  height: getProportionateScreenWidth(150),
                 ),
                 const Text(
                   "Connectez-vous avec votre adresse e-mail et votre mot de passe ou continuez avec les réseaux sociaux",
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(
-                  height: SizeConfig.screenHeight * 0.07,
+                  height: SizeConfig.screenHeight * 0.05,
                 ),
                 const SignForm(),
                 SizedBox(
@@ -116,7 +109,7 @@ class _BodyState extends State<Body> {
     await ip.checkInternetConnection();
 //***************verifie si l'utilisateur est connecté a internet//
     if (ip.hasInternet == false) {
-      openSnackbar(context, "Check your Internet connection", Colors.red);
+      openSnackbar(context, "Vérifiez votre connection internet", Colors.red);
     } else {
       await sp.signInWithGoogle().then((value) {
         if (sp.hasError == true) {
@@ -156,7 +149,7 @@ class _BodyState extends State<Body> {
 //***************verifie si l'utilisateur est connecté a internet//
 
     if (ip.hasInternet == false) {
-      openSnackbar(context, "Check your Internet connection", Colors.red);
+      openSnackbar(context, "Vérifiez votre connection internet", Colors.red);
     } else {
       await sp.signInWithFacebook().then((value) {
         if (sp.hasError == true) {
@@ -192,7 +185,7 @@ class _BodyState extends State<Body> {
     await ip.checkInternetConnection();
 
     if (ip.hasInternet == false) {
-      openSnackbar(context, "Check your Internet connection", Colors.red);
+      openSnackbar(context, "Vérifiez votre connection internet", Colors.red);
     } else {
       await sp.signInWithTwitter().then((value) {
         if (sp.hasError == true) {

@@ -26,6 +26,7 @@ class _SignFormState extends State<SignForm> {
   late String email;
   late String password = '';
   bool? remember = false;
+  bool isPasswordVisible = false;
   final List<String?> errors = [];
 
   void addError({required String error}) {
@@ -66,13 +67,13 @@ class _SignFormState extends State<SignForm> {
                   });
                 },
               ),
-              Text("Remember me"),
+              Text("Se souvenir de moi"),
               Spacer(),
               GestureDetector(
                 onTap: () => Navigator.pushNamed(
                     context, ForgotPasswordScreen.routeName),
-                child: Text(
-                  "Forgot Password",
+                child: const Text(
+                  "Mot de passe oublié",
                   style: TextStyle(
                     decoration: TextDecoration.underline,
                   ),
@@ -81,7 +82,7 @@ class _SignFormState extends State<SignForm> {
             ],
           ),
           DefaultButton(
-            text: "Continue",
+            text: "Continuer",
             press: () async {
               // internet provider
               final ip = context.read<InternetProvider>();
@@ -95,7 +96,7 @@ class _SignFormState extends State<SignForm> {
                   elevation: 0,
                   content: AwesomeSnackbarContent(
                     title: 'Oh Hey!!',
-                    message: "Check your Internet connection",
+                    message: "Vérifiez votre connection internet",
                     contentType: ContentType.failure,
                     messageFontSize: getProportionateScreenWidth(15),
                   ),
@@ -150,7 +151,7 @@ class _SignFormState extends State<SignForm> {
 
   TextFormField buildPasswordFormField() {
     return TextFormField(
-      obscureText: true,
+      obscureText: !isPasswordVisible,
       onSaved: (newValue) => password = newValue ?? '',
       onChanged: (value) {
         if (value.isNotEmpty) {
@@ -167,11 +168,26 @@ class _SignFormState extends State<SignForm> {
         return null;
       },
       decoration: InputDecoration(
-        labelText: "Password",
-        hintText: "Enter your password",
+        labelText: "mot de passe",
+        hintText: "Entrer votre mot de passe",
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: CustomSurffixIcon(
-          svgIcon: "assets/icons/Lock.svg",
+        suffixIcon: GestureDetector(
+          onTap: () {
+            setState(() {
+              isPasswordVisible = !isPasswordVisible;
+            });
+          },
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(0,
+              getProportionateScreenWidth(20),
+              getProportionateScreenWidth(20),
+              getProportionateScreenWidth(20),
+            ),
+            child: Icon(
+              isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+              color: kPrimaryColor,
+            ),
+          ),
         ),
       ),
     );
@@ -196,9 +212,9 @@ class _SignFormState extends State<SignForm> {
         }
         return null;
       },
-      decoration: InputDecoration(
-        labelText: "Email",
-        hintText: "Enter your email",
+      decoration: const InputDecoration(
+        labelText: "E-mail",
+        hintText: "Entrer votre email",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSurffixIcon(
           svgIcon: "assets/icons/Mail.svg",

@@ -24,6 +24,8 @@ class _SignUpFormState extends State<SignUpForm> {
   late String email;
   late String password = '';
   late String conform_password;
+  bool isPasswordVisible = false;
+  bool isConfPasswordVisible = false;
 
   final List<String> errors = [];
 
@@ -84,7 +86,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
   TextFormField buildPasswordFormField() {
     return TextFormField(
-      obscureText: true,
+      obscureText: isPasswordVisible,
       onSaved: (newValue) => password = newValue ?? '',
       onChanged: (value) {
         if (value.isNotEmpty) {
@@ -110,20 +112,36 @@ class _SignUpFormState extends State<SignUpForm> {
         }
         return null;
       },
-      decoration: const InputDecoration(
-        labelText: "Password",
-        hintText: "Enter your password",
+      decoration: InputDecoration(
+        labelText: "Mot de passe",
+        hintText: "Tapez votre mot de passe",
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: CustomSurffixIcon(
-          svgIcon: "assets/icons/Lock.svg",
+        suffixIcon: GestureDetector(
+          onTap: () {
+            setState(() {
+              isPasswordVisible = !isPasswordVisible;
+            });
+          },
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(0,
+              getProportionateScreenWidth(20),
+              getProportionateScreenWidth(20),
+              getProportionateScreenWidth(20),
+            ),
+            child: Icon(
+              isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+              color: kPrimaryColor,
+            ),
+          ),
         ),
       ),
     );
   }
 
+
   TextFormField buildConfPasswordFormField() {
     return TextFormField(
-      obscureText: true,
+      obscureText: isConfPasswordVisible,
       onSaved: (newValue) => conform_password = newValue ?? '',
       onChanged: (value) {
         if (password == value) {
@@ -141,15 +159,31 @@ class _SignUpFormState extends State<SignUpForm> {
         return null;
       },
       decoration: InputDecoration(
-        labelText: "Confirm Password",
-        hintText: "Re-enter your password",
+        labelText: "Confirmer le mot de passe",
+        hintText: "Retapez votre mot de passe",
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: CustomSurffixIcon(
-          svgIcon: "assets/icons/Lock.svg",
+        suffixIcon: GestureDetector(
+          onTap: () {
+            setState(() {
+              isConfPasswordVisible = !isConfPasswordVisible;
+            });
+          },
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(0,
+              getProportionateScreenWidth(20),
+              getProportionateScreenWidth(20),
+              getProportionateScreenWidth(20),
+            ),
+            child: Icon(
+              isConfPasswordVisible ? Icons.visibility : Icons.visibility_off,
+              color: kPrimaryColor,
+            ),
+          ),
         ),
       ),
     );
   }
+
 
   TextFormField buildEmailFormField() {
     return TextFormField(
@@ -174,8 +208,8 @@ class _SignUpFormState extends State<SignUpForm> {
         return null;
       },
       decoration: InputDecoration(
-        labelText: "Email",
-        hintText: "Enter your email",
+        labelText: "E-mail",
+        hintText: "Entrer votre email",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSurffixIcon(
           svgIcon: "assets/icons/Mail.svg",
