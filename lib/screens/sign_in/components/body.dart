@@ -45,7 +45,7 @@ class _BodyState extends State<Body> {
                   ),
                 ),
                 SvgPicture.asset(
-                  'assets/icons/Location point.svg',
+                  'assets/icons/logo_svg_white.svg',
                   width: 50,
                   height: 50,
                 ),
