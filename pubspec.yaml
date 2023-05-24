@@ -59,7 +59,11 @@ dependencies:
   slide_popup_dialog_null_safety: ^1.0.0
   firebase_performance: ^0.9.2+1
   firebase_crashlytics: ^3.3.1
+  flutter_native_splash: ^2.2.19
 
+flutter_native_splash:
+  color: '#ffffff'
+  image: assets/logo.png
 
 dev_dependencies:
   flutter_test:

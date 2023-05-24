@@ -32,87 +32,7 @@ class CardProduct extends StatefulWidget {
 }
 
 class _CardProductState extends State<CardProduct> {
-  void updateQuantity(int newQuantity) {
-    FirebaseFirestore.instance
-        .collection('Card')
-        .doc(FirebaseAuth.instance.currentUser?.uid)
-        .collection(FirebaseAuth.instance.currentUser!.uid)
-        .doc(widget.documentId)
-        .update({'quantite': newQuantity})
-        .then((value) {
-      print('Quantity updated successfully!');
-    }).catchError((error) {
-      print('Failed to update quantity: $error');
-    });
-  }
 
-  void showCustomDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Container(
-            padding: EdgeInsets.all(15),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Voulez-vous vraiment supprimer cet article sélectionné ?',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: getProportionateScreenWidth(14)),
-                ),
-                SizedBox(height: getProportionateScreenHeight(15)),
-                Divider(thickness: 1,height: 1),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: TextButton(
-                        child: Text('Non',style: TextStyle(color: Color(0xFF858585),fontWeight:FontWeight.bold,fontSize: getProportionateScreenWidth(14)),),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ),
-                    Container(
-                      width: 1,
-                      height: 25,
-                      color: Color(0xFF858585),
-                      margin: EdgeInsets.symmetric(horizontal: 10),
-                    ),
-                    Expanded(
-                      child: TextButton(
-                        child: Text('Oui',style: TextStyle(color: Colors.red,fontWeight:FontWeight.bold,fontSize: getProportionateScreenWidth(14)),),
-                        onPressed: () {
-                          // Action à effectuer lorsque l'icône est "Icons.delete"
-
-                          FirebaseFirestore.instance
-                              .collection('Card')
-                              .doc(FirebaseAuth.instance.currentUser?.uid)
-                              .collection(FirebaseAuth.instance.currentUser!.uid)
-                              .where('code', isEqualTo: widget.cardCodes) // Filtrez par le champ 'code'
-                              .get()
-                              .then((querySnapshot) {
-                            querySnapshot.docs.forEach((document) {
-                              document.reference.delete(); // Supprimez le document correspondant
-                            });
-                          });
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -235,4 +155,90 @@ class _CardProductState extends State<CardProduct> {
       ),
     );
   }
+
+
+
+  void updateQuantity(int newQuantity) {
+    FirebaseFirestore.instance
+        .collection('Card')
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .collection(FirebaseAuth.instance.currentUser!.uid)
+        .doc(widget.documentId)
+        .update({'quantite': newQuantity})
+        .then((value) {
+      print('Quantity updated successfully!');
+    }).catchError((error) {
+      print('Failed to update quantity: $error');
+    });
+  }
+
+  void showCustomDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Container(
+            padding: EdgeInsets.all(15),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Voulez-vous vraiment supprimer cet article sélectionné ?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: getProportionateScreenWidth(14)),
+                ),
+                SizedBox(height: getProportionateScreenHeight(15)),
+                Divider(thickness: 1,height: 1),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                        child: Text('Non',style: TextStyle(color: Color(0xFF858585),fontWeight:FontWeight.bold,fontSize: getProportionateScreenWidth(14)),),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                    Container(
+                      width: 1,
+                      height: 25,
+                      color: Color(0xFF858585),
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                    ),
+                    Expanded(
+                      child: TextButton(
+                        child: Text('Oui',style: TextStyle(color: Colors.red,fontWeight:FontWeight.bold,fontSize: getProportionateScreenWidth(14)),),
+                        onPressed: () {
+                          // Action à effectuer lorsque l'icône est "Icons.delete"
+
+                          FirebaseFirestore.instance
+                              .collection('Card')
+                              .doc(FirebaseAuth.instance.currentUser?.uid)
+                              .collection(FirebaseAuth.instance.currentUser!.uid)
+                              .where('code', isEqualTo: widget.cardCodes) // Filtrez par le champ 'code'
+                              .get()
+                              .then((querySnapshot) {
+                            querySnapshot.docs.forEach((document) {
+                              document.reference.delete(); // Supprimez le document correspondant
+                            });
+                          });
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
 }

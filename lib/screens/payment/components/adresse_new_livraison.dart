@@ -156,14 +156,14 @@ class _NewAdresseState extends State<NewAdresse> {
         controller: _ctrlastname,
         onChanged: (value) {
           if (value.isNotEmpty) {
-            removeError(error: kNamelNullError);
+            removeError(error: kLastNamelNullError);
           } else {
-            addError(error: kNamelNullError);
+            addError(error: kLastNamelNullError);
           }
         },
         validator: (value) {
           if (value!.isEmpty) {
-            addError(error: kNamelNullError);
+            addError(error: kLastNamelNullError);
             return "";
           }
           return null;
@@ -185,14 +185,14 @@ class _NewAdresseState extends State<NewAdresse> {
         controller: _ctrcommune,
         onChanged: (value) {
           if (value.isNotEmpty) {
-            removeError(error: kNamelNullError);
+            removeError(error: kCommuneNullError);
           } else {
-            addError(error: kNamelNullError);
+            addError(error: kCommuneNullError);
           }
         },
         validator: (value) {
           if (value!.isEmpty) {
-            addError(error: kNamelNullError);
+            addError(error: kCommuneNullError);
             return "";
           }
           return null;
@@ -213,14 +213,14 @@ class _NewAdresseState extends State<NewAdresse> {
         controller: _ctrquartier,
         onChanged: (value) {
           if (value.isNotEmpty) {
-            removeError(error: kNamelNullError);
+            removeError(error: kQuartierNullError);
           } else {
-            addError(error: kNamelNullError);
+            addError(error: kQuartierNullError);
           }
         },
         validator: (value) {
           if (value!.isEmpty) {
-            addError(error: kNamelNullError);
+            addError(error: kQuartierNullError);
             return "";
           }
           return null;
@@ -242,14 +242,14 @@ class _NewAdresseState extends State<NewAdresse> {
         keyboardType: TextInputType.number,
         onChanged: (value) {
           if (value.isNotEmpty) {
-            removeError(error: kNamelNullError);
+            removeError(error: kPhoneNumberNullError);
           } else {
-            addError(error: kNamelNullError);
+            addError(error: kPhoneNumberNullError);
           }
         },
         validator: (value) {
           if (value!.isEmpty) {
-            addError(error: kNamelNullError);
+            addError(error: kPhoneNumberNullError);
             return "";
           }
           return null;

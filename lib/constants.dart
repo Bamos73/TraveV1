@@ -36,24 +36,26 @@ bool isPasswordValid(String password) {
   RegExp regExp = new RegExp(pattern);
   return regExp.hasMatch(password);
 }
-
 final RegExp emailValidatorRegExp =
-    RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-const String kEmailNullError = "Please Enter your email";
-const String kInvalidEmailError = "Please Enter Valid Email";
-const String kPassNullError = "Please Enter your password";
-const String kShortPassError = "Password is too short";
+RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+const String kEmailNullError = "Veuillez saisir votre adresse e-mail";
+const String kInvalidEmailError = "Veuillez saisir une adresse e-mail valide";
+const String kPassNullError = "Veuillez saisir votre mot de passe";
+const String kShortPassError = "Le mot de passe est trop court";
 const String kNotStrongPassError =
-    "must contain an uppercase letter,\na lowercase letter and a number";
+    "doit contenir une lettre majuscule, une lettre minuscule et un chiffre";
 const String kEmailExistPassError =
-    "The account already exists for that email.";
-const String kMatchPassError = "Passwords don't match";
-const String kNamelNullError = "Please Enter your name";
-const String kPhoneNumberNullError = "Please Enter your phone number";
-const String kAddressNullError = "Please Enter your address";
-const String kWrongEmailOrPassError = "incorrect email address or password";
-const String kEmailNotExistError = "you do not have an account with \nthis email address";
-const String kTooManyRequestError = "the user has been disabled due to\ntoo many failed login attempts.";
+    "Ce compte existe déjà avec cette adresse e-mail.";
+const String kMatchPassError = "Les mots de passe ne correspondent pas";
+const String kNamelNullError = "Veuillez saisir votre nom";
+const String kLastNamelNullError = "Veuillez saisir votre prenom";
+const String kPhoneNumberNullError = "Veuillez saisir votre numéro de téléphone";
+const String kAddressNullError = "Veuillez saisir votre adresse";
+const String kCommuneNullError = "Veuillez saisir votre commune";
+const String kQuartierNullError = "Veuillez saisir votre quartier";
+const String kWrongEmailOrPassError = "Adresse e-mail ou mot de passe incorrect";
+const String kEmailNotExistError = "Vous n'avez pas de compte avec cette adresse e-mail";
+const String kTooManyRequestError = "L'utilisateur a été désactivé en raison de trop de tentatives de connexion échouées.";
 
 final otpInputDecoration = InputDecoration(
   contentPadding:

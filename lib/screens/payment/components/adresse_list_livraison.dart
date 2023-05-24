@@ -73,16 +73,30 @@ class _AdresseLivraisonState extends State<AdresseLivraison> {
             return Container();
           }
           List<Address> addresses = snapshot.data!.docs.map((doc) {
-            Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-            return Address(
-              commune: data['Commune'],
-              quartier: data['Quartier'],
-              nom: data['Nom'],
-              prenom: data['Prenom'],
-              numero: data['Numero'],
-              code: data['Code'],
-            );
+            Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
+            if (data != null) {
+              return Address(
+                commune: data['Commune'] ?? '',
+                quartier: data['Quartier'] ?? '',
+                nom: data['Nom'] ?? '',
+                prenom: data['Prenom'] ?? '',
+                numero: data['numero_de_livraison'] ?? '',
+                code: data['Code'] ?? '',
+              );
+            } else {
+              // Gérer le cas où les données sont nulles ou ne contiennent pas les champs attendus
+              // Vous pouvez retourner une valeur par défaut ou afficher un message d'erreur approprié
+              return Address(
+                commune: '',
+                quartier: '',
+                nom: '',
+                prenom: '',
+                numero: '',
+                code: '',
+              );
+            }
           }).toList();
+
 
           if (addresses.isEmpty) {
             return Center(
@@ -116,13 +130,20 @@ class _AdresseLivraisonState extends State<AdresseLivraison> {
                             Text(address.numero),
                           ],
                         ),
-                        secondary: Icon(Icons.delete_forever),
+                        secondary: GestureDetector(
+                          onTap: () {
+                            if (snapshot.hasData) {
+                              showCustomDialog(context, snapshot.data!.docs[index].id);
+                            }
+                          },
+                          child: Icon(Icons.delete_forever),
+                        ),
                         groupValue: _selectedOption,
                         onChanged: (value) {
                           setState(() {
                             _selectedOption = value as String;
                           });
-                          UpdateselectedOption(_selectedOption,address.numero);
+                          UpdateselectedOption(_selectedOption, address.numero as String);
                           nextScreenReplace(context, PaymentScreen());
                         },
                       ),
@@ -151,7 +172,7 @@ class _AdresseLivraisonState extends State<AdresseLivraison> {
     );
   }
 
-  void UpdateselectedOption(String optionTake,numero) async {
+  void UpdateselectedOption(String optionTake,String numero) async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId != null) {
       final userCardRef = FirebaseFirestore.instance.collection('users').doc(userId);
@@ -160,5 +181,78 @@ class _AdresseLivraisonState extends State<AdresseLivraison> {
         'numero_de_livraison': numero,
       }, SetOptions(merge: true));
     }
+  }
+
+  void showCustomDialog(BuildContext context, String documentId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Container(
+            padding: EdgeInsets.all(15),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Voulez-vous vraiment supprimer cette adresse ?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: getProportionateScreenWidth(14)),
+                ),
+                SizedBox(height: getProportionateScreenHeight(15)),
+                Divider(thickness: 1,height: 1),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                        child: Text('Non',style: TextStyle(color: Color(0xFF858585),fontWeight:FontWeight.bold,fontSize: getProportionateScreenWidth(14)),),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                    Container(
+                      width: 1,
+                      height: 25,
+                      color: Color(0xFF858585),
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                    ),
+                    Expanded(
+                      child: TextButton(
+                        child: Text(
+                          'Oui',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                            fontSize: getProportionateScreenWidth(14),
+                          ),
+                        ),
+                        onPressed: () {
+                          FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(FirebaseAuth.instance.currentUser?.uid)
+                              .collection('adresse_livraison')
+                              .doc(documentId) // Utilisez le documentId pour spécifier le document à supprimer
+                              .delete()
+                              .then((_) {
+                            print('Document supprimé avec succès!');
+                          }).catchError((error) {
+                            print('Erreur lors de la suppression du document: $error');
+                          });
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }

@@ -81,8 +81,6 @@ class Body extends StatelessWidget {
             SizedBox(height: SizeConfig.screenHeight * 0.005,),
             Puce(puce: "Personnaliser l'expérience utilisateur ;",),
             SizedBox(height: SizeConfig.screenHeight * 0.005,),
-            Puce(puce: "Publier du contenu sur Twitter (avec l'autorisation de l'utilisateur) ;",),
-            SizedBox(height: SizeConfig.screenHeight * 0.005,),
             Puce(puce: "Analyser les données d'utilisation pour améliorer l'expérience utilisateur et optimiser les performances de l'application ;",),
             SizedBox(height: SizeConfig.screenHeight * 0.005,),
             Puce(puce: "Proposer des offres promotionnelles ou des publicités ciblées en fonction des préférences de l'utilisateur.",),
