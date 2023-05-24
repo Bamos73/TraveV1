@@ -34,12 +34,11 @@ class _BodyState extends State<Body> {
             child: Column(
               children: [
                 SizedBox(
-                  height: SizeConfig.screenHeight * 0.01,
+                  height: SizeConfig.screenHeight * 0.002,
                 ),
 
-                Image.asset(
-                  "assets/images/1.png",
-                  width: getProportionateScreenWidth(150),
+                SvgPicture.asset(
+                  "assets/icons/logo_svg.svg",
                   height: getProportionateScreenWidth(150),
                 ),
                 const Text(
