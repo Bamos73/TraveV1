@@ -58,10 +58,7 @@ class _CheckOurCardState extends State<CheckOurCard> {
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return Container();
         } else if (snapshot.data!.docs.isEmpty) {
-          return Container(
-            height: 0,
-            width: 0,
-          );
+          return Container();
         }
 
         final docs = snapshot.data!.docs;
@@ -177,7 +174,6 @@ class _CheckOurCardState extends State<CheckOurCard> {
                 duration: Duration(seconds: 2),
                 width: _showContainer ? double.infinity : 0,
                 height: _showContainer ? getProportionateScreenHeight(150) : 0,
-                // color: Colors.redAccent,
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -214,8 +210,7 @@ class _CheckOurCardState extends State<CheckOurCard> {
                           SizedBox(width: 20,),
                           GestureDetector(
                             onTap: () {
-                              removeerror(MyAppState.CodeReductionPrecedent,total);
-
+                              removeerror();
                               if (_formKey.currentState!.validate()) {
 
                                 setState(() {
@@ -300,8 +295,6 @@ class _CheckOurCardState extends State<CheckOurCard> {
       // Le code promo n'est pas valide
       addError(error: "Le code promo n'est pas valide");
       return;
-    }else{
-      removeError(error: "Le code promo n'est pas valide");
     }
 
 
@@ -310,27 +303,30 @@ class _CheckOurCardState extends State<CheckOurCard> {
       // Le code promo n'est pas actif
       addError(error: "Le code promo n'est pas actif");
       return;
-    }else{
-      removeError(error: "Le code promo n'est pas actif");
     }
-
 
     // Check if the promo code date has not passed
     if (!promoCodeData['date_limite'].toDate().isAfter(DateTime.now())) {
       // La date du code promo est passée
       addError(error: "La date du code promo est passée");
       return;
-    }else{
-      removeError(error: "La date du code promo est passée");
     }
 
 
     if (promoCodeData['minimum_achat']>total) {
       // miminum d'achat
-      addError(error: "Le montant minimum d'achat pour utiliser ce code promo est de ${promoCodeData['minimum_achat']} FCFA");
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        behavior: SnackBarBehavior.fixed,
+        backgroundColor: Color(0x00FFFFFF),
+        elevation: 0,
+        content: AwesomeSnackbarContent(
+          title: 'Ohh Ohh',
+          message: "Le montant minimum d'achat pour utiliser ce code promo est de ${promoCodeData['minimum_achat']} FCFA",
+          contentType: ContentType.failure,
+          messageFontSize: getProportionateScreenWidth(15),
+        ),
+      ));
       return;
-    }else{
-      removeError(error: "Le montant minimum d'achat pour utiliser ce code promo est de ${promoCodeData['minimum_achat']} FCFA");
     }
 
 
@@ -338,8 +334,6 @@ class _CheckOurCardState extends State<CheckOurCard> {
     if (promolistRef.exists) {
       addError(error: "code promo déjà utilisé");
       return;
-    }else{
-      removeError(error: "code promo déjà utilisé");
     }
 
       if (userData.data()!.containsKey('code_reduction_actif')) {
@@ -349,11 +343,13 @@ class _CheckOurCardState extends State<CheckOurCard> {
 
         return;
       } else {
-           await userDataRef.set({'code_reduction_actif': promoCodeData['montant']}, SetOptions(merge: true)
+           await userDataRef.set({
+             'code_reduction_actif': promoCodeData['montant'],
+           }, SetOptions(merge: true)
         );
 
            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-             behavior: SnackBarBehavior.floating,
+             behavior: SnackBarBehavior.fixed,
              backgroundColor: Color(0x00FFFFFF),
              elevation: 0,
              content: AwesomeSnackbarContent(
@@ -379,26 +375,13 @@ class _CheckOurCardState extends State<CheckOurCard> {
     }
 }
 
-  void removeerror(String promoCode, num total) async {
-
-      final userId = FirebaseAuth.instance.currentUser?.uid;
-      if (userId != null) {
-        final promoCodeData = await FirebaseFirestore.instance
-            .collection('CodesPromo')
-            .doc(promoCode)
-            .get();
+  void removeerror() async {
           removeError(error: "Connectez-vous");
           removeError(error: "Le code promo n'est pas valide");
           removeError(error: "Le code promo n'est pas actif");
           removeError(error: "La date du code promo est passée");
           removeError(error: "code promo déjà utilisé");
           removeError(error: "Erreur lors de la récupération des données");
-          try{
-             removeError(error: "Le montant minimum d'achat pour utiliser ce code promo est de ${promoCodeData['minimum_achat']} FCFA");
-          }catch(e){
-            print(e);
-          }
-  }
   }
 
 
@@ -457,6 +440,17 @@ class _CheckOurCardState extends State<CheckOurCard> {
                                 .set(userData.data()!..remove('code_reduction_actif'));
                           }
                           Navigator.of(context).pop();
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            behavior: SnackBarBehavior.fixed,
+                            backgroundColor: Color(0x00FFFFFF),
+                            elevation: 0,
+                            content: AwesomeSnackbarContent(
+                              title: 'Super!!',
+                              message: "Code de reduction supprimé",
+                              contentType: ContentType.success,
+                              messageFontSize: getProportionateScreenWidth(15),
+                            ),
+                          ));
                         },
                       ),
                     ),

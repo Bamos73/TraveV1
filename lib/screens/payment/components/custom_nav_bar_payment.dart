@@ -16,11 +16,12 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
   bool _isListViewVisible = false;
   String uid = FirebaseAuth.instance.currentUser?.uid ?? '';
 
+
   double _getContainerHeight() {
     if (_isListViewVisible) {
-      return getProportionateScreenHeight(197);
+      return getProportionateScreenHeight(219);
     } else {
-      return getProportionateScreenHeight(117);
+      return getProportionateScreenHeight(119);
     }
   }
 
@@ -70,12 +71,16 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
               return Container();
             }
 
-            final userModeLivraison =
-                userSnapshot.data?.get('frais_de_livraison') as int? ?? 1000;
+            final userModeLivraison = userSnapshot.data?.get('frais_de_livraison') as int? ?? 1000;
+
+            final userData = userSnapshot.data!.data() as Map<String, dynamic>?;
+
+            final userReduction = userData != null && userData.containsKey('code_reduction_actif')
+                ? userData['code_reduction_actif'] as int? ?? 0
+                : 0;
 
             return AnimatedContainer(
               height: _getContainerHeight(),
-              color: Colors.transparent,
               duration: Duration(seconds: 2),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -123,7 +128,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
                   Visibility(
                     visible: _isListViewVisible,
                     child: Container(
-                      height: getProportionateScreenHeight(80),
+                      height: getProportionateScreenHeight(97),
                       width: double.infinity,
                       color: Colors.white,
                       padding: EdgeInsets.symmetric(
@@ -145,6 +150,28 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
                               ),
                               Text(
                                 "${total} FCFA",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: getProportionateScreenHeight(14),
+                                  color: Colors.black87,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: getProportionateScreenHeight(10)),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Reduction :",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: getProportionateScreenHeight(14),
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              Text(
+                                "-${userReduction} FCFA",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: getProportionateScreenHeight(14),
@@ -198,7 +225,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
                                 text: "Total:\n",
                                 children: [
                                   TextSpan(
-                                    text: "${userModeLivraison + total} FCFA",
+                                    text: "${userModeLivraison + total - userReduction} FCFA",
                                     style: TextStyle(
                                       fontSize: getProportionateScreenWidth(16),
                                       color: Colors.black,
@@ -229,6 +256,30 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
       },
     );
   }
+  void VerifeCodeReduction() async {
+
+    try {
+
+      final userId = FirebaseAuth.instance.currentUser?.uid;
+      if (userId != null) {
+
+        final userDataRef = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId);
+
+        final userData= await userDataRef.get();
+
+        if (userData.data()!.containsKey('code_reduction_actif')) {
+
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+    }
+
+
+
 
   void addToOrder() async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
