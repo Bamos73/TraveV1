@@ -23,7 +23,7 @@ class _EmptyCartState extends State<EmptyCart> {
           size: getProportionateScreenWidth(80),
           color: kSecondaryColor.withOpacity(0.6),),
         SizedBox(height: getProportionateScreenHeight(30),),
-        Text("DÉCOUVRE LES NOUVEAUTÉS.",
+        Text("Votre commande a été enregistrée avec succès..",
           style: TextStyle(
               color:Colors.black.withOpacity(0.8),
               fontSize: getProportionateScreenWidth(15)
@@ -35,7 +35,8 @@ class _EmptyCartState extends State<EmptyCart> {
           child: DefaultButton(text: "MAGASINE", press: (){
             Navigator.pushNamed(context, MainScreen.routeName);
           }),
-        )
+        ),
+
       ],
     );;
   }

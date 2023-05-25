@@ -1,13 +1,10 @@
 import 'dart:math';
-
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopapp/components/default_button.dart';
-import 'package:shopapp/constants.dart';
 import 'package:shopapp/screens/payment/components/cart_empty.dart';
-
 import 'package:shopapp/size_config.dart';
 
 class CustomNavBarPayment extends StatefulWidget {
@@ -378,6 +375,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
       final userCardRef = FirebaseFirestore.instance.collection('Card').doc(userId).collection(userId);
       final userRef = FirebaseFirestore.instance.collection('users').doc(userId);
 
+
       final userOrderDocFirst = await FirebaseFirestore.instance.collection('Order').doc(userId).get();
       final userOrderCardQuerySnapshot = await userOrderCardRef.get();
       final userCardQuerySnapshot = await userCardRef.get();
@@ -406,19 +404,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
           await userOrderCardRef.doc(code).set(docData);
         }
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            behavior: SnackBarBehavior.fixed,
-            backgroundColor: Color(0x00FFFFFF),
-            elevation: 0,
-            content: AwesomeSnackbarContent(
-              title: 'Commande enregistrée',
-              message: "Votre commande a été enregistrée avec succès.",
-              contentType: ContentType.success,
-              messageFontSize: getProportionateScreenWidth(15),
-            ),
-          ),
-        );
+
 
         if (userDoc.exists) {
           await FirebaseFirestore.instance
