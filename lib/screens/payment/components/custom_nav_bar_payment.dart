@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -71,11 +72,13 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
               return Container();
             }
 
-            final userModeLivraison = userSnapshot.data?.get('frais_de_livraison') as int? ?? 1000;
+            final userModeLivraison = userSnapshot.data?.get(
+                'frais_de_livraison') as int? ?? 1000;
 
             final userData = userSnapshot.data!.data() as Map<String, dynamic>?;
 
-            final userReduction = userData != null && userData.containsKey('code_reduction_actif')
+            final userReduction = userData != null &&
+                userData.containsKey('code_reduction_actif')
                 ? userData['code_reduction_actif'] as int? ?? 0
                 : 0;
 
@@ -170,8 +173,9 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
                                   color: Colors.black87,
                                 ),
                               ),
-                              Text(
-                                "-${userReduction} FCFA",
+                              Text(userReduction > 0
+                                  ? "-${userReduction} FCFA" :
+                              "0 FCFA",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: getProportionateScreenHeight(14),
@@ -225,7 +229,8 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
                                 text: "Total:\n",
                                 children: [
                                   TextSpan(
-                                    text: "${userModeLivraison + total - userReduction} FCFA",
+                                    text: "${userModeLivraison + total -
+                                        userReduction} FCFA",
                                     style: TextStyle(
                                       fontSize: getProportionateScreenWidth(16),
                                       color: Colors.black,
@@ -238,7 +243,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
                               width: getProportionateScreenWidth(190),
                               child: DefaultButton(
                                   text: "Commande", press: () {
-                                addToOrder();
+                                verificationOrder(context);
                               }
                               ),
                             )
@@ -256,90 +261,92 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
       },
     );
   }
-  void VerifeCodeReduction() async {
 
+  void verificationOrder(BuildContext context) async {
     try {
-
       final userId = FirebaseAuth.instance.currentUser?.uid;
-      if (userId != null) {
-
-        final userDataRef = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userId);
-
-        final userData= await userDataRef.get();
-
-        if (userData.data()!.containsKey('code_reduction_actif')) {
-
-        }
+      if (userId == null) {
+        showCustomSnackBar(context, "L'utilisateur n'a pas de compte", ContentType.failure);
+        return;
       }
-    } catch (e) {
-      print(e);
-    }
-    }
 
-
-
-
-  void addToOrder() async {
-    final userId = FirebaseAuth.instance.currentUser?.uid;
-    if (userId != null) {
-      final userOrderRef = FirebaseFirestore.instance
-          .collection('Order')
-          .doc(userId);
-
-      final userCardRef = FirebaseFirestore.instance
-          .collection('Card')
-          .doc(userId)
-          .collection(userId);
-
-      final userRef = FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId);
+      final userOrderRef = FirebaseFirestore.instance.collection('Order').doc(userId);
+      final userCardRef =
+      FirebaseFirestore.instance.collection('Card').doc(userId).collection(userId);
+      final userRef = FirebaseFirestore.instance.collection('users').doc(userId);
 
       final userOrderDoc = await userOrderRef.get();
       if (userOrderDoc.exists) {
-        final userOrderData = userOrderDoc.data();
-        print("l'utilisateur as une commande");
-    }else{
-        print("l'utilisateur n'as pas de commande");
+        print("L'utilisateur a déjà une commande");
+        return;
+      }
 
-        final userDoc = await userRef.get();
-        //On verifie si uid de l'utilisateur est dans la collection users
-        if (userDoc.exists) {
-          final userData = userDoc.data();
-          //on verifie si le champs uid existe dans la collection users
-          if (userData != null && userData['uid'] == userId)  {
-            //on verifie si le champs nom et prenom existe dans la collection users
-            if (userData['adresse_de_livraison'] !=null && userData['nom_de_livraison'] !=null)  {
-              //on verifie si numero est ajouté
-              if (userData['numero_de_livraison'] !=null )  {
-                //on verifie s'il y'a des commandes dans le panier
-                final userCardSnapshot = await userCardRef.get();
-                if (userCardSnapshot.docs.isNotEmpty) {
-                  print('enregistrement de la commande');
-                }else{
-                  print('le panier est vide');
-                }
+      final userDoc = await userRef.get();
+      if (!userDoc.exists) {
+        showCustomSnackBar(context, "L'utilisateur n'a pas de compte", ContentType.failure);
+        return;
+      }
 
-              }else{
-                print('veuillez ajouter un numero de telephone');
-              }
+      final userData = userDoc.data();
+      if (userData == null || userData['uid'] != userId) {
+        showCustomSnackBar(context, "L'utilisateur n'a pas de compte valide, veuillez creer un autre compte", ContentType.failure);
+        return;
+      }
 
-            }else{
-              print('veuillez choisir ou ajouter une adresse de livraison');
-            }
-          }
+      final userCardSnapshot = await userCardRef.get();
+      if (userCardSnapshot.docs.isEmpty) {
+        showCustomSnackBar(context, "Le panier est vide", ContentType.failure);
+        return;
+      }
 
-        }else{
-          print('l\'utilisateur n\'a pas de compte');
+      if (userData['adresse_de_livraison'] == null ||
+          userData['nom_de_livraison'] == null) {
+        showCustomSnackBar(context, "Veuillez choisir ou ajouter une adresse de livraison", ContentType.failure);
+        return;
+      }
+
+      if (userData['numero_de_livraison'] == null) {
+        showCustomSnackBar(context, "Veuillez ajouter un numéro de téléphone", ContentType.failure);
+        return;
+      }
+
+
+
+      if (userData['code_reduction_name'] != null) {
+        final promoCodeData = await FirebaseFirestore.instance
+            .collection('CodesPromo')
+            .doc(userData['code_reduction_name'] as String)
+            .get();
+
+        if (promoCodeData.exists && promoCodeData['minimum_achat'] == userData['code_reduction_actif']) {
+          print("Validation de l'achat");
+
+        } else {
+          showCustomSnackBar(context, "Erreur sur la valeur du bon de réduction, veuillez utiliser un autre bon de réduction", ContentType.failure);
         }
+      } else {
 
-
+        showCustomSnackBar(context, "L'utilisateur n'a pas de code de réduction", ContentType.failure);
       }
-
-      }
+    }catch(e){
+      print(e);
     }
+  }
 
+  void showCustomSnackBar(BuildContext context, String message, ContentType contentType) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.fixed,
+        backgroundColor: Color(0x00FFFFFF),
+        elevation: 0,
+        content: AwesomeSnackbarContent(
+          title: 'Ohh Ohh!!',
+          message: message,
+          contentType: contentType,
+          messageFontSize: getProportionateScreenWidth(15),
+        ),
+      ),
+    );
+  }
 }
 

@@ -58,7 +58,7 @@ class _CheckOurCardState extends State<CheckOurCard> {
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return Container();
         } else if (snapshot.data!.docs.isEmpty) {
-          return Container();
+          return Container(width: 0, height: 0,); /* a ne pas supprimer sinon il cachera tout le panier s'il est vide*/
         }
 
         final docs = snapshot.data!.docs;
@@ -286,151 +286,70 @@ class _CheckOurCardState extends State<CheckOurCard> {
         .collection('users')
         .doc(userId);
 
-      final userData= await userDataRef.get();
+    final userData= await userDataRef.get();
 
 
     // Check if the promo code is valid
     if (!promoCodeData.exists) {
-
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        behavior: SnackBarBehavior.fixed,
-        backgroundColor: Color(0x00FFFFFF),
-        elevation: 0,
-        content: AwesomeSnackbarContent(
-          title: 'Ohh Ohh!!',
-          message: "Le code promo n'est pas valide",
-          contentType: ContentType.failure,
-          messageFontSize: getProportionateScreenWidth(15),
-        ),
-      ));
+      showCustomSnackBar("Le code promo n'est pas valide",ContentType.failure);
       return;
     }
 
 
-    if (promoCodeData['Actif']==false) {
-
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        behavior: SnackBarBehavior.fixed,
-        backgroundColor: Color(0x00FFFFFF),
-        elevation: 0,
-        content: AwesomeSnackbarContent(
-          title: 'Ohh Ohh!!',
-          message: "Le code promo n'est pas actif",
-          contentType: ContentType.failure,
-          messageFontSize: getProportionateScreenWidth(15),
-        ),
-      ));
+    if (promoCodeData['actif']==false) {
+      showCustomSnackBar("Le code promo n'est pas actif",ContentType.failure);
       return;
     }
 
 
     if (!promoCodeData['date_limite'].toDate().isAfter(DateTime.now())) {
-
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        behavior: SnackBarBehavior.fixed,
-        backgroundColor: Color(0x00FFFFFF),
-        elevation: 0,
-        content: AwesomeSnackbarContent(
-          title: 'Ohh Ohh!!',
-          message: "La date du code promo est passée",
-          contentType: ContentType.failure,
-          messageFontSize: getProportionateScreenWidth(15),
-        ),
-      ));
+      showCustomSnackBar("La date du code promo est passée",ContentType.failure);
       return;
     }
 
 
     if (promoCodeData['minimum_achat']>total) {
       // miminum d'achat
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        behavior: SnackBarBehavior.fixed,
-        backgroundColor: Color(0x00FFFFFF),
-        elevation: 0,
-        content: AwesomeSnackbarContent(
-          title: 'Ohh Ohh',
-          message: "Le montant minimum d'achat pour utiliser ce code promo est de ${promoCodeData['minimum_achat']} FCFA",
-          contentType: ContentType.failure,
-          messageFontSize: getProportionateScreenWidth(15),
-        ),
-      ));
+
+      showCustomSnackBar("Le montant minimum d'achat pour utiliser ce code promo est de ${promoCodeData['minimum_achat']} FCFA",ContentType.failure);
       return;
     }
 
 
 
     if (promolistRef.exists) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        behavior: SnackBarBehavior.fixed,
-        backgroundColor: Color(0x00FFFFFF),
-        elevation: 0,
-        content: AwesomeSnackbarContent(
-          title: 'Ohh Ohh!!',
-          message: "code promo déjà utilisé",
-          contentType: ContentType.failure,
-          messageFontSize: getProportionateScreenWidth(15),
-        ),
-      ));
+
+      showCustomSnackBar("code promo déjà utilisé",ContentType.failure);
+
       return;
     }
 
       if (userData.data()!.containsKey('code_reduction_actif')) {
         final codeReductionActif = userData['code_reduction_actif'] as int;
-
         showCustomDialog(context, codeReductionActif);
 
         return;
       } else {
            await userDataRef.set({
              'code_reduction_actif': promoCodeData['montant'],
+             'code_reduction_name': promoCodeData['code_name'],
            }, SetOptions(merge: true)
         );
-
-           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-             behavior: SnackBarBehavior.fixed,
-             backgroundColor: Color(0x00FFFFFF),
-             elevation: 0,
-             content: AwesomeSnackbarContent(
-               title: 'Super!!',
-               message: "Code de reduction activé. Allez a la caisse",
-               contentType: ContentType.success,
-               messageFontSize: getProportionateScreenWidth(15),
-             ),
-           ));
+           showCustomSnackBar("Code de reduction activé. Allez a la caisse",ContentType.success);
            controler.text='';
-      print('code ajouté');
     }
 
 
     // Apply the promo code
     // ...
   }else{
+      showCustomSnackBar("Connectez-vous",ContentType.failure);
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        behavior: SnackBarBehavior.fixed,
-        backgroundColor: Color(0x00FFFFFF),
-        elevation: 0,
-        content: AwesomeSnackbarContent(
-          title: 'Ohh Ohh!!',
-          message: "Connectez-vous",
-          contentType: ContentType.failure,
-          messageFontSize: getProportionateScreenWidth(15),
-        ),
-      ));
     }
     } catch (e) {
       print(e);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        behavior: SnackBarBehavior.fixed,
-        backgroundColor: Color(0x00FFFFFF),
-        elevation: 0,
-        content: AwesomeSnackbarContent(
-          title: 'Ohh Ohh!!',
-          message: "Erreur lors de la récupération des données",
-          contentType: ContentType.failure,
-          messageFontSize: getProportionateScreenWidth(15),
-        ),
-      ));
+      showCustomSnackBar("Erreur lors de la récupération des données",ContentType.failure);
+
     }
 }
 
@@ -490,17 +409,8 @@ class _CheckOurCardState extends State<CheckOurCard> {
                                 .set(userData.data()!..remove('code_reduction_actif'));
                           }
                           Navigator.of(context).pop();
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            behavior: SnackBarBehavior.fixed,
-                            backgroundColor: Color(0x00FFFFFF),
-                            elevation: 0,
-                            content: AwesomeSnackbarContent(
-                              title: 'Super!!',
-                              message: "Code de reduction supprimé",
-                              contentType: ContentType.success,
-                              messageFontSize: getProportionateScreenWidth(15),
-                            ),
-                          ));
+                          showCustomSnackBar("Code de reduction supprimé",ContentType.failure);
+
                         },
                       ),
                     ),
@@ -514,6 +424,20 @@ class _CheckOurCardState extends State<CheckOurCard> {
     );
   }
 
-
+  void showCustomSnackBar(String message, ContentType Content) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.fixed,
+        backgroundColor: Color(0x00FFFFFF),
+        elevation: 0,
+        content: AwesomeSnackbarContent(
+          title: 'Ohh Ohh!!',
+          message: message,
+          contentType: Content,
+          messageFontSize: getProportionateScreenWidth(15),
+        ),
+      ),
+    );
+  }
 
 }
