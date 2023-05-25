@@ -173,7 +173,7 @@ class _CheckOurCardState extends State<CheckOurCard> {
     return AnimatedContainer(
                 duration: Duration(seconds: 2),
                 width: _showContainer ? double.infinity : 0,
-                height: _showContainer ? getProportionateScreenHeight(150) : 0,
+                height: _showContainer ? getProportionateScreenHeight(115) : 0,
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -210,9 +210,8 @@ class _CheckOurCardState extends State<CheckOurCard> {
                           SizedBox(width: 20,),
                           GestureDetector(
                             onTap: () {
-                              removeerror();
-                              if (_formKey.currentState!.validate()) {
 
+                              if (_formKey.currentState!.validate()) {
                                 setState(() {
                                   MyAppState.CodeReductionPrecedent=_ctrcodepromo.text.trim();
                                 });
@@ -292,23 +291,52 @@ class _CheckOurCardState extends State<CheckOurCard> {
 
     // Check if the promo code is valid
     if (!promoCodeData.exists) {
-      // Le code promo n'est pas valide
-      addError(error: "Le code promo n'est pas valide");
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        behavior: SnackBarBehavior.fixed,
+        backgroundColor: Color(0x00FFFFFF),
+        elevation: 0,
+        content: AwesomeSnackbarContent(
+          title: 'Ohh Ohh!!',
+          message: "Le code promo n'est pas valide",
+          contentType: ContentType.failure,
+          messageFontSize: getProportionateScreenWidth(15),
+        ),
+      ));
       return;
     }
 
 
-    // Check if the promo code is still active
     if (promoCodeData['Actif']==false) {
-      // Le code promo n'est pas actif
-      addError(error: "Le code promo n'est pas actif");
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        behavior: SnackBarBehavior.fixed,
+        backgroundColor: Color(0x00FFFFFF),
+        elevation: 0,
+        content: AwesomeSnackbarContent(
+          title: 'Ohh Ohh!!',
+          message: "Le code promo n'est pas actif",
+          contentType: ContentType.failure,
+          messageFontSize: getProportionateScreenWidth(15),
+        ),
+      ));
       return;
     }
 
-    // Check if the promo code date has not passed
+
     if (!promoCodeData['date_limite'].toDate().isAfter(DateTime.now())) {
-      // La date du code promo est passée
-      addError(error: "La date du code promo est passée");
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        behavior: SnackBarBehavior.fixed,
+        backgroundColor: Color(0x00FFFFFF),
+        elevation: 0,
+        content: AwesomeSnackbarContent(
+          title: 'Ohh Ohh!!',
+          message: "La date du code promo est passée",
+          contentType: ContentType.failure,
+          messageFontSize: getProportionateScreenWidth(15),
+        ),
+      ));
       return;
     }
 
@@ -332,7 +360,17 @@ class _CheckOurCardState extends State<CheckOurCard> {
 
 
     if (promolistRef.exists) {
-      addError(error: "code promo déjà utilisé");
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        behavior: SnackBarBehavior.fixed,
+        backgroundColor: Color(0x00FFFFFF),
+        elevation: 0,
+        content: AwesomeSnackbarContent(
+          title: 'Ohh Ohh!!',
+          message: "code promo déjà utilisé",
+          contentType: ContentType.failure,
+          messageFontSize: getProportionateScreenWidth(15),
+        ),
+      ));
       return;
     }
 
@@ -367,22 +405,34 @@ class _CheckOurCardState extends State<CheckOurCard> {
     // Apply the promo code
     // ...
   }else{
-      addError(error: "Connectez-vous");
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        behavior: SnackBarBehavior.fixed,
+        backgroundColor: Color(0x00FFFFFF),
+        elevation: 0,
+        content: AwesomeSnackbarContent(
+          title: 'Ohh Ohh!!',
+          message: "Connectez-vous",
+          contentType: ContentType.failure,
+          messageFontSize: getProportionateScreenWidth(15),
+        ),
+      ));
     }
     } catch (e) {
       print(e);
-      addError(error: 'Erreur lors de la récupération des données');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        behavior: SnackBarBehavior.fixed,
+        backgroundColor: Color(0x00FFFFFF),
+        elevation: 0,
+        content: AwesomeSnackbarContent(
+          title: 'Ohh Ohh!!',
+          message: "Erreur lors de la récupération des données",
+          contentType: ContentType.failure,
+          messageFontSize: getProportionateScreenWidth(15),
+        ),
+      ));
     }
 }
-
-  void removeerror() async {
-          removeError(error: "Connectez-vous");
-          removeError(error: "Le code promo n'est pas valide");
-          removeError(error: "Le code promo n'est pas actif");
-          removeError(error: "La date du code promo est passée");
-          removeError(error: "code promo déjà utilisé");
-          removeError(error: "Erreur lors de la récupération des données");
-  }
 
 
   void showCustomDialog(BuildContext context, int reduction_actif) {

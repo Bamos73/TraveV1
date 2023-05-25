@@ -3,6 +3,7 @@ import 'package:shopapp/components/main_screens.dart';
 import 'package:shopapp/screens/Privacy_Policy/Privacy_Policy_Screen.dart';
 import 'package:shopapp/screens/Term_And_Condition/term_and_condition_screen.dart';
 import 'package:shopapp/screens/cart/cart_screen.dart';
+import 'package:shopapp/screens/cart/components/test.dart';
 import 'package:shopapp/screens/category/category_screen.dart';
 import 'package:shopapp/screens/complete_profile/complete_profile_screen.dart';
 import 'package:shopapp/screens/details/details_screen.dart';
@@ -42,5 +43,6 @@ final Map<String, WidgetBuilder> routes = {
         PaymentScreen.routeName:(context) => PaymentScreen(),
         AdresseLivraison.routeName:(context) => AdresseLivraison(),
         AdresseLivraison.routeName:(context) => AdresseLivraison(),
+        MyApp.routeName:(context) => MyApp(),
 
 };
