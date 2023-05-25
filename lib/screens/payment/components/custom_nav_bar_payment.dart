@@ -73,9 +73,10 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
             final userModeLivraison =
                 userSnapshot.data?.get('frais_de_livraison') as int? ?? 1000;
 
-            return Container(
+            return AnimatedContainer(
               height: _getContainerHeight(),
               color: Colors.transparent,
+              duration: Duration(seconds: 2),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [

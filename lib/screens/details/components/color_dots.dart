@@ -20,7 +20,6 @@ class MyAppState {
   static int nmbreArticleState = 1;
 }
 
-
 class _ColorDotsState extends State<ColorDots> {
 
   // Récupère l'utilisateur actif

@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,9 @@ class CheckOurCard extends StatefulWidget {
 
   @override
   State<CheckOurCard> createState() => _CheckOurCardState();
+}
+class MyAppState {
+  static String CodeReductionPrecedent = "code";
 }
 
 class _CheckOurCardState extends State<CheckOurCard> {
@@ -129,7 +133,10 @@ class _CheckOurCardState extends State<CheckOurCard> {
                         :Icon(Icons.arrow_forward_ios, size: 12, color: kTextColor,)
                   ],
                 ),
-                SizedBox(height: getProportionateScreenHeight(20),),
+                SizedBox(height: _showContainer == true
+                    ?getProportionateScreenHeight(0)
+                    :getProportionateScreenHeight(20)
+                  ,),
                 buildAnimatedContainer(total),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -167,9 +174,9 @@ class _CheckOurCardState extends State<CheckOurCard> {
 
   AnimatedContainer buildAnimatedContainer(num total) {
     return AnimatedContainer(
-                duration: Duration(seconds: 3),
+                duration: Duration(seconds: 2),
                 width: _showContainer ? double.infinity : 0,
-                height: _showContainer ? getProportionateScreenHeight(140) : 0,
+                height: _showContainer ? getProportionateScreenHeight(150) : 0,
                 // color: Colors.redAccent,
                 child: Form(
                   key: _formKey,
@@ -179,7 +186,6 @@ class _CheckOurCardState extends State<CheckOurCard> {
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Expanded(
                             child: TextFormField(
@@ -194,7 +200,7 @@ class _CheckOurCardState extends State<CheckOurCard> {
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   addError(error: "Veuillez saisir le code");
-                                  return "Erreur";
+                                  return "";
                                 }
                                 return null;
                               },
@@ -208,9 +214,15 @@ class _CheckOurCardState extends State<CheckOurCard> {
                           SizedBox(width: 20,),
                           GestureDetector(
                             onTap: () {
+                              removeerror(MyAppState.CodeReductionPrecedent,total);
 
                               if (_formKey.currentState!.validate()) {
-                                verifyPromoCode(_ctrcodepromo.text.trim(),total);
+
+                                setState(() {
+                                  MyAppState.CodeReductionPrecedent=_ctrcodepromo.text.trim();
+                                });
+                                verifyPromoCode(_ctrcodepromo.text.trim(),total,_ctrcodepromo);
+
                               }
                             },
                               child: Text("AJOUTER"),
@@ -252,12 +264,18 @@ class _CheckOurCardState extends State<CheckOurCard> {
       }
         }
 
-  void verifyPromoCode(String promoCode, num total) async {
+
+
+  void verifyPromoCode(String promoCode, num total,TextEditingController controler) async {
+
+    try {
+
     final userId = FirebaseAuth.instance.currentUser?.uid;
+
     if (userId != null) {
+      //supprimer l'erreur si l'utilisateur est connecté
+      removeError(error: "Connectez-vous");
 
-
-    // Get the promo code data from Firestore
     final promoCodeData = await FirebaseFirestore.instance
         .collection('CodesPromo')
         .doc(promoCode)
@@ -270,60 +288,187 @@ class _CheckOurCardState extends State<CheckOurCard> {
         .doc(userId)
         .get();
 
-    final promoCodeDate = promoCodeData['date_limite'];
+    final userDataRef = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId);
+
+      final userData= await userDataRef.get();
+
 
     // Check if the promo code is valid
     if (!promoCodeData.exists) {
-      // Promo code is not valid
-      addError(error: "Promo code is not valid");
+      // Le code promo n'est pas valide
+      addError(error: "Le code promo n'est pas valide");
       return;
     }else{
-      removeError(error: "Promo code is not valid");
+      removeError(error: "Le code promo n'est pas valide");
     }
 
 
     // Check if the promo code is still active
     if (promoCodeData['Actif']==false) {
-      // Promo code is not active
-      addError(error: "Promo code is not active");
+      // Le code promo n'est pas actif
+      addError(error: "Le code promo n'est pas actif");
       return;
     }else{
-      removeError(error: "Promo code is not active");
+      removeError(error: "Le code promo n'est pas actif");
     }
 
 
     // Check if the promo code date has not passed
-    if (!promoCodeDate.toDate().isAfter(DateTime.now())) {
-      // Promo code date has passed
-      addError(error: "Promo code date has passed");
+    if (!promoCodeData['date_limite'].toDate().isAfter(DateTime.now())) {
+      // La date du code promo est passée
+      addError(error: "La date du code promo est passée");
       return;
     }else{
-      removeError(error: "Promo code date has passed");
+      removeError(error: "La date du code promo est passée");
     }
 
 
     if (promoCodeData['minimum_achat']>total) {
       // miminum d'achat
-      addError(error: "Le montant minimum d'achat pour utiliser \nce code promo est de ${promoCodeData['minimum_achat']} FCFA");
+      addError(error: "Le montant minimum d'achat pour utiliser ce code promo est de ${promoCodeData['minimum_achat']} FCFA");
       return;
     }else{
-      removeError(error: "Le montant minimum d'achat pour utiliser \nce code promo est de ${promoCodeData['minimum_achat']} FCFA");
+      removeError(error: "Le montant minimum d'achat pour utiliser ce code promo est de ${promoCodeData['minimum_achat']} FCFA");
     }
+
 
 
     if (promolistRef.exists) {
-      addError(error: "coupon code already used");
+      addError(error: "code promo déjà utilisé");
       return;
     }else{
-      removeError(error: "coupon code already used");
+      removeError(error: "code promo déjà utilisé");
     }
 
-    print('code ajouté');
+      if (userData.data()!.containsKey('code_reduction_actif')) {
+        final codeReductionActif = userData['code_reduction_actif'] as int;
+
+        showCustomDialog(context, codeReductionActif);
+
+        return;
+      } else {
+           await userDataRef.set({'code_reduction_actif': promoCodeData['montant']}, SetOptions(merge: true)
+        );
+
+           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+             behavior: SnackBarBehavior.floating,
+             backgroundColor: Color(0x00FFFFFF),
+             elevation: 0,
+             content: AwesomeSnackbarContent(
+               title: 'Super!!',
+               message: "Code de reduction activé. Allez a la caisse",
+               contentType: ContentType.success,
+               messageFontSize: getProportionateScreenWidth(15),
+             ),
+           ));
+           controler.text='';
+      print('code ajouté');
+    }
+
 
     // Apply the promo code
     // ...
-  }
+  }else{
+      addError(error: "Connectez-vous");
+    }
+    } catch (e) {
+      print(e);
+      addError(error: 'Erreur lors de la récupération des données');
+    }
 }
+
+  void removeerror(String promoCode, num total) async {
+
+      final userId = FirebaseAuth.instance.currentUser?.uid;
+      if (userId != null) {
+        final promoCodeData = await FirebaseFirestore.instance
+            .collection('CodesPromo')
+            .doc(promoCode)
+            .get();
+          removeError(error: "Connectez-vous");
+          removeError(error: "Le code promo n'est pas valide");
+          removeError(error: "Le code promo n'est pas actif");
+          removeError(error: "La date du code promo est passée");
+          removeError(error: "code promo déjà utilisé");
+          removeError(error: "Erreur lors de la récupération des données");
+          try{
+             removeError(error: "Le montant minimum d'achat pour utiliser ce code promo est de ${promoCodeData['minimum_achat']} FCFA");
+          }catch(e){
+            print(e);
+          }
+  }
+  }
+
+
+  void showCustomDialog(BuildContext context, int reduction_actif) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Container(
+            padding: EdgeInsets.all(15),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Vous avez déjà un code de reduction actif de ${reduction_actif} FCFA, voulez vous le supprimer ?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: getProportionateScreenWidth(14),color: Colors.black),
+                ),
+                SizedBox(height: getProportionateScreenHeight(15)),
+                Divider(thickness: 1,height: 1),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                        child: Text('Non',style: TextStyle(color: Color(0xFF858585),fontWeight:FontWeight.bold,fontSize: getProportionateScreenWidth(14)),),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                    Container(
+                      width: 1,
+                      height: 25,
+                      color: Color(0xFF858585),
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                    ),
+                    Expanded(
+                      child: TextButton(
+                        child: Text('Oui',style: TextStyle(color: Colors.red,fontWeight:FontWeight.bold,fontSize: getProportionateScreenWidth(14)),),
+                        onPressed: () async {
+
+                          final userId = FirebaseAuth.instance.currentUser?.uid;
+                          final userData = await FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(userId)
+                              .get();
+
+                          if (userData.exists) {
+                            await FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(userId)
+                                .set(userData.data()!..remove('code_reduction_actif'));
+                          }
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
 
 

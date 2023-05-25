@@ -93,8 +93,8 @@ class _ListPaymentNumberState extends State<ListPaymentNumber> {
                                   'Veuillez ajouter un numero.',
                                   maxLines: 2,
                                   style: TextStyle(
-                                    color: kTextColor,
-                                    fontSize: getProportionateScreenHeight(10),
+                                    color: Colors.red,
+                                    fontSize: getProportionateScreenHeight(12),
                                   ),
                                 );
                               }

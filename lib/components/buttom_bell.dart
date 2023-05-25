@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopapp/size_config.dart';
 
-
 class ButtomBell extends StatefulWidget {
   const ButtomBell({
     super.key,

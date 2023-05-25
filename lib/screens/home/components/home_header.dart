@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shopapp/components/buttom_card.dart';
+import 'package:shopapp/constants.dart';
 import 'package:shopapp/screens/cart/cart_screen.dart';
+import 'package:shopapp/screens/cart/components/test.dart';
 import 'package:shopapp/screens/home/components/search_field.dart';
 import 'package:shopapp/components/buttom_bell.dart';
 import 'package:shopapp/screens/profil/profil_screen.dart';
@@ -34,7 +36,10 @@ class _HomeHeaderState extends State<HomeHeader> {
           ButtomBell(
             svgSrc: "assets/icons/notifications_active.svg",
             numOfItems: 3, // le nombre de Notification a parametrer après
-            press: () {}, height: 46, width: 46, padding: 10,
+            press: () {
+                nextScreenReplace(context, MyApp());
+
+            }, height: 46, width: 46, padding: 10,
           ),
         ],
       ),
