@@ -406,7 +406,10 @@ class _CheckOurCardState extends State<CheckOurCard> {
                             await FirebaseFirestore.instance
                                 .collection('users')
                                 .doc(userId)
-                                .set(userData.data()!..remove('code_reduction_actif'));
+                                .update({
+                              'code_reduction_actif': FieldValue.delete(),
+                              'code_reduction_name': FieldValue.delete(),
+                            });
                           }
                           Navigator.of(context).pop();
                           showCustomSnackBar("Code de reduction supprimé",ContentType.failure);

@@ -1,8 +1,12 @@
+import 'dart:math';
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopapp/components/default_button.dart';
+import 'package:shopapp/constants.dart';
+import 'package:shopapp/screens/payment/components/cart_empty.dart';
 
 import 'package:shopapp/size_config.dart';
 
@@ -40,7 +44,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return Container();
         } else if (snapshot.data!.docs.isEmpty) {
-          return Container();
+          return EmptyCart();
         }
         final docs = snapshot.data!.docs;
         num total = 0;
@@ -266,30 +270,25 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
     try {
       final userId = FirebaseAuth.instance.currentUser?.uid;
       if (userId == null) {
-        showCustomSnackBar(context, "L'utilisateur n'a pas de compte", ContentType.failure);
+        showCustomSnackBar(
+            context, "L'utilisateur n'a pas de compte", ContentType.failure);
         return;
       }
 
-      final userOrderRef = FirebaseFirestore.instance.collection('Order').doc(userId);
-      final userCardRef =
-      FirebaseFirestore.instance.collection('Card').doc(userId).collection(userId);
+      final userCardRef = FirebaseFirestore.instance.collection('Card').doc(userId).collection(userId);
       final userRef = FirebaseFirestore.instance.collection('users').doc(userId);
 
-      final userOrderDoc = await userOrderRef.get();
-      if (userOrderDoc.exists) {
-        print("L'utilisateur a déjà une commande");
-        return;
-      }
 
       final userDoc = await userRef.get();
       if (!userDoc.exists) {
-        showCustomSnackBar(context, "L'utilisateur n'a pas de compte", ContentType.failure);
+        showCustomSnackBar(context, "Connectez-vous!!", ContentType.failure);
         return;
       }
 
       final userData = userDoc.data();
       if (userData == null || userData['uid'] != userId) {
-        showCustomSnackBar(context, "L'utilisateur n'a pas de compte valide, veuillez creer un autre compte", ContentType.failure);
+        showCustomSnackBar(context, "L'utilisateur n'a pas de compte valide, veuillez creer un autre compte",
+            ContentType.failure);
         return;
       }
 
@@ -311,29 +310,28 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
       }
 
 
-
       if (userData['code_reduction_name'] != null) {
         final promoCodeData = await FirebaseFirestore.instance
             .collection('CodesPromo')
             .doc(userData['code_reduction_name'] as String)
             .get();
 
-        if (promoCodeData.exists && promoCodeData['minimum_achat'] == userData['code_reduction_actif']) {
-          print("Validation de l'achat");
-
+        if (promoCodeData.exists && promoCodeData['minimum_achat'] ==
+            userData['code_reduction_actif']) {
+          addOrder(context);
         } else {
           showCustomSnackBar(context, "Erreur sur la valeur du bon de réduction, veuillez utiliser un autre bon de réduction", ContentType.failure);
         }
       } else {
-
         showCustomSnackBar(context, "L'utilisateur n'a pas de code de réduction", ContentType.failure);
       }
-    }catch(e){
+    } catch (e) {
       print(e);
     }
   }
 
-  void showCustomSnackBar(BuildContext context, String message, ContentType contentType) {
+  void showCustomSnackBar(BuildContext context, String message,
+      ContentType contentType) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.fixed,
@@ -348,5 +346,114 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
       ),
     );
   }
+
+  void addOrder(BuildContext context) async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+
+    if (userId != null) {
+      final random = Random();
+      final letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      final digits = '0123456789';
+
+      String generateOrderCode() {
+        String code = 'CM';
+
+        // Générer 7 lettres aléatoires
+        for (int i = 0; i < 7; i++) {
+          int randomIndex = random.nextInt(letters.length);
+          code += letters[randomIndex];
+        }
+        // Générer 3 chiffres aléatoires
+        for (int i = 0; i < 3; i++) {
+          int randomIndex = random.nextInt(digits.length);
+          code += digits[randomIndex];
+        }
+        return code;
+      }
+      // Utilisation :
+      final orderNumber = generateOrderCode();
+
+      final userOrderRef = FirebaseFirestore.instance.collection('Order').doc(userId).collection(orderNumber).doc(orderNumber);
+      final userOrderCardRef = FirebaseFirestore.instance.collection('Order').doc(userId).collection(orderNumber).doc(orderNumber).collection('Articles');
+      final userCardRef = FirebaseFirestore.instance.collection('Card').doc(userId).collection(userId);
+      final userRef = FirebaseFirestore.instance.collection('users').doc(userId);
+
+      final userOrderDocFirst = await FirebaseFirestore.instance.collection('Order').doc(userId).get();
+      final userOrderCardQuerySnapshot = await userOrderCardRef.get();
+      final userCardQuerySnapshot = await userCardRef.get();
+      final userDoc = await userRef.get();
+
+
+      final userCardData = userCardQuerySnapshot.docs.map((doc) => doc.data()).toList();
+      final userData = userDoc.data();
+
+      if (!userOrderDocFirst.exists) {
+          //Pas de commande
+        await userOrderRef.set({
+          'orderCode': orderNumber,
+          'userID': FirebaseAuth.instance.currentUser?.uid,
+          'nom_de_livraison': userData!['nom_de_livraison'],
+          'adresse_de_livraison': userData['adresse_de_livraison'],
+          'numero_de_livraison': userData['numero_de_livraison'],
+          'frais_de_livraison': userData['frais_de_livraison'],
+          'reduction': userData['code_reduction_actif'],
+          'mode_de_paiement': userData['mode_de_paiement'],
+        });
+
+        // Copier les documents de la sous-collection "Card" vers la sous-collection "Order"
+        for (var docData in userCardData) {
+          final code = docData['code'];
+          await userOrderCardRef.doc(code).set(docData);
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            behavior: SnackBarBehavior.fixed,
+            backgroundColor: Color(0x00FFFFFF),
+            elevation: 0,
+            content: AwesomeSnackbarContent(
+              title: 'Commande enregistrée',
+              message: "Votre commande a été enregistrée avec succès.",
+              contentType: ContentType.success,
+              messageFontSize: getProportionateScreenWidth(15),
+            ),
+          ),
+        );
+
+        if (userDoc.exists) {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .update({
+            'code_reduction_actif': FieldValue.delete(),
+            'code_reduction_name': FieldValue.delete(),
+          });
+
+          print('information supprimé');
+        }
+
+        // Supprimer la sous-collection dans card
+        final subcollectionSnapshot = await FirebaseFirestore.instance
+            .collection('Card')
+            .doc(userId)
+            .collection(userId)
+            .get();
+
+        for (final doc in subcollectionSnapshot.docs) {
+          await doc.reference.delete();
+        }
+
+        // Supprimer le document principal dans card
+        await FirebaseFirestore.instance
+            .collection('Card')
+            .doc(userId)
+            .delete();
+      } else {
+        print("L'utilisateur a déjà une commande");
+      }
+    }
+  }
+
+
 }
 
