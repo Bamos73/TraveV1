@@ -11,28 +11,19 @@ import 'package:http/http.dart' as http;
 class Body extends StatefulWidget {
   const Body({
     super.key,
-    required this.coverDoc,
-    required this.categoryDocs,
   });
 
-  final QueryDocumentSnapshot<Map<String, dynamic>> coverDoc;
-  final List<QueryDocumentSnapshot<Map<String, dynamic>>> categoryDocs;
+
 
   @override
   State<Body> createState() => _BodyState();
 }
 
 class _BodyState extends State<Body> {
+  bool isLoading = true;
+  late QueryDocumentSnapshot<Map<String, dynamic>> coverDoc;
+  late List<QueryDocumentSnapshot<Map<String, dynamic>>> categoryDocs;
 
-  //VERIFIER SI L'URL DE L'IMAGE DES CATEGORIE EST BONNE
-  Future<bool> checkImage(String url) async {
-    try {
-      final response = await http.head(Uri.parse(url));
-      return response.statusCode == 200;
-    } catch (e) {
-      return false;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +38,7 @@ class _BodyState extends State<Body> {
               SizedBox(height: getProportionateScreenWidth(10)),
               // Afficher l'image de la collection "Category_cover" dans Image.network
               FutureBuilder(
-                future: checkImage(widget.coverDoc.data()['image']),
+                future: checkImage(coverDoc.data()['image']),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return shimmer_cover();
@@ -55,7 +46,7 @@ class _BodyState extends State<Body> {
                     return shimmer_cover();
                   } else {
                     return Image.network(
-                      widget.coverDoc.data()['image'] ?? "",
+                      coverDoc.data()['image'] ?? "",
                       width: MediaQuery.of(context).size.width,
                       fit: BoxFit.cover,
                       height: getProportionateScreenHeight(200),
@@ -64,12 +55,14 @@ class _BodyState extends State<Body> {
                 },
               ),
               SizedBox(height: getProportionateScreenHeight(10)),
-              ListView(
+              ListView.builder(
                 shrinkWrap: true,
                 physics: ScrollPhysics(),
-                children: widget.categoryDocs.map((Document) {
-                  String title = Document.data()['titre_categorie'] ?? "NOUVEAUTES";
-                  String image = Document.data()['image'] ?? "https://via.placeholder.com/150";
+                itemCount: categoryDocs.length,
+                itemBuilder: (context, index) {
+                  QueryDocumentSnapshot<Map<String, dynamic>> document = categoryDocs[index];
+                  String title = document.data()['titre_categorie'] ?? "NOUVEAUTES";
+                  String image = document.data()['image'] ?? "https://via.placeholder.com/150";
                   return Column(
                     children: [
                       ListTile(
@@ -82,24 +75,64 @@ class _BodyState extends State<Body> {
                           title,
                           style: TextStyle(fontWeight: FontWeight.w500),
                         ),
-                        trailing: Icon(Icons.chevron_right, color: kSecondaryColor, weight: 100, grade: 0,),
+                        trailing: Icon(Icons.chevron_right, color: kSecondaryColor),
                         onTap: () {
                           Navigator.pushNamed(context, DetailCtgScreen.routeName,
                               arguments: {
-                                'nom_document': Document.id,
-                                'titre_categorie': Document['titre_categorie'],
+                                'nom_document': document.id,
+                                'titre_categorie': document['titre_categorie'],
                               });
                         },
                       ),
                       Divider(thickness: 1, height: 1),
                     ],
                   );
-                }).toList(),
+                },
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  //VERIFIER SI L'URL DE L'IMAGE DES CATEGORIE EST BONNE
+  Future<bool> checkImage(String url) async {
+    try {
+      final response = await http.head(Uri.parse(url));
+      return response.statusCode == 200;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<void> getData() async {
+    try {
+      // Récupérer le document de la collection "Category_cover" qui contient l'image pour Image.network
+      QuerySnapshot<Map<String, dynamic>> CategoryCover = await FirebaseFirestore.instance.collection('Category_cover').get();
+
+      // Récupérer les documents de la collection "Category" pour la ListView
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+      await FirebaseFirestore.instance.collection('Category').get();
+
+      // Attendre un court instant pour simuler un chargement
+      await Future.delayed(Duration(seconds: 2));
+
+      // Mettre à jour l'état pour arrêter l'affichage du Shimmer effect
+      setState(() {
+        isLoading = false;
+        categoryDocs = querySnapshot.docs;
+        coverDoc = CategoryCover.docs.first;
+      });
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }

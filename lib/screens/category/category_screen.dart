@@ -49,7 +49,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
       backgroundColor: Color(0xFFF5F6F9),
       body: isLoading
           ? _buildLoadingIndicator()
-          : Body(coverDoc: coverDoc, categoryDocs: categoryDocs),
+          : Body(),
     );
   }
   // Afficher le Shimmer effect
