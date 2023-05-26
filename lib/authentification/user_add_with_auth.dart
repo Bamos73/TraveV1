@@ -24,7 +24,7 @@ class UserAuth {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'Firstname': firstname,
+      'name': firstname + lastname,
       'Lastname': lastname,
       'Phonenumber': phonenumber,
       'Address': address,
@@ -37,7 +37,7 @@ class UserAuth {
   factory UserAuth.fromJson(Map<String, dynamic> json) {
     return UserAuth(
       id: json['id'],
-      firstname: json['Firstname'],
+      firstname: json['name'] + json['Lastname'],
       lastname: json['Lastname'],
       phonenumber: json['Phonenumber'],
       address: json['Address'],
