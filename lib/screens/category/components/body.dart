@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shopapp/components/shimmer_box.dart';
 import 'package:shopapp/constants.dart';
+import 'package:shopapp/screens/Category/components/category_shimmer.dart';
 import 'package:shopapp/screens/details_categorie/details_categorie_screen.dart';
 import 'package:shopapp/screens/home/components/home_header.dart';
 import 'package:shopapp/size_config.dart';
@@ -24,9 +25,7 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
+      return category_shimmer();
     } else {
       return SafeArea(
         child: SingleChildScrollView(
