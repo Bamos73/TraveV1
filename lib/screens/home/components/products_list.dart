@@ -57,7 +57,6 @@ class _ProductsListState extends State<ProductsList> {
                           product: products[index] as DocumentSnapshot<Map<String, dynamic>>?,
                           collectionName: widget.collectionName,
                           FirstcollectionName: 'Home_Collection',
-
                         ),
                       ),
                     ),
