@@ -132,6 +132,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
           'style': userCardData['style'] + 1,
           'taille': product['tailles'][_lastSelectedSizeIndex],
           'quantite': quantiteSelectionnee,
+          'quantite_Max': product['quantité'],
         });
         if (userCardRefData != null && userCardRefData['quantite'] != quantiteSelectionnee) {
           // la quantité est différente
@@ -153,7 +154,8 @@ class _CustomNavBarState extends State<CustomNavBar> {
         'price': product['price'],
         'style': product['style'],
         'taille': product['tailles'][index],
-        'quantite': quantiteSelectionnee,// Ajouter la quantité contenu dans le Intent
+        'quantite': quantiteSelectionnee,
+        'quantite_Max': product['quantité'],
       });
       Navigator.of(context).pop();
     }

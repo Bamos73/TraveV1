@@ -13,11 +13,8 @@ class CardProduct extends StatefulWidget {
     required this.cardColors,
     required this.cardTailles,
     required this.cardQuantites,
-    required this.cardQuantitesMax,
     required this.cardPrices,
-    this.cardStyles,
-    required this.documentId,
-    this.cardCodes,
+    this.cardStyles, required this.documentId, this.cardCodes,
   });
 
   final  cardImages;
@@ -25,7 +22,6 @@ class CardProduct extends StatefulWidget {
   final  cardColors;
   final  cardTailles;
   final  cardQuantites;
-  final  cardQuantitesMax;
   final  cardPrices;
   final  cardStyles;
   final  cardCodes;
@@ -123,10 +119,8 @@ class _CardProductState extends State<CardProduct> {
                                   color: kTextColor
                               ),
                               onPressed: () {
-                                if(widget.cardQuantites < widget.cardQuantitesMax){
                                 int newQuantity = widget.cardQuantites + 1;
                                 updateQuantity(newQuantity);
-                                }
                               },
                             ),
                             // SizedBox(width: getProportionateScreenWidth(1)),
