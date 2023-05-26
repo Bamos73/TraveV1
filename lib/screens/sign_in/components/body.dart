@@ -88,7 +88,7 @@ class _BodyState extends State<Body> {
                   height: getProportionateScreenHeight(20),
                 ),
                 const NoAccountText(),
-                SizedBox(height: getProportionateScreenHeight(40)),
+                SizedBox(height: getProportionateScreenHeight(30)),
                 const PolicyAndTerm(),
               ],
             ),
