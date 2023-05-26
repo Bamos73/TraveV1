@@ -313,14 +313,14 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
             .doc(userData['code_reduction_name'] as String)
             .get();
 
-        if (promoCodeData.exists && promoCodeData['minimum_achat'] ==
-            userData['code_reduction_actif']) {
-          addOrder(context);
+        if (promoCodeData.exists && promoCodeData['montant'] == userData['code_reduction_actif']) {
+          addOrderWithCodePromo(context);
+
         } else {
           showCustomSnackBar(context, "Erreur sur la valeur du bon de réduction, veuillez utiliser un autre bon de réduction", ContentType.failure);
         }
       } else {
-        showCustomSnackBar(context, "L'utilisateur n'a pas de code de réduction", ContentType.failure);
+        addOrderWithOutCodePromo(context);
       }
     } catch (e) {
       print(e);
@@ -343,31 +343,33 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
       ),
     );
   }
+  // générer code de commande
+  String generateOrderCode() {
+    String code = 'CM';
+    final random = Random();
+    final letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    final digits = '0123456789';
 
-  void addOrder(BuildContext context) async {
+    // Générer 7 lettres aléatoires
+    for (int i = 0; i < 7; i++) {
+      int randomIndex = random.nextInt(letters.length);
+      code += letters[randomIndex];
+    }
+    // Générer 3 chiffres aléatoires
+    for (int i = 0; i < 3; i++) {
+      int randomIndex = random.nextInt(digits.length);
+      code += digits[randomIndex];
+    }
+    return code;
+  }
+
+
+  void addOrderWithCodePromo(BuildContext context) async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
 
     if (userId != null) {
-      final random = Random();
-      final letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      final digits = '0123456789';
 
-      String generateOrderCode() {
-        String code = 'CM';
-
-        // Générer 7 lettres aléatoires
-        for (int i = 0; i < 7; i++) {
-          int randomIndex = random.nextInt(letters.length);
-          code += letters[randomIndex];
-        }
-        // Générer 3 chiffres aléatoires
-        for (int i = 0; i < 3; i++) {
-          int randomIndex = random.nextInt(digits.length);
-          code += digits[randomIndex];
-        }
-        return code;
-      }
-      // Utilisation :
+      // code de commande généré
       final orderNumber = generateOrderCode();
 
       final userOrderRef = FirebaseFirestore.instance.collection('Order').doc(userId).collection(orderNumber).doc(orderNumber);
@@ -377,7 +379,6 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
 
 
       final userOrderDocFirst = await FirebaseFirestore.instance.collection('Order').doc(userId).get();
-      final userOrderCardQuerySnapshot = await userOrderCardRef.get();
       final userCardQuerySnapshot = await userCardRef.get();
       final userDoc = await userRef.get();
 
@@ -386,7 +387,8 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
       final userData = userDoc.data();
 
       if (!userOrderDocFirst.exists) {
-          //Pas de commande
+
+          //Nouvelle commande
         await userOrderRef.set({
           'orderCode': orderNumber,
           'userID': FirebaseAuth.instance.currentUser?.uid,
@@ -402,20 +404,6 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
         for (var docData in userCardData) {
           final code = docData['code'];
           await userOrderCardRef.doc(code).set(docData);
-        }
-
-
-
-        if (userDoc.exists) {
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(userId)
-              .update({
-            'code_reduction_actif': FieldValue.delete(),
-            'code_reduction_name': FieldValue.delete(),
-          });
-
-          print('information supprimé');
         }
 
         // Supprimer la sous-collection dans card
@@ -434,12 +422,96 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
             .collection('Card')
             .doc(userId)
             .delete();
-      } else {
-        print("L'utilisateur a déjà une commande");
+
+        //ajouter l'uid de l'utilisateur a la collection CodesPromo
+        await FirebaseFirestore.instance
+            .collection('CodesPromo')
+            .doc(userData['code_reduction_name'])
+            .collection('list_user')
+            .doc(userId)
+            .set({
+          'utilisé': true,
+          'date': DateTime.now(),
+        });
+
+        //supprimer les informations du code promo
+        if (userDoc.exists) {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .update({
+            'code_reduction_actif': FieldValue.delete(),
+            'code_reduction_name': FieldValue.delete(),
+          });
+
+        }
+
       }
     }
   }
 
+  void addOrderWithOutCodePromo(BuildContext context) async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+
+    if (userId != null) {
+
+      // code de commande généré
+      final orderNumber = generateOrderCode();
+
+      final userOrderRef = FirebaseFirestore.instance.collection('Order').doc(userId).collection(orderNumber).doc(orderNumber);
+      final userOrderCardRef = FirebaseFirestore.instance.collection('Order').doc(userId).collection(orderNumber).doc(orderNumber).collection('Articles');
+      final userCardRef = FirebaseFirestore.instance.collection('Card').doc(userId).collection(userId);
+      final userRef = FirebaseFirestore.instance.collection('users').doc(userId);
+
+
+      final userOrderDocFirst = await FirebaseFirestore.instance.collection('Order').doc(userId).get();
+      final userCardQuerySnapshot = await userCardRef.get();
+      final userDoc = await userRef.get();
+
+
+      final userCardData = userCardQuerySnapshot.docs.map((doc) => doc.data()).toList();
+      final userData = userDoc.data();
+
+      if (!userOrderDocFirst.exists) {
+
+        //Nouvelle commande
+        await userOrderRef.set({
+          'orderCode': orderNumber,
+          'userID': FirebaseAuth.instance.currentUser?.uid,
+          'nom_de_livraison': userData!['nom_de_livraison'],
+          'adresse_de_livraison': userData['adresse_de_livraison'],
+          'numero_de_livraison': userData['numero_de_livraison'],
+          'frais_de_livraison': userData['frais_de_livraison'],
+          'reduction': 0,
+          'mode_de_paiement': userData['mode_de_paiement'],
+        });
+
+        // Copier les documents de la sous-collection "Card" vers la sous-collection "Order"
+        for (var docData in userCardData) {
+          final code = docData['code'];
+          await userOrderCardRef.doc(code).set(docData);
+        }
+
+        // Supprimer la sous-collection dans card
+        final subcollectionSnapshot = await FirebaseFirestore.instance
+            .collection('Card')
+            .doc(userId)
+            .collection(userId)
+            .get();
+
+        for (final doc in subcollectionSnapshot.docs) {
+          await doc.reference.delete();
+        }
+
+        // Supprimer le document principal dans card
+        await FirebaseFirestore.instance
+            .collection('Card')
+            .doc(userId)
+            .delete();
+
+      }
+    }
+  }
 
 }
 

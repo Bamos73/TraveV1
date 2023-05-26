@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopapp/components/default_button.dart';
 import 'package:shopapp/components/main_screens.dart';
 import 'package:shopapp/constants.dart';
@@ -19,11 +20,8 @@ class _EmptyCartState extends State<EmptyCart> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(Icons.shopping_cart_checkout,
-          size: getProportionateScreenWidth(80),
-          color: kSecondaryColor.withOpacity(0.6),),
-        SizedBox(height: getProportionateScreenHeight(30),),
-        Text("Votre commande a été enregistrée avec succès..",
+        SvgPicture.asset("assets/icons/Ok-bro.svg"),
+        Text("Votre commande a été enregistrée avec succès.",
           style: TextStyle(
               color:Colors.black.withOpacity(0.8),
               fontSize: getProportionateScreenWidth(15)
@@ -32,7 +30,7 @@ class _EmptyCartState extends State<EmptyCart> {
         SizedBox(height: getProportionateScreenHeight(30),),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: getProportionateScreenHeight(50)),
-          child: DefaultButton(text: "MAGASINE", press: (){
+          child: DefaultButton(text: "PAGE D'ACCUEIL", press: (){
             Navigator.pushNamed(context, MainScreen.routeName);
           }),
         ),
