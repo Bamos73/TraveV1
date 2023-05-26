@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shopapp/components/default_button.dart';
 import 'package:shopapp/components/main_screens.dart';
-import 'package:shopapp/constants.dart';
 import 'package:shopapp/size_config.dart';
 
 class EmptyCart extends StatefulWidget {
@@ -20,7 +19,9 @@ class _EmptyCartState extends State<EmptyCart> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SvgPicture.asset("assets/icons/Ok-bro.svg"),
+        Center(
+          child: Lottie.asset("name"),
+        ),
         Text("Votre commande a été enregistrée avec succès.",
           style: TextStyle(
               color:Colors.black.withOpacity(0.8),
