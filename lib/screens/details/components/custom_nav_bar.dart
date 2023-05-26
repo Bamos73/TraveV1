@@ -88,10 +88,6 @@ class _CustomNavBarState extends State<CustomNavBar> {
     // Utilisez la valeur de quantiteSelectionnee comme vous le souhaitez
     int quantiteSelectionnee = MyAppState.nmbreArticleState;
 
-    // //généré un code a 6 chiffre pour les differente style
-    // Random random = Random();
-    // int CodeStyle = random.nextInt(99999) + 2300000;
-    // print('Code généré : $CodeStyle');
 
     final userCardRef = FirebaseFirestore.instance
         .collection('Card')
@@ -147,7 +143,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
       }
       Navigator.of(context).pop();
     } else {
-      print("Le document n'existe pas");
+
       await userCardRef.set({
         'userID': FirebaseAuth.instance.currentUser?.uid,
         'code': product['code'],
