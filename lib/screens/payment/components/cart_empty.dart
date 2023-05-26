@@ -20,7 +20,7 @@ class _EmptyCartState extends State<EmptyCart> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Center(
-          child: Lottie.asset("name"),
+          child: Lottie.asset("assets/lottiefiles/96365-delivery-service-delivery-man.json"),
         ),
         Text("Votre commande a été enregistrée avec succès.",
           style: TextStyle(
