@@ -9,7 +9,8 @@ class DetailsScreen extends StatefulWidget {
   const DetailsScreen({
     Key? key,
     required this.productId,
-    this.product, required this.collectionName,
+    this.product,
+    required this.collectionName,
   }) : super(key: key);
 
   final String productId; // l'identifiant unique du produit
@@ -40,6 +41,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
     try {
       DocumentSnapshot<Map<String, dynamic>> product =
       await FirebaseFirestore.instance
+          .collection('Category')
+          .doc(widget.collectionName)
           .collection(widget.collectionName)
           .doc(productId)
           .get();
