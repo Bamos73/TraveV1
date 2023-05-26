@@ -60,6 +60,7 @@ class _ProductsCategorieCardState extends State<ProductsCategorieCard> {
                                 productId: products[index].id,
                                 product: products[index] as DocumentSnapshot<Map<String, dynamic>>?,
                                 collectionName: widget.collectionName,
+                                FirstcollectionName: 'Category',
                               ),
                             ),
                           ),

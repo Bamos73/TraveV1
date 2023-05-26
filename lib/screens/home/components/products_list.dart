@@ -11,7 +11,9 @@ class ProductsList extends StatefulWidget {
   final Stream<QuerySnapshot<Map<String, dynamic>>> productsStream;
   final String collectionName;
 
-  const ProductsList({Key? key, required this.productsStream, required this.collectionName}) : super(key: key);
+  const ProductsList({Key? key,
+    required this.productsStream,
+    required this.collectionName}) : super(key: key);
 
   @override
   State<ProductsList> createState() => _ProductsListState();
@@ -36,7 +38,7 @@ class _ProductsListState extends State<ProductsList> {
           return shimmer_box();
         }
         else if (snapshot.connectionState == ConnectionState.waiting) {
-          return Container();
+          return shimmer_box();
         }
         else {
           List<DocumentSnapshot> products = snapshot.data!.docs;
@@ -54,6 +56,8 @@ class _ProductsListState extends State<ProductsList> {
                           productId: products[index].id,
                           product: products[index] as DocumentSnapshot<Map<String, dynamic>>?,
                           collectionName: widget.collectionName,
+                          FirstcollectionName: 'Home_Collection',
+
                         ),
                       ),
                     ),
