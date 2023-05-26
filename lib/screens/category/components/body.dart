@@ -13,8 +13,6 @@ class Body extends StatefulWidget {
     super.key,
   });
 
-
-
   @override
   State<Body> createState() => _BodyState();
 }
@@ -23,7 +21,6 @@ class _BodyState extends State<Body> {
   bool isLoading = true;
   late QueryDocumentSnapshot<Map<String, dynamic>> coverDoc;
   late List<QueryDocumentSnapshot<Map<String, dynamic>>> categoryDocs;
-
 
   @override
   Widget build(BuildContext context) {

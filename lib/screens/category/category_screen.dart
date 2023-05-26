@@ -52,6 +52,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
           : Body(),
     );
   }
+
   // Afficher le Shimmer effect
   Widget _buildLoadingIndicator() {
     return category_shimmer();
