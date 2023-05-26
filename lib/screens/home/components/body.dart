@@ -34,10 +34,10 @@ class _BodyState extends State<Body> {
     _HomecoverDocFuture2 = _getHomeCoverData('HomeCover_2');
     _HomecoverDocFuture3 = _getHomeCoverData('HomeCover_3');
     _HomecoverDocFuture4 = _getHomeCoverData('HomeCover_4');
-    _productsStream1 = FirebaseFirestore.instance.collection('Home_NewCollection_product').snapshots();
-    _productsStream2 = FirebaseFirestore.instance.collection('Home_WomanCollection_product').snapshots();
-    _productsStream3 = FirebaseFirestore.instance.collection('Home_MenCollection_product').snapshots();
-    _productsStream4 = FirebaseFirestore.instance.collection('Home_AccessoireCollection_product').snapshots();
+    _productsStream1 = FirebaseFirestore.instance.collection('Home_Collection').doc("Home_NewCollection_product").collection('Home_NewCollection_product').snapshots();
+    _productsStream2 = FirebaseFirestore.instance.collection('Home_Collection').doc("Home_WomanCollection_product").collection('Home_WomanCollection_product').snapshots();
+    _productsStream3 = FirebaseFirestore.instance.collection('Home_Collection').doc("Home_MenCollection_product").collection('Home_MenCollection_product').snapshots();
+    _productsStream4 = FirebaseFirestore.instance.collection('Home_Collection').doc("Home_AccessoireCollection_product").collection('Home_AccessoireCollection_product').snapshots();
   }
 
   Future<DocumentSnapshot<Map<String, dynamic>>> _getHomeCoverData(String docId) async {
