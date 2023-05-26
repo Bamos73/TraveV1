@@ -49,15 +49,12 @@ class _CategoryScreenState extends State<CategoryScreen> {
     return Scaffold(
       backgroundColor: Color(0xFFF5F6F9),
       body: isLoading
-          ? _buildLoadingIndicator()
+          ? category_shimmer()
           : Body(),
     );
   }
 
-  // Afficher le Shimmer effect
-  Widget _buildLoadingIndicator() {
-    return category_shimmer();
-  }
+
 }
 
 
