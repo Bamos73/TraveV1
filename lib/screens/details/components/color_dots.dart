@@ -46,7 +46,6 @@ class _ColorDotsState extends State<ColorDots> {
     }
   }
 
-
   void addItemInCard(DocumentSnapshot<Map<String, dynamic>> product) {
   if (product == null) {
   print("erreur");
@@ -54,7 +53,6 @@ class _ColorDotsState extends State<ColorDots> {
     setState(() {
   MyAppState.nmbreArticleState = NmbreArticle;
     });
-
   }
   }
 

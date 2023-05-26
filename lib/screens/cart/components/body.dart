@@ -89,7 +89,8 @@ class _BodyState extends State<Body> {
                           cardTailles: cardData['taille'],
                           cardQuantites: cardData['quantite'],
                           cardCodes: cardData['code'],
-                          cardPrices: cardData['price'], documentId: cardData['code'],
+                          cardPrices: cardData['price'],
+                          documentId: cardData['code'],
                         ),
                       );
                     },
