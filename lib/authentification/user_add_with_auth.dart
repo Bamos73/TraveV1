@@ -9,9 +9,11 @@ class UserAuth {
   String id;
   String email;
   String uid;
+  String provider;
 
   UserAuth({
     this.id = '',
+    this.provider = '',
     required this.firstname,
     required this.lastname,
     required this.phonenumber,
@@ -24,6 +26,7 @@ class UserAuth {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'provider': provider,
       'name': firstname + lastname,
       'Lastname': lastname,
       'Phonenumber': phonenumber,
@@ -37,6 +40,7 @@ class UserAuth {
   factory UserAuth.fromJson(Map<String, dynamic> json) {
     return UserAuth(
       id: json['id'],
+      provider: json['provider'],
       firstname: json['name'] + json['Lastname'],
       lastname: json['Lastname'],
       phonenumber: json['Phonenumber'],
@@ -55,7 +59,7 @@ Future addUser(UserAuth user) async {
   if (currentUser != null) {
     user.email = currentUser.email!;
     user.uid=currentUser.uid;
-
+    user.provider='TraveSignUp';
     final docUser = FirebaseFirestore.instance.collection("users").doc(user.uid);
 
     await docUser.set(user.toJson());
@@ -68,6 +72,7 @@ Future updateUser(UserAuth user) async {
   if (currentUser != null) {
     user.email = currentUser.email!;
     user.uid = currentUser.uid;
+    user.provider='TraveSignUp';
 
     final snapshot = await FirebaseFirestore.instance
         .collection("users")
