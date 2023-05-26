@@ -16,7 +16,7 @@ class EmptyCart extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Center(
-            child: Lottie.asset("assets/lottiefiles/92272-add-to-cart.json"),
+            child: Lottie.asset("assets/lottiefiles/116422-shopping-cart.json"),
           ),
           Text("TON PANIER EST VIDE. DÉCOUVRE LES NOUVEAUTÉS.",
             style: TextStyle(
