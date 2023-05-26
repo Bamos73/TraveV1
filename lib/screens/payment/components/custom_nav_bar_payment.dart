@@ -69,18 +69,18 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
               return Container();
             }
             else if (!userSnapshot.data!.exists ||
-                userSnapshot.data!.get('frais_de_livraison') == null) {
+                userSnapshot.data!.get('frais_de_livraison') == null || userSnapshot.data!.get('mode_de_paiement') == null) {
               return Container();
             }
 
             final userModeLivraison = userSnapshot.data?.get(
-                'frais_de_livraison') as int? ?? 1000;
+                'frais_de_livraison') as num? ?? 1000;
 
             final userData = userSnapshot.data!.data() as Map<String, dynamic>?;
 
             final userReduction = userData != null &&
                 userData.containsKey('code_reduction_actif')
-                ? userData['code_reduction_actif'] as int? ?? 0
+                ? userData['code_reduction_actif'] as num? ?? 0
                 : 0;
 
             return AnimatedContainer(
@@ -244,7 +244,9 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
                               width: getProportionateScreenWidth(190),
                               child: DefaultButton(
                                   text: "Commande", press: () {
-                                verificationOrder(context);
+                                  num totalCmd=userModeLivraison + total - userReduction;
+
+                                verificationOrder(context, totalCmd );
                               }
                               ),
                             )
@@ -263,7 +265,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
     );
   }
 
-  void verificationOrder(BuildContext context) async {
+  void verificationOrder(BuildContext context,num total_commande) async {
     try {
       final userId = FirebaseAuth.instance.currentUser?.uid;
       if (userId == null) {
@@ -314,13 +316,13 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
             .get();
 
         if (promoCodeData.exists && promoCodeData['montant'] == userData['code_reduction_actif']) {
-          addOrderWithCodePromo(context);
+          addOrderWithCodePromo(context,total_commande);
 
         } else {
           showCustomSnackBar(context, "Erreur sur la valeur du bon de réduction, veuillez utiliser un autre bon de réduction", ContentType.failure);
         }
       } else {
-        addOrderWithOutCodePromo(context);
+        addOrderWithOutCodePromo(context,total_commande);
       }
     } catch (e) {
       print(e);
@@ -343,6 +345,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
       ),
     );
   }
+
   // générer code de commande
   String generateOrderCode() {
     String code = 'CM';
@@ -364,7 +367,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
   }
 
 
-  void addOrderWithCodePromo(BuildContext context) async {
+  void addOrderWithCodePromo(BuildContext context,num total_commande) async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
 
     if (userId != null) {
@@ -390,7 +393,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
 
           //Nouvelle commande
         await userOrderRef.set({
-          'orderCode': orderNumber,
+          'code_commande': orderNumber,
           'userID': FirebaseAuth.instance.currentUser?.uid,
           'nom_de_livraison': userData!['nom_de_livraison'],
           'adresse_de_livraison': userData['adresse_de_livraison'],
@@ -398,6 +401,8 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
           'frais_de_livraison': userData['frais_de_livraison'],
           'reduction': userData['code_reduction_actif'],
           'mode_de_paiement': userData['mode_de_paiement'],
+          'date_de_commande': FieldValue.serverTimestamp(),
+          'total_commande': total_commande,
         });
 
         // Copier les documents de la sous-collection "Card" vers la sous-collection "Order"
@@ -431,7 +436,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
             .doc(userId)
             .set({
           'utilisé': true,
-          'date': DateTime.now(),
+          'date': FieldValue.serverTimestamp(),
         });
 
         //supprimer les informations du code promo
@@ -450,7 +455,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
     }
   }
 
-  void addOrderWithOutCodePromo(BuildContext context) async {
+  void addOrderWithOutCodePromo(BuildContext context,num total_commande) async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
 
     if (userId != null) {
@@ -476,7 +481,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
 
         //Nouvelle commande
         await userOrderRef.set({
-          'orderCode': orderNumber,
+          'code_commande': orderNumber,
           'userID': FirebaseAuth.instance.currentUser?.uid,
           'nom_de_livraison': userData!['nom_de_livraison'],
           'adresse_de_livraison': userData['adresse_de_livraison'],
@@ -484,6 +489,8 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment> {
           'frais_de_livraison': userData['frais_de_livraison'],
           'reduction': 0,
           'mode_de_paiement': userData['mode_de_paiement'],
+          'date_de_commande': FieldValue.serverTimestamp(),
+          'total_commande': total_commande,
         });
 
         // Copier les documents de la sous-collection "Card" vers la sous-collection "Order"

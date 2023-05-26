@@ -156,7 +156,6 @@ class _CheckOurCardState extends State<CheckOurCard> {
                       width: getProportionateScreenWidth(190),
                       child: DefaultButton(text: "Caisse", press: () {
                         nextScreenReplace(context, PaymentScreen());
-                        UpdateselectedOption();
                       }),
                     )
                   ],
@@ -230,34 +229,6 @@ class _CheckOurCardState extends State<CheckOurCard> {
                 ),
               );
   }
-  void UpdateselectedOption() async {
-    final userId = FirebaseAuth.instance.currentUser?.uid;
-    if (userId != null) {
-      final userCardRefLiv = FirebaseFirestore.instance.collection('Livraison').doc('Mode_Livraison');
-      final userCardDocLiv = await userCardRefLiv.get();
-
-
-      if (userCardDocLiv.exists) {
-        final userCardData = userCardDocLiv.data();
-
-        //Changement du mode de Livraison par defaut a Régulier
-      final userCardRefMode = FirebaseFirestore.instance.collection('users').doc(userId);
-      await userCardRefMode.set({
-        'frais_de_livraison': userCardData!['Regulier'],
-      }, SetOptions(merge: true));
-
-
-
-          //Changement du mode de paiement par defaut a Expèces
-        final userCardRefPaie = FirebaseFirestore.instance.collection('users').doc(userId);
-        await userCardRefPaie.set({
-          'mode_de_paiement': 'Espèces',
-        }, SetOptions(merge: true));
-
-        }
-      }
-        }
-
 
 
   void verifyPromoCode(String promoCode, num total,TextEditingController controler) async {
