@@ -41,6 +41,19 @@
 		<key>LSRequiresIPhoneOS</key>
 		<true/>
 		<key>UILaunchStoryboardName</key>
+		<key>CFBundleURLTypes</key>
+        <array>
+            <dict>
+                <key>CFBundleTypeRole</key>
+                <string>Editor</string>
+                <key>CFBundleURLSchemes</key>
+                <array>
+                    <!-- TODO Replace this value: -->
+                    <!-- Copied from GoogleService-Info.plist key REVERSED_CLIENT_ID -->
+                    <string>com.googleusercontent.apps.423632900833-0g4s608dnv81cruotloqk0j3um68hpsi</string>
+                </array>
+            </dict>
+        </array>
 		<string>LaunchScreen</string>
 		<key>UIMainStoryboardFile</key>
 		<string>Main</string>
