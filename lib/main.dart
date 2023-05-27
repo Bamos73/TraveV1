@@ -14,7 +14,6 @@ import 'package:firebase_performance/firebase_performance.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
   runApp(MyApp());
 }
 FirebasePerformance performance = FirebasePerformance.instance;
