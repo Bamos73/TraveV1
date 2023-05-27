@@ -20,9 +20,11 @@ import 'package:shopapp/screens/profil/profil_screen.dart';
 import 'package:shopapp/screens/sign_in/sign_in_screen.dart';
 import 'package:shopapp/screens/sign_up/sign_up_screen.dart';
 import 'package:shopapp/screens/splash_screen.dart';
+import 'package:shopapp/screens/splash_screen_first.dart';
 
 final Map<String, WidgetBuilder> routes = {
         SplashScreen.routeName : (context) => SplashScreen(),
+        SplashScreenFirst.routeName : (context) => SplashScreenFirst(),
         SignInScreen.routeName: (context) => SignInScreen(),
         ForgotPasswordScreen.routeName: (context) => ForgotPasswordScreen(),
         LoginSuccessScreen.routeName: (context) => LoginSuccessScreen(),
