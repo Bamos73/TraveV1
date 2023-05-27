@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:shopapp/screens/home/components/categories.dart';
-import 'package:shopapp/screens/home/components/discount_banner.dart';
+import 'package:shopapp/screens/home/components/categorie_popular.dart';
 import 'package:shopapp/screens/home/components/home_cover.dart';
 import 'package:shopapp/screens/home/components/home_header.dart';
 import 'package:shopapp/screens/home/components/products_list.dart';
@@ -34,20 +33,34 @@ class _BodyState extends State<Body> {
     _HomecoverDocFuture2 = _getHomeCoverData('HomeCover_2');
     _HomecoverDocFuture3 = _getHomeCoverData('HomeCover_3');
     _HomecoverDocFuture4 = _getHomeCoverData('HomeCover_4');
-    _productsStream1 = FirebaseFirestore.instance.collection('Home_Collection').doc("Home_NewCollection_product").collection('Home_NewCollection_product').snapshots();
-    _productsStream2 = FirebaseFirestore.instance.collection('Home_Collection').doc("Home_WomanCollection_product").collection('Home_WomanCollection_product').snapshots();
-    _productsStream3 = FirebaseFirestore.instance.collection('Home_Collection').doc("Home_MenCollection_product").collection('Home_MenCollection_product').snapshots();
-    _productsStream4 = FirebaseFirestore.instance.collection('Home_Collection').doc("Home_AccessoireCollection_product").collection('Home_AccessoireCollection_product').snapshots();
+    _productsStream1 =
+        FirebaseFirestore.instance.collection('Home_Collection').doc(
+            "Home_NewCollection_product").collection(
+            'Home_NewCollection_product').snapshots();
+    _productsStream2 =
+        FirebaseFirestore.instance.collection('Home_Collection').doc(
+            "Home_WomanCollection_product").collection(
+            'Home_WomanCollection_product').snapshots();
+    _productsStream3 =
+        FirebaseFirestore.instance.collection('Home_Collection').doc(
+            "Home_MenCollection_product").collection(
+            'Home_MenCollection_product').snapshots();
+    _productsStream4 =
+        FirebaseFirestore.instance.collection('Home_Collection').doc(
+            "Home_AccessoireCollection_product").collection(
+            'Home_AccessoireCollection_product').snapshots();
   }
 
-  Future<DocumentSnapshot<Map<String, dynamic>>> _getHomeCoverData(String docId) async {
-    try{
-      DocumentSnapshot<Map<String, dynamic>> homeCover = await FirebaseFirestore.instance
+  Future<DocumentSnapshot<Map<String, dynamic>>> _getHomeCoverData(
+      String docId) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> homeCover = await FirebaseFirestore
+          .instance
           .collection('Home')
           .doc(docId)
           .get();
       return homeCover;
-    }catch (e) {
+    } catch (e) {
       print(e.toString());
       rethrow;
     }
@@ -62,42 +75,49 @@ class _BodyState extends State<Body> {
             SizedBox(height: getProportionateScreenWidth(20),),
             HomeHeader(),
             SizedBox(height: getProportionateScreenWidth(30),),
-            DiscountBanner(),
-            SizedBox(height: getProportionateScreenWidth(30),),
-            Categories(),
-            SizedBox(height: getProportionateScreenWidth(30),),
             SpecialOffers(),
             SizedBox(height: getProportionateScreenWidth(30),),
-            SectionTitle(text: "Nouvelle Collection", press: (){},),
+            SectionTitle(text: "Catégorie Populaire", press: () {},),
             SizedBox(height: getProportionateScreenWidth(20),),
-            ProductsList(productsStream: _productsStream1, collectionName: 'Home_NewCollection_product',),
-            SizedBox(height: getProportionateScreenWidth(30),),
-            HomeCover_1(HomecoverDocFuture1: _HomecoverDocFuture1),
-            SizedBox(height: getProportionateScreenWidth(30),),
-            SectionTitle(text: "Collection Femme", press: (){},),
+            CategoriePopular(),
             SizedBox(height: getProportionateScreenWidth(20),),
-            ProductsList(productsStream: _productsStream2, collectionName: 'Home_WomanCollection_product',),
-            SizedBox(height: getProportionateScreenWidth(30),),
-            HomeCover_1(HomecoverDocFuture1: _HomecoverDocFuture2),
-            SizedBox(height: getProportionateScreenWidth(30),),
-            SectionTitle(text: "Collection Homme", press: (){},),
+            SectionTitle(text: "Nouvelle Collection", press: () {},),
             SizedBox(height: getProportionateScreenWidth(20),),
-            ProductsList(productsStream: _productsStream3, collectionName: 'Home_MenCollection_product',),
+            ProductsList(productsStream: _productsStream1,
+              collectionName: 'Home_NewCollection_product',),
             SizedBox(height: getProportionateScreenWidth(30),),
-            HomeCover_1(HomecoverDocFuture1: _HomecoverDocFuture3),
+            HomeCover(HomecoverDocFuture1: _HomecoverDocFuture1),
             SizedBox(height: getProportionateScreenWidth(30),),
-            SectionTitle(text: "Accessoire", press: (){},),
+            SectionTitle(text: "Collection Femme", press: () {},),
             SizedBox(height: getProportionateScreenWidth(20),),
-            ProductsList(productsStream: _productsStream4, collectionName: 'Home_AccessoireCollection_product',),
+            ProductsList(productsStream: _productsStream2,
+              collectionName: 'Home_WomanCollection_product',),
             SizedBox(height: getProportionateScreenWidth(30),),
-            HomeCover_1(HomecoverDocFuture1: _HomecoverDocFuture4),
+            HomeCover(HomecoverDocFuture1: _HomecoverDocFuture2),
             SizedBox(height: getProportionateScreenWidth(30),),
-            ],
-          ),
+            SectionTitle(text: "Collection Homme", press: () {},),
+            SizedBox(height: getProportionateScreenWidth(20),),
+            ProductsList(productsStream: _productsStream3,
+              collectionName: 'Home_MenCollection_product',),
+            SizedBox(height: getProportionateScreenWidth(30),),
+            HomeCover(HomecoverDocFuture1: _HomecoverDocFuture3),
+            SizedBox(height: getProportionateScreenWidth(30),),
+            SectionTitle(text: "Accessoire", press: () {},),
+            SizedBox(height: getProportionateScreenWidth(20),),
+            ProductsList(productsStream: _productsStream4,
+              collectionName: 'Home_AccessoireCollection_product',),
+            SizedBox(height: getProportionateScreenWidth(30),),
+            HomeCover(HomecoverDocFuture1: _HomecoverDocFuture4),
+            SizedBox(height: getProportionateScreenWidth(30),),
+          ],
         ),
+      ),
     );
   }
 }
+
+
+
 
 
 

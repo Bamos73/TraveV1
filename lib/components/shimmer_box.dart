@@ -2,6 +2,61 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:shopapp/size_config.dart';
 
+class shimmer_box_line extends StatelessWidget {
+  const shimmer_box_line({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Container(
+              width: getProportionateScreenWidth(120),
+              height: getProportionateScreenHeight(240),
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: getProportionateScreenWidth(20)),
+            child: Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                width: getProportionateScreenWidth(120),
+                height: getProportionateScreenHeight(240),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: getProportionateScreenWidth(20)),
+            child: Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                width: getProportionateScreenWidth(120),
+                height: getProportionateScreenHeight(240),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 class shimmer_box extends StatelessWidget {
   const shimmer_box({
@@ -179,7 +234,67 @@ class ShimmerCard extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
 
+
+class ShimmerPopular extends StatelessWidget {
+  const ShimmerPopular({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: getProportionateScreenHeight(175),
+      child: GridView.builder(
+        itemCount: 8,
+        physics: NeverScrollableScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: getProportionateScreenWidth(64),
+          mainAxisSpacing: getProportionateScreenWidth(20),
+          crossAxisSpacing: getProportionateScreenWidth(20),
+          childAspectRatio: 1,
+        ),
+        itemBuilder: (context, index) {
+          return Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(50)
+              ),
+
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+
+class ShimmerHomeCover extends StatelessWidget {
+  const ShimmerHomeCover({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: getProportionateScreenHeight(600),
+        decoration: BoxDecoration(
+            color: Colors.grey[300],
+            borderRadius: BorderRadius.circular(50)
+        ),
+      ),
     );
   }
 }

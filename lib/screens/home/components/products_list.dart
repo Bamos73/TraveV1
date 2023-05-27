@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:shopapp/components/card_categorie.dart';
+import 'package:shopapp/screens/home/components/card_categorie.dart';
 import 'package:shopapp/components/shimmer_box.dart';
 import 'package:shopapp/screens/details/details_screen.dart';
 import 'package:shopapp/size_config.dart';
@@ -35,10 +35,10 @@ class _ProductsListState extends State<ProductsList> {
       stream: widget.productsStream,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError || snapshot.data == null || snapshot.data!.docs.isEmpty) {
-          return shimmer_box();
+          return shimmer_box_line();
         }
         else if (snapshot.connectionState == ConnectionState.waiting) {
-          return shimmer_box();
+          return shimmer_box_line();
         }
         else {
           List<DocumentSnapshot> products = snapshot.data!.docs;
