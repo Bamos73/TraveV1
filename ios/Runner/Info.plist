@@ -20,7 +20,6 @@
         <key>FacebookClientToken</key>
         <string>74c689784a0b795bc95fba2420a56af2</string>
         <key>FacebookDisplayName</key>
-        <string></string>
         <string>APP-NAME</string>
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
