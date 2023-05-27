@@ -93,13 +93,13 @@ class SignInProvider extends ChangeNotifier {
         switch (e.code) {
           case "account-exists-with-different-credential":
             _errorCode =
-                "You already have an account with us. Use correct provider";
+                "Vous avez déjà un compte chez nous. Utilisez le bon fournisseur";
             _hasError = true;
             notifyListeners();
             break;
 
           case "null":
-            _errorCode = "Some unexpected error while trying to sign in";
+            _errorCode = "Une erreur inattendue lors de la tentative de connexion";
             _hasError = true;
             notifyListeners();
             break;
@@ -142,13 +142,13 @@ class SignInProvider extends ChangeNotifier {
         switch (e.code) {
           case "account-exists-with-different-credential":
             _errorCode =
-                "You already have an account with us. Use correct provider";
+                "Vous avez déjà un compte chez nous. Utilisez le bon fournisseur";
             _hasError = true;
             notifyListeners();
             break;
 
           case "null":
-            _errorCode = "Some unexpected error while trying to sign in";
+            _errorCode = "Une erreur inattendue lors de la tentative de connexion";
             _hasError = true;
             notifyListeners();
             break;
@@ -187,13 +187,13 @@ class SignInProvider extends ChangeNotifier {
         switch (e.code) {
           case "account-exists-with-different-credential":
             _errorCode =
-                "You already have an account with us. Use correct provider";
+                "Vous avez déjà un compte chez nous. Utilisez le bon fournisseur";
             _hasError = true;
             notifyListeners();
             break;
 
           case "null":
-            _errorCode = "Some unexpected error while trying to sign in";
+            _errorCode = "Une erreur inattendue lors de la tentative de connexion";
             _hasError = true;
             notifyListeners();
             break;

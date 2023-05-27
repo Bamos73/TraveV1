@@ -4,6 +4,7 @@ import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:shopapp/components/main_screens.dart';
 import 'package:shopapp/constants.dart';
 import 'package:shopapp/provider/sign_in_provider.dart';
 import 'package:shopapp/screens/home/home_screen.dart';
@@ -28,7 +29,7 @@ class _SplashScreenFirstState extends State<SplashScreenFirst> {
     Timer(const Duration(seconds :2) ,(){
       sp.isSignedIn==false
           ? nextScreenReplace(context,SplashScreen())
-          :nextScreenReplace(context, HomeScreen());
+          :nextScreenReplace(context, MainScreen());
     });
   }
 
