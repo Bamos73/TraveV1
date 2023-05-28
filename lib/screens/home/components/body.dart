@@ -188,19 +188,13 @@ class _BodyState extends State<Body> {
                                     SizedBox(height: 5,),
                                     Container(
                                       color: Colors.black,
-                                      width: getProportionateScreenWidth(100),
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 10,
-                                          vertical: 1
-                                        ),
-                                        child: Center(
-                                          child: Text("MAGAZINE",
-                                            style: TextStyle(
-                                              fontSize: getProportionateScreenWidth(13),
-                                              color: Colors.white,
-                                            ),),
-                                        ),
+                                      width: getProportionateScreenWidth(80),
+                                      child: Center(
+                                        child: Text("Magasine",
+                                          style: TextStyle(
+                                            fontSize: getProportionateScreenWidth(13),
+                                            color: Colors.white,
+                                          ),),
                                       ),
                                     )
                                   ],
