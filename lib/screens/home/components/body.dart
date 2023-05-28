@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shopapp/screens/details_categorie/details_categorie_screen.dart';
 import 'package:shopapp/screens/home/components/categorie_popular.dart';
 import 'package:shopapp/screens/home/components/home_cover.dart';
 import 'package:shopapp/screens/home/components/home_header.dart';
@@ -109,6 +110,111 @@ class _BodyState extends State<Body> {
             SizedBox(height: getProportionateScreenWidth(30),),
             HomeCover(HomecoverDocFuture1: _HomecoverDocFuture4),
             SizedBox(height: getProportionateScreenWidth(30),),
+            Text("Nouveautés a la mode",style: TextStyle(
+              fontSize: getProportionateScreenWidth(18),
+              color: Colors.black,
+            ),
+            ),
+            SizedBox(height: getProportionateScreenWidth(20),),
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('Category')
+                  .where('isNew', isEqualTo: true)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError || snapshot.data == null || snapshot.data!.docs.isEmpty) {
+                  return Container();
+                }
+                else if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Container();
+                }
+                final documents = snapshot.data!.docs;
+                return Container(
+                  width: double.infinity,
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: getProportionateScreenHeight(7),
+                      crossAxisSpacing: getProportionateScreenHeight(7),
+                      mainAxisExtent: getProportionateScreenHeight(250),
+                    ),
+                    itemCount: 6,
+                    itemBuilder: (context, index) {
+                      final document = documents[index];
+                      final imageUrl = document['image'] ?? '';
+                      final title = document['titre_categorie'] ?? '';
+
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, DetailCtgScreen.routeName,
+                              arguments: {
+                                'nom_document': document['nom_document'],
+                                'titre_categorie': document['titre_categorie'],
+                              });
+                        },
+                        child: Stack(
+                          children: [
+                            Container(
+                              width: double.maxFinite,
+                              child: Image.network(
+                                imageUrl,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              top: 0,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.black54.withOpacity(0.1),
+                                ),
+                                padding: EdgeInsets.symmetric(vertical: 8),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      title.toString().toUpperCase(),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: getProportionateScreenWidth(20),
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    SizedBox(height: 5,),
+                                    Container(
+                                      color: Colors.black,
+                                      width: getProportionateScreenWidth(100),
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10,
+                                          vertical: 1
+                                        ),
+                                        child: Center(
+                                          child: Text("MAGAZINE",
+                                            style: TextStyle(
+                                              fontSize: getProportionateScreenWidth(13),
+                                              color: Colors.white,
+                                            ),),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ),
