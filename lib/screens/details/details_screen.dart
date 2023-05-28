@@ -9,18 +9,22 @@ class DetailsScreen extends StatefulWidget {
   const DetailsScreen({
     Key? key,
     required this.productId,
-    this.product, required this.collectionName,
+    this.product,
+    required this.collectionName,
+    required this.FirstcollectionName,
   }) : super(key: key);
 
   final String productId; // l'identifiant unique du produit
   final DocumentSnapshot<Map<String, dynamic>>? product; // les informations du produit
   final String collectionName;
+  final String FirstcollectionName;
 
   factory DetailsScreen.fromProductId(String productId) {
     return DetailsScreen(
       productId: productId,
       product: null as DocumentSnapshot<Map<String, dynamic>>,
-      collectionName: '', // Remarque : il faut initialiser le document snapshot à une valeur null car on ne peut pas le récupérer avec seulement l'ID.
+      collectionName: '',
+      FirstcollectionName: '', // Remarque : il faut initialiser le document snapshot à une valeur null car on ne peut pas le récupérer avec seulement l'ID.
     );
   }
 
@@ -40,6 +44,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
     try {
       DocumentSnapshot<Map<String, dynamic>> product =
       await FirebaseFirestore.instance
+          .collection(widget.FirstcollectionName)
+          .doc(widget.collectionName)
           .collection(widget.collectionName)
           .doc(productId)
           .get();

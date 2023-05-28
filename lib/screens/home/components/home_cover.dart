@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shopapp/components/shimmer_box.dart';
 import 'package:shopapp/size_config.dart';
 
 class HomeCover_4 extends StatefulWidget {
@@ -129,8 +130,8 @@ class _HomeCover_2State extends State<HomeCover_2> {
 
 
 
-class HomeCover_1 extends StatefulWidget {
-  const HomeCover_1({
+class HomeCover extends StatefulWidget {
+  const HomeCover({
     super.key,
     required Future<DocumentSnapshot<Map<String, dynamic>>> HomecoverDocFuture1,
   }) : _HomecoverDocFuture1 = HomecoverDocFuture1;
@@ -138,32 +139,30 @@ class HomeCover_1 extends StatefulWidget {
   final Future<DocumentSnapshot<Map<String, dynamic>>> _HomecoverDocFuture1;
 
   @override
-  State<HomeCover_1> createState() => _HomeCover_1State();
+  State<HomeCover> createState() => _HomeCover_1State();
 }
 
-class _HomeCover_1State extends State<HomeCover_1> {
+class _HomeCover_1State extends State<HomeCover> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: widget._HomecoverDocFuture1,
       builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else {
-            return Container(
-              width: double.infinity,
-              child: Image.network(
-                snapshot.data?.data()?['Image'] ?? "",
-                width: MediaQuery.of(context).size.width,
-                fit: BoxFit.cover,
-                height: getProportionateScreenHeight(600),
-              ),
-            );
-          }
-        } else {
-          return CircularProgressIndicator();
+        if (snapshot.hasError || snapshot.data == null) {
+          return ShimmerHomeCover();
         }
+        else if (snapshot.connectionState == ConnectionState.waiting) {
+          return ShimmerHomeCover();
+        }
+        return Container(
+          width: double.infinity,
+          child: Image.network(
+            snapshot.data?.data()?['Image'] ?? "",
+            width: MediaQuery.of(context).size.width,
+            fit: BoxFit.cover,
+            height: getProportionateScreenHeight(600),
+          ),
+        );
       },
     );
   }

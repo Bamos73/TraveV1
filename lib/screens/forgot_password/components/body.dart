@@ -25,8 +25,8 @@ class Body extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
           child: Column(
             children: [
-              SizedBox(height: SizeConfig.screenHeight*0.04,),
-              Text("Forgot Password",
+              SizedBox(height: SizeConfig.screenHeight*0.01,),
+              Text("Mot de passe oublié",
                 style: TextStyle(
                   fontSize: getProportionateScreenWidth(24),
                   color: Colors.black,

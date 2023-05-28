@@ -46,6 +46,65 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
     super.dispose();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          TextFormField(
+            controller: _emailController,
+            keyboardType: TextInputType.emailAddress,
+            onChanged: (value) {
+              if (value.isNotEmpty && errors.contains(kEmailNullError)) {
+                setState(() {
+                  errors.remove(kEmailNullError);
+                });
+              } else if (emailValidatorRegExp.hasMatch(value) &&
+                  errors.contains(kInvalidEmailError)) {
+                setState(() {
+                  errors.remove(kInvalidEmailError);
+                });
+              }
+              return null;
+            },
+            validator: (value) {
+              if (value!.isEmpty && !errors.contains(kEmailNullError)) {
+                setState(() {
+                  errors.add(kEmailNullError);
+                });
+              } else if (!emailValidatorRegExp.hasMatch(value) &&
+                  !errors.contains(kInvalidEmailError)) {
+                setState(() {
+                  errors.add(kInvalidEmailError);
+                });
+              }
+              return null;
+            },
+            decoration: InputDecoration(
+              labelText: "Email",
+              hintText: "Entrer votre Email",
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+              suffixIcon: CustomSurffixIcon(
+                svgIcon: "assets/icons/Mail.svg",
+              ),
+            ),
+          ),
+          SizedBox(height: getProportionateScreenHeight(30)),
+          FormError(errors: errors),
+          SizedBox(height: SizeConfig.screenHeight * 0.1),
+          DefaultButton(
+              text: "Continue",
+              press: () {
+                PasswordReset();
+              }),
+          SizedBox(height: SizeConfig.screenHeight * 0.1),
+          NoAccountText(),
+        ],
+      ),
+    );
+  }
+
   Future PasswordReset() async {
     // internet provider
     final ip = context.read<InternetProvider>();
@@ -59,7 +118,7 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
         elevation: 0,
         content: AwesomeSnackbarContent(
           title: 'Oh Hey!!',
-          message: "Check your Internet connection",
+          message: "Vérifiez votre connection internet",
           contentType: ContentType.failure,
           messageFontSize: getProportionateScreenWidth(15),
         ),
@@ -113,64 +172,5 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
         }
       }
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          TextFormField(
-            controller: _emailController,
-            keyboardType: TextInputType.emailAddress,
-            onChanged: (value) {
-              if (value.isNotEmpty && errors.contains(kEmailNullError)) {
-                setState(() {
-                  errors.remove(kEmailNullError);
-                });
-              } else if (emailValidatorRegExp.hasMatch(value) &&
-                  errors.contains(kInvalidEmailError)) {
-                setState(() {
-                  errors.remove(kInvalidEmailError);
-                });
-              }
-              return null;
-            },
-            validator: (value) {
-              if (value!.isEmpty && !errors.contains(kEmailNullError)) {
-                setState(() {
-                  errors.add(kEmailNullError);
-                });
-              } else if (!emailValidatorRegExp.hasMatch(value) &&
-                  !errors.contains(kInvalidEmailError)) {
-                setState(() {
-                  errors.add(kInvalidEmailError);
-                });
-              }
-              return null;
-            },
-            decoration: InputDecoration(
-              labelText: "Email",
-              hintText: "Enter your email",
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-              suffixIcon: CustomSurffixIcon(
-                svgIcon: "assets/icons/Mail.svg",
-              ),
-            ),
-          ),
-          SizedBox(height: getProportionateScreenHeight(30)),
-          FormError(errors: errors),
-          SizedBox(height: SizeConfig.screenHeight * 0.1),
-          DefaultButton(
-              text: "Continue",
-              press: () {
-                PasswordReset();
-              }),
-          SizedBox(height: SizeConfig.screenHeight * 0.1),
-          NoAccountText(),
-        ],
-      ),
-    );
   }
 }

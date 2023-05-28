@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +24,24 @@ class _CustomNavBarState extends State<CustomNavBar> {
   int _lastSelectedSizeIndex = -1;
   User? user = FirebaseAuth.instance.currentUser;
 
+  @override
+  Widget build(BuildContext context) {
+    return BottomAppBar(
+      color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(45)),
+          height: getProportionateScreenHeight(40),
+          child: DefaultButton(
+            text: "AJOUTER AU PANIER",
+            press: () => _showDialogTaille(widget.product),
+
+          ),
+        ),
+      ),
+    );
+  }
   void _showDialogTaille(DocumentSnapshot<Map<String, dynamic>>? product) async{
     if (product != null) {
       slideDialog.showSlideDialog(
@@ -60,21 +77,17 @@ class _CustomNavBarState extends State<CustomNavBar> {
         ),
       );
     }
+
   }
 
   void addToCard(DocumentSnapshot<Map<String, dynamic>>? product, int index) async {
     if (product == null) {
       return;
     }
-
     final userId = user?.uid;
     // Utilisez la valeur de quantiteSelectionnee comme vous le souhaitez
     int quantiteSelectionnee = MyAppState.nmbreArticleState;
 
-    // //généré un code a 6 chiffre pour les differente style
-    // Random random = Random();
-    // int CodeStyle = random.nextInt(99999) + 2300000;
-    // print('Code généré : $CodeStyle');
 
     final userCardRef = FirebaseFirestore.instance
         .collection('Card')
@@ -95,6 +108,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
           });
           print("quantité modifié");
         }
+        Navigator.of(context).pop();
       } else {
         /* La taille du produit est différente de celle de la base alors on creer un autre document
         * avec le nom du code */
@@ -118,6 +132,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
           'style': userCardData['style'] + 1,
           'taille': product['tailles'][_lastSelectedSizeIndex],
           'quantite': quantiteSelectionnee,
+          'quantite_Max': product['quantité'],
         });
         if (userCardRefData != null && userCardRefData['quantite'] != quantiteSelectionnee) {
           // la quantité est différente
@@ -127,8 +142,9 @@ class _CustomNavBarState extends State<CustomNavBar> {
           print("quantité modifié");
         }
       }
+      Navigator.of(context).pop();
     } else {
-      print("Le document n'existe pas");
+
       await userCardRef.set({
         'userID': FirebaseAuth.instance.currentUser?.uid,
         'code': product['code'],
@@ -138,27 +154,11 @@ class _CustomNavBarState extends State<CustomNavBar> {
         'price': product['price'],
         'style': product['style'],
         'taille': product['tailles'][index],
-        'quantite': quantiteSelectionnee,// Ajouter la quantité contenu dans le Intent
+        'quantite': quantiteSelectionnee,
+        'quantite_Max': product['quantité'],
       });
+      Navigator.of(context).pop();
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomAppBar(
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(45)),
-          height: getProportionateScreenHeight(40),
-          child: DefaultButton(
-            text: "AJOUTER AU PANIER",
-            press: () => _showDialogTaille(widget.product),
-          ),
-        ),
-      ),
-    );
   }
 }
 

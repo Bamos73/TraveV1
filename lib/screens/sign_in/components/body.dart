@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopapp/components/main_screens.dart';
 import 'package:shopapp/components/no_account_text.dart';
 import 'package:shopapp/components/policy_and_term_card.dart';
@@ -33,34 +34,32 @@ class _BodyState extends State<Body> {
             child: Column(
               children: [
                 SizedBox(
-                  height: SizeConfig.screenHeight * 0.06,
+                  height: SizeConfig.screenHeight * 0.002,
                 ),
-                Text(
-                  "Welcome Back",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: getProportionateScreenWidth(28),
-                    fontWeight: FontWeight.bold,
-                  ),
+
+                SvgPicture.asset(
+                  "assets/icons/logo_svg.svg",
+                  height: getProportionateScreenWidth(150),
                 ),
                 const Text(
-                  "Sign in with your email and password \n or continue with social media",
+                  "Connectez-vous avec votre adresse e-mail et votre mot de passe ou continuez avec les réseaux sociaux",
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(
-                  height: SizeConfig.screenHeight * 0.07,
+                  height: SizeConfig.screenHeight * 0.05,
                 ),
                 const SignForm(),
                 SizedBox(
                   height: SizeConfig.screenHeight * 0.05,
                 ),
                 Text(
-                  "Continue with",
+                  "Continuer avec",
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: getProportionateScreenWidth(15),
                   ),
                 ),
+
                 SizedBox(height: SizeConfig.screenHeight * 0.02),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -89,7 +88,7 @@ class _BodyState extends State<Body> {
                   height: getProportionateScreenHeight(20),
                 ),
                 const NoAccountText(),
-                SizedBox(height: getProportionateScreenHeight(40)),
+                SizedBox(height: getProportionateScreenHeight(25)),
                 const PolicyAndTerm(),
               ],
             ),
@@ -109,7 +108,7 @@ class _BodyState extends State<Body> {
     await ip.checkInternetConnection();
 //***************verifie si l'utilisateur est connecté a internet//
     if (ip.hasInternet == false) {
-      openSnackbar(context, "Check your Internet connection", Colors.red);
+      openSnackbar(context, "Vérifiez votre connection internet", Colors.red);
     } else {
       await sp.signInWithGoogle().then((value) {
         if (sp.hasError == true) {
@@ -149,7 +148,7 @@ class _BodyState extends State<Body> {
 //***************verifie si l'utilisateur est connecté a internet//
 
     if (ip.hasInternet == false) {
-      openSnackbar(context, "Check your Internet connection", Colors.red);
+      openSnackbar(context, "Vérifiez votre connection internet", Colors.red);
     } else {
       await sp.signInWithFacebook().then((value) {
         if (sp.hasError == true) {
@@ -185,7 +184,7 @@ class _BodyState extends State<Body> {
     await ip.checkInternetConnection();
 
     if (ip.hasInternet == false) {
-      openSnackbar(context, "Check your Internet connection", Colors.red);
+      openSnackbar(context, "Vérifiez votre connection internet", Colors.red);
     } else {
       await sp.signInWithTwitter().then((value) {
         if (sp.hasError == true) {

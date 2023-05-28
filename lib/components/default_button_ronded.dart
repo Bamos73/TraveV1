@@ -27,7 +27,7 @@ class DefaultButtonRounded extends StatelessWidget {
       children: [
         SizedBox(
           width: double.infinity,
-          height: getProportionateScreenHeight(56),
+          height: getProportionateScreenHeight(40),
           child: RoundedLoadingButton(
             controller: _btnController,
             successColor: kPrimaryColor,
@@ -37,7 +37,7 @@ class DefaultButtonRounded extends StatelessWidget {
             child: Text(
               text!,
               style: TextStyle(
-                fontSize: getProportionateScreenWidth(18),
+                fontSize: getProportionateScreenWidth(16),
                 color: Colors.white,
               ),
             ),

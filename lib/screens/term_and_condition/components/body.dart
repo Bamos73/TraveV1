@@ -12,7 +12,7 @@ class Body extends StatelessWidget {
       child: Padding(
         padding:  EdgeInsets.symmetric(horizontal:getProportionateScreenWidth(25)),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text("Accord Utilisateur Trave",
               style: TextStyle(

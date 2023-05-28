@@ -20,11 +20,10 @@ class MyAppState {
   static int nmbreArticleState = 1;
 }
 
-
 class _ColorDotsState extends State<ColorDots> {
 
-  // Récupère l'utilisateur actif
   User? user = FirebaseAuth.instance.currentUser;
+
   int selectedColor=0;
   int NmbreArticle = 1; // ajout d'un état pour le nombre d'articles
 
@@ -47,7 +46,6 @@ class _ColorDotsState extends State<ColorDots> {
     }
   }
 
-
   void addItemInCard(DocumentSnapshot<Map<String, dynamic>> product) {
   if (product == null) {
   print("erreur");
@@ -55,7 +53,6 @@ class _ColorDotsState extends State<ColorDots> {
     setState(() {
   MyAppState.nmbreArticleState = NmbreArticle;
     });
-  // Naviguez vers l'écran suivant ou appelez une autre méthode
   }
   }
 

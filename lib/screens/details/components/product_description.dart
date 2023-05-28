@@ -50,6 +50,7 @@ class ProductDescription extends StatelessWidget {
             Container(
               width: getProportionateScreenWidth(320),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
                     padding: EdgeInsets.only(

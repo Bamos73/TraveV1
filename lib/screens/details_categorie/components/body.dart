@@ -28,8 +28,12 @@ class _BodyState extends State<Body> {
     super.initState();
     _orderByField = 'date';
     _croissant=true;
-    _productsStream =
-        FirebaseFirestore.instance.collection(widget.documentName).orderBy(_orderByField, descending: _croissant).snapshots();
+    _productsStream = FirebaseFirestore.instance
+        .collection('Category')
+        .doc(widget.documentName)
+        .collection(widget.documentName)
+        .orderBy(_orderByField, descending: _croissant)
+        .snapshots();
   }
 // POUR LE FILTRE
   Future<void> _onOrderByChanged(String value) async {
@@ -50,8 +54,12 @@ class _BodyState extends State<Body> {
         _croissant=true;
       });
     }
-    _productsStream =
-        FirebaseFirestore.instance.collection(widget.documentName).orderBy(_orderByField, descending: _croissant).snapshots();
+    _productsStream = FirebaseFirestore.instance
+        .collection('Category')
+        .doc(widget.documentName)
+        .collection(widget.documentName)
+        .orderBy(_orderByField, descending: _croissant)
+        .snapshots();
   }
 
   @override

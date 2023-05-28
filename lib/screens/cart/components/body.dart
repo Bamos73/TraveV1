@@ -43,10 +43,11 @@ class _BodyState extends State<Body> {
                     child: ShimmerCard(),
                   );
                 } else if (snapshot.data!.docs.isEmpty) {
-                  return EmptyCart();
+                  return Expanded(
+                    child: Container(),
+                  );
                 }
-                final cardDataList =
-                snapshot.data!.docs.map((doc) => doc.data()).toList();
+                final cardDataList = snapshot.data!.docs.map((doc) => doc.data()).toList();
                 return Expanded(
                   child: ListView.builder(
                     itemCount: cardDataList.length,
@@ -89,8 +90,10 @@ class _BodyState extends State<Body> {
                           cardColors: cardData['color'],
                           cardTailles: cardData['taille'],
                           cardQuantites: cardData['quantite'],
+                          cardQuantitesMax: cardData['quantite_Max'],
                           cardCodes: cardData['code'],
-                          cardPrices: cardData['price'], documentId: cardData['code'],
+                          cardPrices: cardData['price'],
+                          documentId: cardData['code'],
                         ),
                       );
                     },

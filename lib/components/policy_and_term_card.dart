@@ -15,7 +15,7 @@ class PolicyAndTerm extends StatelessWidget {
       alignment: WrapAlignment.center,
       children: [
         Text(
-          "By continuing, you confirm that you agree with our",
+          "En continuant, vous confirmez que vous acceptez nos",
           style: TextStyle(
             fontSize: getProportionateScreenHeight(13),
           ),
@@ -23,7 +23,7 @@ class PolicyAndTerm extends StatelessWidget {
         GestureDetector(
           onTap: () => Navigator.pushNamed(context, TermAndConditionScreen.routeName),
           child: Text(
-            "Term and Condition",
+            "Conditions générales",
             style: TextStyle(
               fontSize: getProportionateScreenHeight(13),
               color: kPrimaryColor,
@@ -32,14 +32,14 @@ class PolicyAndTerm extends StatelessWidget {
           ),
         ),
         Text(
-          ". Read our ",
+          ". Lisez notre ",
           style: TextStyle(
             fontSize: getProportionateScreenHeight(13),
           ),
         ),
         GestureDetector(
           onTap: () => Navigator.pushNamed(context, PrivacyPolicyScreen.routeName),
-          child: Text("Privacy Policy",
+          child: Text("Politique de confidentialité",
             style: TextStyle(
               fontSize: getProportionateScreenHeight(13),
               color: kPrimaryColor,

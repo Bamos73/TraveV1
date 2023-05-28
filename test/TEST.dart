@@ -83,7 +83,7 @@ List<Product> demoProducts = [
   Product(
     id: 2,
     images: [
-      "assets/images/Image Popular Product 2.png",
+      "assets/images/Image Popular Product LOGO_Png_sans_fond.png",
     ],
     colors: [
       Color(0xFFF6625E),
@@ -104,7 +104,7 @@ List<Product> demoProducts = [
     images: [
       "assets/images/Image Popular Product 3.png",
       "assets/images/Image Popular Product 1.png",
-      "assets/images/Image Popular Product 2.png",
+      "assets/images/Image Popular Product LOGO_Png_sans_fond.png",
       "assets/images/Image Popular Product 3.png",
     ],
     colors: [
