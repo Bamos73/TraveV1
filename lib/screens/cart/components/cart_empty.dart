@@ -5,14 +5,15 @@ import 'package:shopapp/components/main_screens.dart';
 import 'package:shopapp/size_config.dart';
 
 class EmptyCart extends StatelessWidget {
+  static String routeName='cart/components';
   const EmptyCart({
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
+    return Scaffold(
+      body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Center(

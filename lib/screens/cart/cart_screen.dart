@@ -15,6 +15,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFF5F6F9),
       body: Body(),
       bottomNavigationBar: CheckOurCard(),
     );

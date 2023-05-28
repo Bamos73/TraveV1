@@ -43,7 +43,9 @@ class _BodyState extends State<Body> {
                     child: ShimmerCard(),
                   );
                 } else if (snapshot.data!.docs.isEmpty) {
-                  return EmptyCart();
+                  return Expanded(
+                    child: Container(),
+                  );
                 }
                 final cardDataList = snapshot.data!.docs.map((doc) => doc.data()).toList();
                 return Expanded(
