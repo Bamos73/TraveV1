@@ -1,11 +1,15 @@
 // ignore_for_file: avoid_returning_null_for_void
 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shopapp/authentification/user_add_with_auth.dart';
 import 'package:shopapp/components/custom_surfix_icon.dart';
 import 'package:shopapp/components/default_button.dart';
 import 'package:shopapp/components/form_error.dart';
 import 'package:shopapp/constants.dart';
+import 'package:shopapp/provider/internet_provider.dart';
+import 'package:shopapp/provider/sign_in_provider.dart';
 import 'package:shopapp/screens/otp/otp_screen.dart';
 import 'package:shopapp/size_config.dart';
 
@@ -60,7 +64,25 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
             SizedBox(height: getProportionateScreenWidth(40),),
             DefaultButton(
                 text: "Continue",
-                press: () {
+                press: () async {
+                  // internet provider
+                  final sp = context.read<SignInProvider>();
+                  final ip = context.read<InternetProvider>();
+                  await ip.checkInternetConnection();
+                  // vérifie si l'utilisateur est connecté à internet
+                  if (ip.hasInternet == false) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      behavior: SnackBarBehavior.floating,
+                      backgroundColor: Color(0x00FFFFFF),
+                      elevation: 0,
+                      content: AwesomeSnackbarContent(
+                        title: 'Oh Hey!!',
+                        message: "Vérifiez votre connection internet",
+                        contentType: ContentType.failure,
+                        messageFontSize: getProportionateScreenWidth(15),
+                      ),
+                    ));
+                  } else {
                   if (_formKey.currentState!.validate()) {
                     final user = UserAuth(
                         firstname: _ctrfirstname.text.trim(),
@@ -74,8 +96,16 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
                     _ctrlastname.text = '';
                     _ctrphonenumber.text = '';
                     _ctradresse.text = '';
-                    Navigator.pushNamed(context, OTPScreen.routeName);
+
+                    //sauvegarder les données dans le sharedPreferences
+                    await sp.getUserDataFromFirestoreForAuth().then((value) => sp
+                        .saveDataToSharedPreferences()
+                        .then((value) => sp.setSignIn().then((value) {
+                      handleAfterSignIn();
+                    })));
                   }
+                  }
+
                 }),
           ],
         ));
@@ -177,5 +207,11 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
         ),
       ),
     );
+  }
+  //direction après la connection
+  handleAfterSignIn() {
+    Future.delayed(const Duration(milliseconds: 1000)).then((value) {
+      nextScreenReplace(context, const OTPScreen());
+    });
   }
 }

@@ -9,9 +9,12 @@ class UserAuth {
   String email;
   String uid;
   String provider;
+  String image_url;
+
 
   UserAuth({
     this.provider = '',
+    this.image_url = '',
     required this.firstname,
     required this.lastname,
     required this.phonenumber,
@@ -24,6 +27,7 @@ class UserAuth {
   Map<String, dynamic> toJson() {
     return {
       'provider': provider,
+      'image_url': image_url,
       'name': firstname ,
       'Lastname': lastname,
       'Phonenumber': phonenumber,
@@ -37,6 +41,7 @@ class UserAuth {
   factory UserAuth.fromJson(Map<String, dynamic> json) {
     return UserAuth(
       provider: json['provider'],
+      image_url: json['image_url'],
       firstname: json['name'] ,
       lastname: json['Lastname'],
       phonenumber: json['Phonenumber'],
@@ -54,6 +59,7 @@ Future addUser(UserAuth user) async {
     user.email = currentUser.email!;
     user.uid=currentUser.uid;
     user.provider='TraveSignUp';
+    user.image_url='';
     final docUser = FirebaseFirestore.instance.collection("users").doc(user.uid);
 
     await docUser.set(user.toJson());

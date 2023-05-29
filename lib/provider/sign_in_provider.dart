@@ -223,6 +223,20 @@ class SignInProvider extends ChangeNotifier {
               _provider = snapshot['provider'],
             });
   }
+  //prendre les information de l'utilisateur dans le fireStore
+  Future getUserDataFromFirestoreForAuth() async {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .get()
+        .then((DocumentSnapshot snapshot) => {
+      _uid = snapshot['uid'],
+      _name = snapshot['name'],
+      _email = snapshot['email'],
+      _imageUrl = snapshot['image_url'],
+      _provider = snapshot['provider'],
+    });
+  }
 
 //entrer les données de l'utilisateur dans le fireStore
   Future saveDataToFirestore() async {

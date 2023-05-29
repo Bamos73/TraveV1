@@ -79,6 +79,39 @@ class shimmer_box extends StatelessWidget {
   }
 }
 
+class shimmer_box_Category_Grid extends StatelessWidget {
+  const shimmer_box_Category_Grid({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisSpacing: getProportionateScreenHeight(20),
+            crossAxisSpacing: getProportionateScreenHeight(20),
+            mainAxisExtent: getProportionateScreenHeight(300),
+          ),
+          itemCount: 6,
+          itemBuilder: (context, index) {
+        return Container(
+          child: Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child:  Container(
+                color: Colors.grey[300],
+height: getProportionateScreenHeight(50   ),      width: getProportionateScreenHeight(20)
+          )
+          ),
+        );
+        }
+      );
+  }
+}
+
 
 
 class shimmer_cover extends StatelessWidget {

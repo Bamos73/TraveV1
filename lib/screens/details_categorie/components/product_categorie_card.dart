@@ -36,10 +36,10 @@ class _ProductsCategorieCardState extends State<ProductsCategorieCard> {
                 stream: widget._productsStream,
                 builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasError || snapshot.data == null || snapshot.data!.docs.isEmpty) {
-                    return SizedBox.shrink();
+                    return shimmer_box_Category_Grid();
                   }
                   else if (snapshot.connectionState == ConnectionState.waiting) {
-                    return SizedBox.shrink();
+                    return shimmer_box_Category_Grid();
                   }
                   else {
                     List<DocumentSnapshot> products = snapshot.data!.docs;

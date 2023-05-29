@@ -9,6 +9,7 @@ import 'package:shopapp/components/main_screens.dart';
 import 'package:shopapp/constants.dart';
 import 'package:shopapp/helper/keyboard.dart';
 import 'package:shopapp/provider/internet_provider.dart';
+import 'package:shopapp/provider/sign_in_provider.dart';
 import 'package:shopapp/screens/forgot_password/forgot_password_screen.dart';
 import 'package:shopapp/size_config.dart';
 
@@ -85,6 +86,7 @@ class _SignFormState extends State<SignForm> {
             text: "Continuer",
             press: () async {
               // internet provider
+              final sp = context.read<SignInProvider>();
               final ip = context.read<InternetProvider>();
               await ip.checkInternetConnection();
 
@@ -102,16 +104,17 @@ class _SignFormState extends State<SignForm> {
                   ),
                 ));
               } else {
+
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
                   try {
-                    UserCredential userCredential =
-                        await FirebaseAuth.instance.signInWithEmailAndPassword(
-                      email: email,
-                      password: password,
-                    );
+                      await FirebaseAuth
+                        .instance
+                        .signInWithEmailAndPassword(
+                          email: email,
+                          password: password,
+                        );
                     KeyboardUtil.hideKeyboard(context);
-                    nextScreenReplace(context, MainScreen());
                   } on FirebaseAuthException catch (e) {
                     if (e.code == 'user-not-found' ||
                         e.code == 'wrong-password') {
@@ -141,12 +144,19 @@ class _SignFormState extends State<SignForm> {
                     }
                   }
                 }
+                //sauvegarder les données dans le sharedPreferences
+                await sp.getUserDataFromFirestoreForAuth().then((value) => sp
+                    .saveDataToSharedPreferences()
+                    .then((value) => sp.setSignIn().then((value) {
+                  handleAfterSignIn();
+                })));
               }
             },
           ),
         ],
       ),
     );
+
   }
 
   TextFormField buildPasswordFormField() {
@@ -221,5 +231,11 @@ class _SignFormState extends State<SignForm> {
         ),
       ),
     );
+  }
+  //handle after sign in
+  handleAfterSignIn() {
+    Future.delayed(const Duration(milliseconds: 1000)).then((value) {
+      nextScreenReplace(context, const MainScreen());
+    });
   }
 }
