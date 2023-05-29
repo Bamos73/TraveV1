@@ -1,5 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class InternetProvider extends ChangeNotifier {
   bool _hasInternet = false;
@@ -19,5 +20,15 @@ class InternetProvider extends ChangeNotifier {
       print('L\'utilisateur n\'est pas connecté à Internet');
     }
     notifyListeners();
+  }
+}
+
+//VERIFIER SI L'URL DE L'IMAGE DES CATEGORIE EST BONNE
+Future<bool> checkImage(String url) async {
+  try {
+    final response = await http.head(Uri.parse(url));
+    return response.statusCode == 200;
+  } catch (e) {
+    return false;
   }
 }

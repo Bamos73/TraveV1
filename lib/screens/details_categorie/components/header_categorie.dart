@@ -4,7 +4,6 @@ import 'package:shopapp/components/buttom_card.dart';
 import 'package:shopapp/components/default_button.dart';
 import 'package:shopapp/constants.dart';
 import 'package:shopapp/screens/cart/cart_screen.dart';
-import 'package:shopapp/screens/details_categorie/components/filtre.dart';
 import 'package:slide_popup_dialog_null_safety/slide_popup_dialog.dart' as slideDialog;
 import 'package:shopapp/size_config.dart';
 
@@ -28,11 +27,12 @@ class _HeaderCategorieState extends State<HeaderCategorie> {
 
   double _startPrice = 0.0;
   double _endPrice = 100000.0;
-  var _isSelectedColor = false;
-  late String chipColorName = 'Sélectionnez une couleur';
+  List<bool> _isSelectedColor = List.generate(9, (index) => false);
+  List<bool> _isSelectedTaille = List.generate(6, (index) => false);
   bool? _isNew = false;
 
-  List<String> _colors = ['Noir', 'Blanc', 'Gris', 'Bleu', 'Rouge'];
+  List<String> _colors = ['Noir', 'Blanc', 'Gris', 'Bleu', 'Rouge','Vert','Orange','Rose','Autre'];
+  List<String> _tailles = ['XXXL','XXL', 'XL', 'L', 'M', 'S',];
 
   @override
   Widget build(BuildContext context) {
@@ -165,11 +165,13 @@ class _HeaderCategorieState extends State<HeaderCategorie> {
           children: [
             Center(
               child: Text(
-                'Filtres',
-                style: TextStyle(fontSize: 20.0),
+                'Prix',
+                style: TextStyle(
+                  fontSize: getProportionateScreenWidth(16),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-            SizedBox(height: getProportionateScreenHeight(10)),
             RangeSlider(
               values: RangeValues(_startPrice,_endPrice),
               min: 0.0,
@@ -177,7 +179,7 @@ class _HeaderCategorieState extends State<HeaderCategorie> {
               activeColor: kPrimaryColor,
               divisions: 500 ,
               labels: RangeLabels(_startPrice.toString(),_endPrice.toString()),
-              inactiveColor: Color(0xffc0e7b7),
+              inactiveColor: kPrimaryColor.withOpacity(0.2),
               onChanged: (value) {
                 setState(() {
                   _startPrice = value.start;
@@ -188,65 +190,114 @@ class _HeaderCategorieState extends State<HeaderCategorie> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-              Text.rich(
-                TextSpan(
-                  text: 'Prix Min : ${_startPrice.toInt()}',
-                  style: TextStyle(
-                    color: kSecondaryColor.withOpacity(0.5),
-                    fontSize: getProportionateScreenWidth(13),
-                  )
-                )
-              ),
-              Text.rich(
-                  TextSpan(
-                      text: 'Prix Max : ${_endPrice.toInt()}',
+                Text.rich(
+                    TextSpan(
+                        text: 'Prix Min : ${_startPrice.toInt()} FCFA',
+                        style: TextStyle(
+                          color: kSecondaryColor.withOpacity(0.5),
+                          fontSize: getProportionateScreenWidth(13),
+                        )
+                    )
+                ),
+                Text.rich(
+                    TextSpan(
+                      text: 'Prix Max : ${_endPrice.toInt()} FCFA',
                       style: TextStyle(
                         color: kSecondaryColor.withOpacity(0.5),
                         fontSize: getProportionateScreenWidth(13),),
-                  )
-              ),
-            ],),
-            SizedBox(height: 20.0),
-            FilterChip(
-                label: Text(chipColorName),
-                labelStyle: TextStyle(
-                    color: kSecondaryColor.withOpacity(0.5),
-                    fontSize: getProportionateScreenWidth(13),
+                    )
                 ),
-                selected: _isSelectedColor,
-                backgroundColor: kPrimaryColor.withOpacity(0.2),
-              onSelected: (isSelected) {
-                setState(() {
-                  _isSelectedColor = isSelected;
-                });
-              },
-            ),
+              ],),
             SizedBox(height: 20.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Center(child: Text(
+              'Couleurs',
+              style: TextStyle(
+                fontSize: getProportionateScreenWidth(16),
+                fontWeight: FontWeight.bold,
+              ),)),
+            SizedBox(height: getProportionateScreenHeight(5)),
+            Wrap(
+              spacing: getProportionateScreenWidth(10),
               children: [
-                Text('Nouveauté'),
-                Checkbox(
-                  value: _isNew,
-                  onChanged: (value) {
-                    setState(() {
-                      _isNew = value;
-                    });
-                  },
-                ),
+                filterChipColor(0, _colors[0]),
+                filterChipColor(1, _colors[1]),
+                filterChipColor(2, _colors[2]),
+                filterChipColor(3, _colors[3]),
+                filterChipColor(4, _colors[4]),
+                filterChipColor(5, _colors[5]),
+                filterChipColor(6, _colors[6]),
+                filterChipColor(7, _colors[7]),
+                filterChipColor(7, _colors[8]),
               ],
             ),
-            SizedBox(height: getProportionateScreenHeight(60)),
-            
+            SizedBox(height: 5.0),
+            Center(child: Text(
+              'Tailles',
+              style: TextStyle(
+                fontSize: getProportionateScreenWidth(16),
+                fontWeight: FontWeight.bold,
+              ),)),
+            SizedBox(height: getProportionateScreenHeight(5)),
+            Center(
+              child: Wrap(
+                spacing: getProportionateScreenWidth(10),
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  filterChipTaille(0, _tailles[0]),
+                  filterChipTaille(0, _tailles[1]),
+                  filterChipTaille(1, _tailles[2]),
+                  filterChipTaille(2, _tailles[3]),
+                  filterChipTaille(3, _tailles[4]),
+                  filterChipTaille(4, _tailles[5]),
+                ],
+              ),
+            ),
+            SizedBox(height: getProportionateScreenHeight(40)),
             DefaultButton(
-                text: 'Filtrer',
-                press: () {
-                  // Ajoutez ici la logique pour filtrer les documents
-                  Navigator.of(context).pop(); // Ferme le dialogue
-                },)
+              text: 'Filtrer',
+              press: () {
+                // Ajoutez ici la logique pour filtrer les documents
+                Navigator.of(context).pop(); // Ferme le dialogue
+              },)
           ],
         ),
       ),
+    );
+  }
+
+
+  Widget filterChipColor(int index, String color) {
+    return FilterChip(
+      label: Text(color),
+      labelStyle: TextStyle(
+        color: Colors.black,
+        fontSize: getProportionateScreenWidth(13),
+      ),
+      selected: _isSelectedColor[index],
+      onSelected: (isSelected) {
+        setState(() {
+          _isSelectedColor[index] = isSelected;
+        });
+      },
+      selectedColor: kPrimaryColor.withOpacity(0.2),
+    );
+  }
+
+  Widget filterChipTaille(int index, String taille) {
+    return FilterChip(
+      label: Text(taille),
+      labelStyle: TextStyle(
+        color: Colors.black,
+        fontSize: getProportionateScreenWidth(13),
+      ),
+      selected: _isSelectedTaille[index],
+      onSelected: (isSelected) {
+        setState(() {
+          _isSelectedTaille[index] = isSelected;
+        });
+      },
+      selectedColor: kPrimaryColor.withOpacity(0.2),
     );
   }
 

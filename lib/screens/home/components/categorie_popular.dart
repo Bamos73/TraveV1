@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shopapp/components/shimmer_box.dart';
 import 'package:shopapp/screens/details_categorie/details_categorie_screen.dart';
+
 import 'package:shopapp/screens/home/components/card_popular.dart';
 import 'package:shopapp/size_config.dart';
 
@@ -13,6 +14,9 @@ class CategoriePopular extends StatefulWidget {
   @override
   State<CategoriePopular> createState() => _CategoriePopularState();
 }
+
+
+
 
 class _CategoriePopularState extends State<CategoriePopular> {
   @override

@@ -3,165 +3,52 @@ import 'package:flutter/material.dart';
 import 'package:shopapp/components/shimmer_box.dart';
 import 'package:shopapp/size_config.dart';
 
-class HomeCover_4 extends StatefulWidget {
-  const HomeCover_4({
-    super.key,
-    required Future<DocumentSnapshot<Map<String, dynamic>>> HomecoverDocFuture4,
-  }) : _HomecoverDocFuture4 = HomecoverDocFuture4;
-
-  final Future<DocumentSnapshot<Map<String, dynamic>>> _HomecoverDocFuture4;
-
-  @override
-  State<HomeCover_4> createState() => _HomeCover_4State();
-}
-
-class _HomeCover_4State extends State<HomeCover_4> {
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: widget._HomecoverDocFuture4,
-      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else {
-            return Container(
-              width: double.infinity,
-              child: Image.network(
-                snapshot.data?.data()?['Image'] ?? "",
-                width: MediaQuery.of(context).size.width,
-                fit: BoxFit.cover,
-                height: getProportionateScreenHeight(600),
-              ),
-            );
-          }
-        } else {
-          return CircularProgressIndicator();
-        }
-      },
-    );
-  }
-}
-
-
-class HomeCover_3 extends StatefulWidget {
-  const HomeCover_3({
-    super.key,
-    required Future<DocumentSnapshot<Map<String, dynamic>>> HomecoverDocFuture3,
-  }) : _HomecoverDocFuture3 = HomecoverDocFuture3;
-
-  final Future<DocumentSnapshot<Map<String, dynamic>>> _HomecoverDocFuture3;
-
-  @override
-  State<HomeCover_3> createState() => _HomeCover_3State();
-}
-
-class _HomeCover_3State extends State<HomeCover_3> {
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: widget._HomecoverDocFuture3,
-      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else {
-            return Container(
-              width: double.infinity,
-              child: Image.network(
-                snapshot.data?.data()?['Image'] ?? "",
-                width: MediaQuery.of(context).size.width,
-                fit: BoxFit.cover,
-                height: getProportionateScreenHeight(600),
-              ),
-            );
-          }
-        } else {
-          return CircularProgressIndicator();
-        }
-      },
-    );
-  }
-}
-
-
-
-
-
-class HomeCover_2 extends StatefulWidget {
-  const HomeCover_2({
-    super.key,
-    required Future<DocumentSnapshot<Map<String, dynamic>>> HomecoverDocFuture2,
-  }) : _HomecoverDocFuture2 = HomecoverDocFuture2;
-
-  final Future<DocumentSnapshot<Map<String, dynamic>>> _HomecoverDocFuture2;
-
-  @override
-  State<HomeCover_2> createState() => _HomeCover_2State();
-}
-
-class _HomeCover_2State extends State<HomeCover_2> {
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: widget._HomecoverDocFuture2,
-      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else {
-            return Container(
-              width: double.infinity,
-              child: Image.network(
-                snapshot.data?.data()?['Image'] ?? "",
-                width: MediaQuery.of(context).size.width,
-                fit: BoxFit.cover,
-                height: getProportionateScreenHeight(600),
-              ),
-            );
-          }
-        } else {
-          return CircularProgressIndicator();
-        }
-      },
-    );
-  }
-}
-
+import '../../../provider/internet_provider.dart';
 
 
 class HomeCover extends StatefulWidget {
   const HomeCover({
-    super.key,
-    required Future<DocumentSnapshot<Map<String, dynamic>>> HomecoverDocFuture1,
-  }) : _HomecoverDocFuture1 = HomecoverDocFuture1;
+    required this.homeCoverStream,
+  });
 
-  final Future<DocumentSnapshot<Map<String, dynamic>>> _HomecoverDocFuture1;
+  final Stream<DocumentSnapshot<Map<String, dynamic>>> homeCoverStream;
 
   @override
-  State<HomeCover> createState() => _HomeCover_1State();
+  State<HomeCover> createState() => _HomeCoverState();
 }
 
-class _HomeCover_1State extends State<HomeCover> {
+class _HomeCoverState extends State<HomeCover> {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: widget._HomecoverDocFuture1,
+    return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+      stream: widget.homeCoverStream,
       builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
-        if (snapshot.hasError || snapshot.data == null) {
+        if (snapshot.hasError || !snapshot.hasData) {
+          return ShimmerHomeCover();
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
           return ShimmerHomeCover();
         }
-        else if (snapshot.connectionState == ConnectionState.waiting) {
-          return ShimmerHomeCover();
-        }
-        return Container(
-          width: double.infinity,
-          child: Image.network(
-            snapshot.data?.data()?['Image'] ?? "",
-            width: MediaQuery.of(context).size.width,
-            fit: BoxFit.cover,
-            height: getProportionateScreenHeight(600),
-          ),
+        final data = snapshot.data!.data();
+        final imageUrl = data?['Image'] as String?;
+        return FutureBuilder(
+            future: checkImage(imageUrl!),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return ShimmerHomeCover();
+              } else if (snapshot.hasError || snapshot.data == null) {
+                return ShimmerHomeCover();
+              }  else {
+                return Container(
+                          width: double.infinity,
+                          child: Image.network(
+                            imageUrl ?? "",
+                            width: MediaQuery.of(context).size.width,
+                            fit: BoxFit.cover,
+                            height: getProportionateScreenHeight(600),
+            ),
+          );
+         }
+         }
         );
       },
     );

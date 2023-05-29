@@ -103,7 +103,8 @@ class shimmer_box_Category_Grid extends StatelessWidget {
               highlightColor: Colors.grey[100]!,
               child:  Container(
                 color: Colors.grey[300],
-height: getProportionateScreenHeight(50   ),      width: getProportionateScreenHeight(20)
+                height: getProportionateScreenHeight(50),
+                  width: getProportionateScreenHeight(20),
           )
           ),
         );
@@ -310,6 +311,30 @@ class ShimmerPopular extends StatelessWidget {
 }
 
 
+
+class shimmer_Popular_image extends StatelessWidget {
+  const shimmer_Popular_image({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        height: getProportionateScreenHeight(64),
+        width: getProportionateScreenWidth(64),
+        decoration: BoxDecoration(
+            color: Colors.grey[300],
+            borderRadius: BorderRadius.circular(50)
+        ),
+      ),
+    );
+  }
+}
+
+
 class ShimmerHomeCover extends StatelessWidget {
   const ShimmerHomeCover({
     super.key,
@@ -325,11 +350,49 @@ class ShimmerHomeCover extends StatelessWidget {
         height: getProportionateScreenHeight(600),
         decoration: BoxDecoration(
             color: Colors.grey[300],
-            borderRadius: BorderRadius.circular(50)
         ),
       ),
     );
   }
 }
+
+
+class ShimmerNouveaute extends StatelessWidget {
+  const ShimmerNouveaute({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      child: GridView.builder(
+        shrinkWrap: true,
+        itemCount: 6,
+        physics: NeverScrollableScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 1,
+          mainAxisSpacing: getProportionateScreenHeight(7),
+          crossAxisSpacing: getProportionateScreenHeight(7),
+          mainAxisExtent: getProportionateScreenHeight(250),
+        ),
+        itemBuilder: (context, index) {
+          return Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.grey[300],
+
+              ),
+
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
 
 

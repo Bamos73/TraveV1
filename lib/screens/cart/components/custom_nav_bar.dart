@@ -150,7 +150,7 @@ class _CheckOurCardState extends State<CheckOurCard>
                                 return Container();
                               } else if (snapshot.data!.docs.isEmpty) {
                                 // Le document est vide, naviguer vers une autre page
-                                WidgetsBinding.instance?.addPostFrameCallback((_) {
+                                WidgetsBinding.instance.addPostFrameCallback((_) {
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(builder: (context) => EmptyCart()),

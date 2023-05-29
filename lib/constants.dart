@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopapp/size_config.dart';
 
-const kPrimaryColor = Color(0xFF48B82C);
+const kPrimaryColor = Color(0xFF7e55f2);
 // 0xFF48B82C  vert
 // 0xFF0FADFF bleu
 // 0xFF7e55f2 violet
