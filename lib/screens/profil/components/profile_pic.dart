@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shopapp/size_config.dart';
-import 'package:shimmer/shimmer.dart';
 import '../../../provider/sign_in_provider.dart';
 
 class ProfilePic extends StatefulWidget {

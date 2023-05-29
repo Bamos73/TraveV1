@@ -59,7 +59,7 @@ Future addUser(UserAuth user) async {
     user.email = currentUser.email!;
     user.uid=currentUser.uid;
     user.provider='TraveSignUp';
-    user.image_url='';
+    user.image_url='https://firebasestorage.googleapis.com/v0/b/singup-a9273.appspot.com/o/PhotoProfile%2FPhotoProfile.png?alt=media&token=1d289cf1-d156-4d61-bc86-7307f3635ca4';
     final docUser = FirebaseFirestore.instance.collection("users").doc(user.uid);
 
     await docUser.set(user.toJson());
