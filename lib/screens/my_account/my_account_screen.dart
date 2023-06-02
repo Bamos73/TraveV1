@@ -10,7 +10,7 @@ class MyAccountScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("My Account"),
+        title: Text("Mon compte"),
         centerTitle: true,
       ),
       body: Body(),

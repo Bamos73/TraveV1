@@ -1,11 +1,18 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:shopapp/constants.dart';
 import 'package:shopapp/screens/otp/components/otp_form.dart';
 import 'package:shopapp/size_config.dart';
 
-class Body extends StatelessWidget {
-  const Body({Key? key}) : super(key: key);
+class Body extends StatefulWidget {
+  const Body({Key? key,
+    required this.verificationId}) : super(key: key);
+  final String verificationId;
+  @override
+  State<Body> createState() => _BodyState();
+}
 
+class _BodyState extends State<Body> {
   String _formatTime(double time) {
     return time.toStringAsFixed(0).padLeft(2, '0');
   }
@@ -27,16 +34,19 @@ class Body extends StatelessWidget {
               Text("We sent your code to +225 076 776****"),
               buildTimer(),
               SizedBox(height: SizeConfig.screenHeight*0.15,),
-              OtpForm(),
+              OtpForm(verificationId: widget.verificationId,),
               SizedBox(height: SizeConfig.screenHeight*0.1,),
               GestureDetector(
                 onTap: () {
-                    //Renvoyer le code OTP
+                  // Renvoyer le code OTP
+                  // Vous pouvez implémenter ici la logique pour renvoyer le code OTP à l'utilisateur.
+                  showCustomSnackBar("Le code OTP a été renvoyé avec succès.",ContentType.success);
                 },
-                child: Text("Resend OTP Code"
-                    ,style: TextStyle(decoration: TextDecoration.underline),
+                child: Text(
+                  "Resend OTP Code",
+                  style: TextStyle(decoration: TextDecoration.underline),
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -62,5 +72,21 @@ class Body extends StatelessWidget {
             ),
           ],
         );
+  }
+
+  void showCustomSnackBar(String message, ContentType Content) {
+    ScaffoldMessenger.of(context as BuildContext).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.fixed,
+        backgroundColor: Color(0x00FFFFFF),
+        elevation: 0,
+        content: AwesomeSnackbarContent(
+          title: 'Code OTP renvoyé',
+          message: message,
+          contentType: Content,
+          messageFontSize: getProportionateScreenWidth(15),
+        ),
+      ),
+    );
   }
 }

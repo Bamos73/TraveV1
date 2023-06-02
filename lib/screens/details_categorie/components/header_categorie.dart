@@ -8,30 +8,35 @@ import 'package:slide_popup_dialog_null_safety/slide_popup_dialog.dart' as slide
 import 'package:shopapp/size_config.dart';
 
 class HeaderCategorie extends StatefulWidget {
-  const HeaderCategorie({
+  HeaderCategorie({
     Key? key,
     required this.titre_document,
     required this.onOrderByChanged,
+    required this.colors,
+    required this.tailles,
+    required this.SelectedColor,
+    required this.SelectedTaille,
+    required this.startPrice,
+    required this.endPrice,
+    required this.onOrderByChangedFiltre,
   }) : super(key: key);
 
   final String titre_document;
   final ValueChanged<String> onOrderByChanged;
-
+  final VoidCallback onOrderByChangedFiltre;
+  final List<String> colors;
+  final List<String> tailles;
+  final List<bool> SelectedColor;
+  final List<bool> SelectedTaille;
+  double startPrice;
+  double endPrice;
 
   @override
   State<HeaderCategorie> createState() => _HeaderCategorieState();
 }
 
 class _HeaderCategorieState extends State<HeaderCategorie> {
-  String dropdownValue = 'NOUVEAUTÉS'; // valeur par défaut
-
-  double _startPrice = 0.0;
-  double _endPrice = 100000.0;
-  List<bool> _isSelectedColor = List.generate(9, (index) => false);
-  List<bool> _isSelectedTaille = List.generate(6, (index) => false);
-
-  List<String> _colors = ['Noir', 'Blanc', 'Gris', 'Bleu', 'Rouge','Vert','Orange','Rose','Autre'];
-  List<String> _tailles = ['XXXL','XXL', 'XL', 'L', 'M', 'S',];
+  String dropdownValue = 'NOUVEAUTÉS';
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +133,8 @@ class _HeaderCategorieState extends State<HeaderCategorie> {
                               color: Color(0xFF858585),
                             ),
                           ),
-                          Icon(Icons.filter_list)
+                          SizedBox(width: 5,),
+                          Icon(Icons.filter_list,color: kSecondaryColor,size: getProportionateScreenWidth(15),)
                         ],
                       ),
                     ),
@@ -149,6 +155,7 @@ class _HeaderCategorieState extends State<HeaderCategorie> {
       ],
     );
   }
+
   void showSlideDialog(BuildContext context) {
     slideDialog.showSlideDialog(
       context: context,
@@ -172,17 +179,17 @@ class _HeaderCategorieState extends State<HeaderCategorie> {
               ),
             ),
             RangeSlider(
-              values: RangeValues(_startPrice,_endPrice),
+              values: RangeValues(widget.startPrice,widget.endPrice),
               min: 0.0,
               max: 100000.0,
               activeColor: kPrimaryColor,
               divisions: 500 ,
-              labels: RangeLabels(_startPrice.toString(),_endPrice.toString()),
+              labels: RangeLabels(widget.startPrice.toString(),widget.endPrice.toString()),
               inactiveColor: kPrimaryColor.withOpacity(0.2),
               onChanged: (value) {
                 setState(() {
-                  _startPrice = value.start;
-                  _endPrice=value.end;
+                  widget.startPrice = value.start;
+                  widget.endPrice=value.end;
                 });
               },
             ),
@@ -191,7 +198,7 @@ class _HeaderCategorieState extends State<HeaderCategorie> {
               children: [
                 Text.rich(
                     TextSpan(
-                        text: 'Prix Min : ${_startPrice.toInt()} FCFA',
+                        text: 'Prix Min : ${widget.startPrice.toInt()} FCFA',
                         style: TextStyle(
                           color: kSecondaryColor.withOpacity(0.5),
                           fontSize: getProportionateScreenWidth(13),
@@ -200,7 +207,7 @@ class _HeaderCategorieState extends State<HeaderCategorie> {
                 ),
                 Text.rich(
                     TextSpan(
-                      text: 'Prix Max : ${_endPrice.toInt()} FCFA',
+                      text: 'Prix Max : ${widget.endPrice.toInt()} FCFA',
                       style: TextStyle(
                         color: kSecondaryColor.withOpacity(0.5),
                         fontSize: getProportionateScreenWidth(13),),
@@ -218,15 +225,15 @@ class _HeaderCategorieState extends State<HeaderCategorie> {
             Wrap(
               spacing: getProportionateScreenWidth(10),
               children: [
-                filterChipColor(0, _colors[0]),
-                filterChipColor(1, _colors[1]),
-                filterChipColor(2, _colors[2]),
-                filterChipColor(3, _colors[3]),
-                filterChipColor(4, _colors[4]),
-                filterChipColor(5, _colors[5]),
-                filterChipColor(6, _colors[6]),
-                filterChipColor(7, _colors[7]),
-                filterChipColor(7, _colors[8]),
+                filterChipColor(0, widget.colors[0]),
+                filterChipColor(1, widget.colors[1]),
+                filterChipColor(2, widget.colors[2]),
+                filterChipColor(3, widget.colors[3]),
+                filterChipColor(4, widget.colors[4]),
+                filterChipColor(5, widget.colors[5]),
+                filterChipColor(6, widget.colors[6]),
+                filterChipColor(7, widget.colors[7]),
+                filterChipColor(7, widget.colors[8]),
               ],
             ),
             SizedBox(height: 5.0),
@@ -243,12 +250,12 @@ class _HeaderCategorieState extends State<HeaderCategorie> {
                 alignment: WrapAlignment.center,
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
-                  filterChipTaille(0, _tailles[0]),
-                  filterChipTaille(0, _tailles[1]),
-                  filterChipTaille(1, _tailles[2]),
-                  filterChipTaille(2, _tailles[3]),
-                  filterChipTaille(3, _tailles[4]),
-                  filterChipTaille(4, _tailles[5]),
+                  filterChipTaille(0, widget.tailles[0]),
+                  filterChipTaille(0, widget.tailles[1]),
+                  filterChipTaille(1, widget.tailles[2]),
+                  filterChipTaille(2, widget.tailles[3]),
+                  filterChipTaille(3, widget.tailles[4]),
+                  filterChipTaille(4, widget.tailles[5]),
                 ],
               ),
             ),
@@ -256,15 +263,28 @@ class _HeaderCategorieState extends State<HeaderCategorie> {
             DefaultButton(
               text: 'Filtrer',
               press: () {
-                // Ajoutez ici la logique pour filtrer les documents
-                Navigator.of(context).pop(); // Ferme le dialogue
-              },)
+                applyFilters();
+                Navigator.of(context).pop(); // Ferme la boîte de dialogue
+              },
+            ),
           ],
         ),
       ),
     );
   }
 
+  bool anyFilterSelected() {
+    return widget.SelectedColor.any((selected) => selected) ||
+        widget.SelectedTaille.any((selected) => selected);
+  }
+  void applyFilters() {
+    if (anyFilterSelected()) {
+      // widget.onOrderByChangedFiltre();
+    } else {
+      // Aucun filtre sélectionné, affichez un message d'erreur ou effectuez une autre action appropriée
+      print('Aucun filtre sélectionné');
+    }
+  }
 
   Widget filterChipColor(int index, String color) {
     return FilterChip(
@@ -273,10 +293,10 @@ class _HeaderCategorieState extends State<HeaderCategorie> {
         color: Colors.black,
         fontSize: getProportionateScreenWidth(13),
       ),
-      selected: _isSelectedColor[index],
+      selected: widget.SelectedColor[index],
       onSelected: (isSelected) {
         setState(() {
-          _isSelectedColor[index] = isSelected;
+          widget.SelectedColor[index] = isSelected;
         });
       },
       selectedColor: kPrimaryColor.withOpacity(0.2),
@@ -290,10 +310,10 @@ class _HeaderCategorieState extends State<HeaderCategorie> {
         color: Colors.black,
         fontSize: getProportionateScreenWidth(13),
       ),
-      selected: _isSelectedTaille[index],
+      selected: widget.SelectedTaille[index],
       onSelected: (isSelected) {
         setState(() {
-          _isSelectedTaille[index] = isSelected;
+          widget.SelectedTaille[index] = isSelected;
         });
       },
       selectedColor: kPrimaryColor.withOpacity(0.2),

@@ -238,6 +238,7 @@ class SignInProvider extends ChangeNotifier {
     });
   }
 
+
 //entrer les données de l'utilisateur dans le fireStore
   Future saveDataToFirestore() async {
     final DocumentReference r =

@@ -1,12 +1,12 @@
-// ignore_for_file: avoid_returning_null_for_void
-
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopapp/authentification/user_add_with_auth.dart';
 import 'package:shopapp/components/custom_surfix_icon.dart';
 import 'package:shopapp/components/default_button.dart';
 import 'package:shopapp/components/form_error.dart';
+import 'package:shopapp/components/main_screens.dart';
 import 'package:shopapp/constants.dart';
 import 'package:shopapp/provider/internet_provider.dart';
 import 'package:shopapp/provider/sign_in_provider.dart';
@@ -44,6 +44,7 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
   final _ctrlastname = TextEditingController();
   final _ctrphonenumber = TextEditingController();
   final _ctradresse = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -63,13 +64,13 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
             FormError(errors: errors),
             SizedBox(height: getProportionateScreenWidth(40),),
             DefaultButton(
-                text: "Continue",
+                text: "Continuer",
                 press: () async {
-                  // internet provider
+                  // Fournisseur d'accès Internet
                   final sp = context.read<SignInProvider>();
                   final ip = context.read<InternetProvider>();
                   await ip.checkInternetConnection();
-                  // vérifie si l'utilisateur est connecté à internet
+                  // Vérifie si l'utilisateur est connecté à Internet
                   if (ip.hasInternet == false) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       behavior: SnackBarBehavior.floating,
@@ -77,35 +78,39 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
                       elevation: 0,
                       content: AwesomeSnackbarContent(
                         title: 'Oh Hey!!',
-                        message: "Vérifiez votre connection internet",
+                        message: "Vérifiez votre connexion Internet",
                         contentType: ContentType.failure,
                         messageFontSize: getProportionateScreenWidth(15),
                       ),
                     ));
                   } else {
-                  if (_formKey.currentState!.validate()) {
-                    final user = UserAuth(
-                        firstname: _ctrfirstname.text.trim(),
-                        lastname: _ctrlastname.text,
-                        phonenumber: _ctrphonenumber.text.trim(),
-                        address: _ctradresse.text,
-                        email: '',
-                        uid: '');
-                    addUser(user);
-                    _ctrfirstname.text = '';
-                    _ctrlastname.text = '';
-                    _ctrphonenumber.text = '';
-                    _ctradresse.text = '';
+                    if (_formKey.currentState!.validate()) {
+                      final user = UserAuth(
+                          firstname: _ctrfirstname.text.trim(),
+                          lastname: _ctrlastname.text,
+                          phonenumber: _ctrphonenumber.text.trim(),
+                          address: _ctradresse.text,
+                          email: '',
+                          uid: '');
+                      addUser(user);
 
-                    //sauvegarder les données dans le sharedPreferences
-                    await sp.getUserDataFromFirestoreForAuth().then((value) => sp
-                        .saveDataToSharedPreferences()
-                        .then((value) => sp.setSignIn().then((value) {
-                      handleAfterSignIn();
-                    })));
-                  }
-                  }
+                      // Sauvegarder les données dans le sharedPreferences
+                      await sp.getUserDataFromFirestoreForAuth().then((value) => sp
+                          .saveDataToSharedPreferences()
+                          .then((value) => sp.setSignIn().then((value) {})));
 
+                      await FirebaseAuth.instance.verifyPhoneNumber(
+                        phoneNumber: '+2250787406257',
+                        verificationCompleted: (PhoneAuthCredential credential) {},
+                        verificationFailed: (FirebaseAuthException e) {},
+                        codeSent: (String verificationId, int? resendToken) {},
+                        codeAutoRetrievalTimeout: (String verificationId) {},
+                      );
+                      Navigator.pushNamed(context, MainScreen.routeName,);
+                      print('+225${_ctrphonenumber.text.trim()}');
+
+                    }
+                  }
                 }),
           ],
         ));
@@ -128,8 +133,8 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
         return null;
       },
       decoration: const InputDecoration(
-        labelText: "First Name",
-        hintText: "Enter your first name",
+        labelText: "Prénom",
+        hintText: "Entrez votre prénom",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSurffixIcon(
           svgIcon: "assets/icons/User.svg",
@@ -143,8 +148,8 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
       controller: _ctrlastname,
       // onSaved: (newValue) => LastName=newValue!,
       decoration: const InputDecoration(
-        labelText: "Last Name",
-        hintText: "Enter your last name",
+        labelText: "Nom",
+        hintText: "Entrez votre nom",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSurffixIcon(
           svgIcon: "assets/icons/User.svg",
@@ -171,8 +176,8 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
         return null;
       },
       decoration: const InputDecoration(
-        labelText: "Phone number",
-        hintText: "Enter your phone number",
+        labelText: "Numéro de téléphone",
+        hintText: "Entrez votre numéro de téléphone",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSurffixIcon(
           svgIcon: "assets/icons/Phone.svg",
@@ -199,8 +204,8 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
         return null;
       },
       decoration: const InputDecoration(
-        labelText: "Address",
-        hintText: "Enter your Address",
+        labelText: "Adresse",
+        hintText: "Entrez votre adresse",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSurffixIcon(
           svgIcon: "assets/icons/Location point.svg",
@@ -208,10 +213,41 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
       ),
     );
   }
-  //direction après la connection
-  handleAfterSignIn() {
-    Future.delayed(const Duration(milliseconds: 1000)).then((value) {
-      nextScreenReplace(context, const OTPScreen());
-    });
+
+
+  void sendOTP(String phoneNumber) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    await auth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      verificationCompleted: (PhoneAuthCredential credential) async {},
+      verificationFailed: (FirebaseAuthException e) {
+        showCustomSnackBar("erreur sur le numero fourni.",ContentType.failure);
+      },
+      codeSent: (String verificationId, int? resendToken) {
+
+        Navigator.pushNamed(context, OTPScreen.routeName,
+            arguments: {
+              'verificationId': verificationId,
+            });
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    );
+  }
+
+  void showCustomSnackBar(String message, ContentType Content) {
+    ScaffoldMessenger.of(context as BuildContext).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.fixed,
+        backgroundColor: Color(0x00FFFFFF),
+        elevation: 0,
+        content: AwesomeSnackbarContent(
+          title: 'Code OTP incorrect',
+          message: message,
+          contentType: Content,
+          messageFontSize: getProportionateScreenWidth(15),
+        ),
+      ),
+    );
   }
 }

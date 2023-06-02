@@ -1,3 +1,6 @@
+
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopapp/components/default_button.dart';
 import 'package:shopapp/components/main_screens.dart';
@@ -5,8 +8,8 @@ import 'package:shopapp/constants.dart';
 import 'package:shopapp/size_config.dart';
 
 class OtpForm extends StatefulWidget {
-  const OtpForm({Key? key}) : super(key: key);
-
+  const OtpForm({Key? key, required this.verificationId}) : super(key: key);
+  final String verificationId;
   @override
   State<OtpForm> createState() => _OtpFormState();
 }
@@ -16,6 +19,12 @@ class _OtpFormState extends State<OtpForm> {
   FocusNode? pin2FocusNode;
   FocusNode? pin3FocusNode;
   FocusNode? pin4FocusNode;
+  final _code1 = TextEditingController();
+  final _code2 = TextEditingController();
+  final _code3 = TextEditingController();
+  final _code4 = TextEditingController();
+  late String CodeOtp='0000';
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -39,6 +48,7 @@ class _OtpFormState extends State<OtpForm> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -51,6 +61,7 @@ class _OtpFormState extends State<OtpForm> {
               SizedBox(
                 width: getProportionateScreenWidth(60),
                 child: TextFormField(
+                  controller: _code1,
                   autofocus: true,
                   obscureText: true,
                   keyboardType: TextInputType.number,
@@ -65,6 +76,7 @@ class _OtpFormState extends State<OtpForm> {
               SizedBox(
                 width: getProportionateScreenWidth(60),
                 child: TextFormField(
+                  controller: _code2,
                   focusNode: pin2FocusNode,
                   obscureText: true,
                   keyboardType: TextInputType.number,
@@ -79,6 +91,7 @@ class _OtpFormState extends State<OtpForm> {
               SizedBox(
                 width: getProportionateScreenWidth(60),
                 child: TextFormField(
+                  controller: _code3,
                   focusNode: pin3FocusNode,
                   obscureText: true,
                   keyboardType: TextInputType.number,
@@ -93,6 +106,7 @@ class _OtpFormState extends State<OtpForm> {
               SizedBox(
                 width: getProportionateScreenWidth(60),
                 child: TextFormField(
+                  controller: _code4,
                   focusNode: pin4FocusNode,
                   obscureText: true,
                   keyboardType: TextInputType.number,
@@ -115,11 +129,48 @@ class _OtpFormState extends State<OtpForm> {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
                   //Après la verification
-                  nextScreenReplace(context, const MainScreen());
+                  CodeOtp = _code1.text+ _code2.text+_code3.text+_code4.text;
+                  verifyOTP(CodeOtp);
                 }
               }),
         ],
       ),
     );
   }
+
+  void verifyOTP(String otpCode) async {
+    String verificationId = widget.verificationId; // Récupérez l'ID de vérification depuis les paramètres de la classe
+
+    PhoneAuthCredential credential = PhoneAuthProvider.credential(
+      verificationId: verificationId,
+      smsCode: otpCode,
+    );
+
+    try {
+      FirebaseAuth auth = FirebaseAuth.instance;
+      UserCredential userCredential = await auth.signInWithCredential(credential);
+
+      nextScreenReplace(context, MainScreen());
+    } catch (e) {
+      showCustomSnackBar("Veuillez saisir le code OTP correct.", ContentType.failure);
+    }
+  }
+
+
+  void showCustomSnackBar(String message, ContentType Content) {
+    ScaffoldMessenger.of(context as BuildContext).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.fixed,
+        backgroundColor: Color(0x00FFFFFF),
+        elevation: 0,
+        content: AwesomeSnackbarContent(
+          title: 'Code OTP incorrect',
+          message: message,
+          contentType: Content,
+          messageFontSize: getProportionateScreenWidth(15),
+        ),
+      ),
+    );
+  }
+
 }

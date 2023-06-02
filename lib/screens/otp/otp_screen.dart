@@ -1,17 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:shopapp/screens/otp/components/body.dart';
 
-class OTPScreen extends StatelessWidget {
-  const OTPScreen({Key? key}) : super(key: key);
+class OTPScreen extends StatefulWidget {
+  const OTPScreen({Key? key, }) : super(key: key);
   static String routeName="/otp";
+
   @override
+  State<OTPScreen> createState() => _OTPScreenState();
+}
+
+class _OTPScreenState extends State<OTPScreen> {
+  @override
+
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final verificationId = args['verificationId'] as String;
+
     return Scaffold(
       appBar: AppBar(
         title: Text("OTP Verification"),
         centerTitle: true,
       ),
-      body: Body(),
+      body: Body(verificationId: verificationId,),
     );
   }
 }

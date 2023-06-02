@@ -27,28 +27,6 @@ class _BodyState extends State<Body> {
   late Stream<QuerySnapshot<Map<String, dynamic>>> _productsStream4;
 
   @override
-  void initState() {
-    super.initState();
-    _productsStream1 =
-        FirebaseFirestore.instance.collection('Home_Collection').doc(
-            "Home_NewCollection_product").collection(
-            'Home_NewCollection_product').snapshots();
-    _productsStream2 =
-        FirebaseFirestore.instance.collection('Home_Collection').doc(
-            "Home_WomanCollection_product").collection(
-            'Home_WomanCollection_product').snapshots();
-    _productsStream3 =
-        FirebaseFirestore.instance.collection('Home_Collection').doc(
-            "Home_MenCollection_product").collection(
-            'Home_MenCollection_product').snapshots();
-    _productsStream4 =
-        FirebaseFirestore.instance.collection('Home_Collection').doc(
-            "Home_AccessoireCollection_product").collection(
-            'Home_AccessoireCollection_product').snapshots();
-  }
-
-
-  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Stack(
@@ -58,6 +36,7 @@ class _BodyState extends State<Body> {
             children: [
               SizedBox(height: getProportionateScreenWidth(50),),
               SizedBox(height: getProportionateScreenWidth(30),),
+              SectionTitle1(text: "Spécialement pour toi", press: () {},),
               SpecialOffers(),
               SizedBox(height: getProportionateScreenWidth(30),),
               SectionTitle(text: "Catégorie Populaire", press: () {
@@ -130,6 +109,26 @@ class _BodyState extends State<Body> {
         ],
       ),
     );
+  }
+  @override
+  void initState() {
+    super.initState();
+    _productsStream1 =
+        FirebaseFirestore.instance.collection('Home_Collection').doc(
+            "Home_NewCollection_product").collection(
+            'Home_NewCollection_product').snapshots();
+    _productsStream2 =
+        FirebaseFirestore.instance.collection('Home_Collection').doc(
+            "Home_WomanCollection_product").collection(
+            'Home_WomanCollection_product').snapshots();
+    _productsStream3 =
+        FirebaseFirestore.instance.collection('Home_Collection').doc(
+            "Home_MenCollection_product").collection(
+            'Home_MenCollection_product').snapshots();
+    _productsStream4 =
+        FirebaseFirestore.instance.collection('Home_Collection').doc(
+            "Home_AccessoireCollection_product").collection(
+            'Home_AccessoireCollection_product').snapshots();
   }
 }
 

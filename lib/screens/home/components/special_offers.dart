@@ -12,9 +12,6 @@ class SpecialOffers extends StatelessWidget {
     return Column(
 
       children: [
-        SectionTitle(
-          text: "Spécialement pour toi",
-          press: () {},),
         SizedBox(height: getProportionateScreenWidth(20),),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
