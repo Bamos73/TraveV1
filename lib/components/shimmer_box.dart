@@ -280,31 +280,34 @@ class ShimmerPopular extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: getProportionateScreenHeight(175),
-      child: GridView.builder(
-        itemCount: 8,
-        physics: NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: getProportionateScreenWidth(64),
-          mainAxisSpacing: getProportionateScreenWidth(20),
-          crossAxisSpacing: getProportionateScreenWidth(20),
-          childAspectRatio: 1,
-        ),
-        itemBuilder: (context, index) {
-          return Shimmer.fromColors(
-            baseColor: Colors.grey[300]!,
-            highlightColor: Colors.grey[100]!,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(50)
-              ),
+    return Padding(
+      padding:  EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
+      child: Container(
+        width: double.infinity,
+        height: getProportionateScreenHeight(175),
+        child: GridView.builder(
+          itemCount: 8,
+          physics: NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: getProportionateScreenWidth(64),
+            mainAxisSpacing: getProportionateScreenWidth(20),
+            crossAxisSpacing: getProportionateScreenWidth(20),
+            childAspectRatio: 1,
+          ),
+          itemBuilder: (context, index) {
+            return Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(50)
+                ),
 
-            ),
-          );
-        },
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -371,7 +374,7 @@ class ShimmerNouveaute extends StatelessWidget {
         itemCount: 6,
         physics: NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 1,
+          crossAxisCount: 2,
           mainAxisSpacing: getProportionateScreenHeight(7),
           crossAxisSpacing: getProportionateScreenHeight(7),
           mainAxisExtent: getProportionateScreenHeight(250),

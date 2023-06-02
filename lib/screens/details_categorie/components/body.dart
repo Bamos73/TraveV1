@@ -21,6 +21,9 @@ class _BodyState extends State<Body> {
   late Stream<QuerySnapshot<Map<String, dynamic>>> _productsStream;
   late String _orderByField;
   late bool _croissant;
+  bool _isNew = false;
+  List<bool> _isSelectedColor = List.generate(9, (index) => false);
+  List<bool> _isSelectedTaille = List.generate(6, (index) => false);
 
   // INITIALISATION DU FILTRE
   @override

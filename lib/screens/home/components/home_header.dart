@@ -24,6 +24,7 @@ class _HomeHeaderState extends State<HomeHeader> {
     return Padding(
       padding:  EdgeInsets.symmetric(
         horizontal: getProportionateScreenWidth(20),
+        vertical: getProportionateScreenHeight(10)
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -26,9 +26,9 @@ class _ProfilePicState extends State<ProfilePic> {
             clipBehavior: Clip.none,
             fit: StackFit.expand,
             children: [
-              const CircleAvatar(
+               CircleAvatar(
                 backgroundColor: Colors.grey,
-                backgroundImage: AssetImage("assets/images/Profile Image.png"),
+                backgroundImage: NetworkImage("${sp.imageUrl}"),
               ),
               Positioned(
                 right: -12,

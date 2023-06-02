@@ -29,7 +29,6 @@ class _HeaderCategorieState extends State<HeaderCategorie> {
   double _endPrice = 100000.0;
   List<bool> _isSelectedColor = List.generate(9, (index) => false);
   List<bool> _isSelectedTaille = List.generate(6, (index) => false);
-  bool? _isNew = false;
 
   List<String> _colors = ['Noir', 'Blanc', 'Gris', 'Bleu', 'Rouge','Vert','Orange','Rose','Autre'];
   List<String> _tailles = ['XXXL','XXL', 'XL', 'L', 'M', 'S',];
@@ -300,5 +299,6 @@ class _HeaderCategorieState extends State<HeaderCategorie> {
       selectedColor: kPrimaryColor.withOpacity(0.2),
     );
   }
+
 
 }
