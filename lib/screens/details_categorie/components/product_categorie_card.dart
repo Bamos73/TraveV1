@@ -9,11 +9,14 @@ import 'package:shopapp/size_config.dart';
 class ProductsCategorieCard extends StatefulWidget {
   const ProductsCategorieCard({
     super.key,
-    required Stream<QuerySnapshot<Map<String, dynamic>>> productsStream, required this.collectionName,
+    required Stream<QuerySnapshot<Map<String, dynamic>>> productsStream,
+    required this.collectionName,
+    required this.firstcollectionName,
   }) : _productsStream = productsStream;
 
   final Stream<QuerySnapshot<Map<String, dynamic>>> _productsStream;
   final String collectionName;
+  final String firstcollectionName;
 
   @override
   State<ProductsCategorieCard> createState() => _ProductsCategorieCardState();
@@ -60,7 +63,7 @@ class _ProductsCategorieCardState extends State<ProductsCategorieCard> {
                                 productId: products[index].id,
                                 product: products[index] as DocumentSnapshot<Map<String, dynamic>>?,
                                 collectionName: widget.collectionName,
-                                FirstcollectionName: 'Category',
+                                FirstcollectionName: widget.firstcollectionName,
                               ),
                             ),
                           ),

@@ -37,8 +37,9 @@ class _CardPopularState extends State<CardPopular> {
         ),
         itemBuilder: (context, index) {
           final document = widget.documents[index];
-          final imageUrl = document['image'] ?? '';
-          final title = document['titre_categorie'] ?? '';
+          final imageUrl = document['image'] ?? 'Nouveauté';
+          final title = document['titre_categorie'] ?? 'https://firebasestorage.googleapis.com/v0/b/singup-a9273.appspot.com/o/Cat%C3%A9gorie%2FAbaya%2FAY0001%2Fjilbab.jpg?alt=media&token=0537c680-7fed-443b-963a-61e43f7eec2d';
+          final collectionName = document['nom_first_collection'] ?? 'Category';
 
           return GestureDetector(
             onTap: () {
@@ -46,6 +47,7 @@ class _CardPopularState extends State<CardPopular> {
                   arguments: {
                     'nom_document': document['nom_document'],
                     'titre_categorie': document['titre_categorie'],
+                    'first_collection': collectionName,
                   });
             },
             child: FutureBuilder(

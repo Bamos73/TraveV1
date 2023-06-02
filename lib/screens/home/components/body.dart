@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:shopapp/components/shimmer_box.dart';
+import 'package:shopapp/screens/category/category_screen.dart';
 import 'package:shopapp/screens/details_categorie/details_categorie_screen.dart';
 import 'package:shopapp/screens/home/components/card_nouveaute.dart';
 import 'package:shopapp/screens/home/components/categorie_popular.dart';
@@ -47,20 +47,6 @@ class _BodyState extends State<Body> {
             'Home_AccessoireCollection_product').snapshots();
   }
 
-  Future<DocumentSnapshot<Map<String, dynamic>>> _getHomeCoverData(
-      String docId) async {
-    try {
-      DocumentSnapshot<Map<String, dynamic>> homeCover = await FirebaseFirestore
-          .instance
-          .collection('Home')
-          .doc(docId)
-          .get();
-      return homeCover;
-    } catch (e) {
-      print(e.toString());
-      rethrow;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,29 +60,59 @@ class _BodyState extends State<Body> {
               SizedBox(height: getProportionateScreenWidth(30),),
               SpecialOffers(),
               SizedBox(height: getProportionateScreenWidth(30),),
-              SectionTitle(text: "Catégorie Populaire", press: () {},),
+              SectionTitle(text: "Catégorie Populaire", press: () {
+                Navigator.pushNamed(context, CategoryScreen.routeName);
+              },),
               SizedBox(height: getProportionateScreenWidth(20),),
               CategoriePopular(),
               SizedBox(height: getProportionateScreenWidth(20),),
-              SectionTitle(text: "Nouvelle Collection", press: () {},),
+              SectionTitle(text: "Nouvelle Collection", press: () {
+                Navigator.pushNamed(context, DetailCtgScreen.routeName,
+                    arguments: {
+                      'nom_document': 'Home_NewCollection_product',
+                      'titre_categorie': 'Nouveauté',
+                      'first_collection': 'Home_Collection',
+                    });
+              },),
               SizedBox(height: getProportionateScreenWidth(20),),
               ProductsList(productsStream: _productsStream1, collectionName: 'Home_NewCollection_product',),
               SizedBox(height: getProportionateScreenWidth(30),),
               HomeCover(homeCoverStream: FirebaseFirestore.instance.collection('Home').doc("HomeCover_1").snapshots()),
               SizedBox(height: getProportionateScreenWidth(30),),
-              SectionTitle(text: "Collection Femme", press: () {},),
+              SectionTitle(text: "Collection Femme", press: () {
+                Navigator.pushNamed(context, DetailCtgScreen.routeName,
+                    arguments: {
+                      'nom_document': ' Home_WomanCollection_product',
+                      'titre_categorie': 'Collection Femme',
+                      'first_collection': 'Home_Collection',
+                    });
+              },),
               SizedBox(height: getProportionateScreenWidth(20),),
               ProductsList(productsStream: _productsStream2, collectionName: 'Home_WomanCollection_product',),
               SizedBox(height: getProportionateScreenWidth(30),),
               HomeCover(homeCoverStream: FirebaseFirestore.instance.collection('Home').doc("HomeCover_2").snapshots()),
               SizedBox(height: getProportionateScreenWidth(30),),
-              SectionTitle(text: "Collection Homme", press: () {},),
+              SectionTitle(text: "Collection Homme", press: () {
+                Navigator.pushNamed(context, DetailCtgScreen.routeName,
+                    arguments: {
+                      'nom_document': ' Home_MenCollection_product',
+                      'titre_categorie': 'Collection Homme',
+                      'first_collection': 'Home_Collection',
+                    });
+              },),
               SizedBox(height: getProportionateScreenWidth(20),),
               ProductsList(productsStream: _productsStream3, collectionName: 'Home_MenCollection_product',),
               SizedBox(height: getProportionateScreenWidth(30),),
               HomeCover(homeCoverStream: FirebaseFirestore.instance.collection('Home').doc("HomeCover_3").snapshots()),
               SizedBox(height: getProportionateScreenWidth(30),),
-              SectionTitle(text: "Accessoire", press: () {},),
+              SectionTitle(text: "Accessoire", press: () {
+                Navigator.pushNamed(context, DetailCtgScreen.routeName,
+                    arguments: {
+                      'nom_document': 'Home_AccessoireCollection_product',
+                      'titre_categorie': 'Accessoire',
+                      'first_collection': 'Home_Collection',
+                    });
+              },),
               SizedBox(height: getProportionateScreenWidth(20),),
               ProductsList(productsStream: _productsStream4, collectionName: 'Home_AccessoireCollection_product',),
               SizedBox(height: getProportionateScreenWidth(30),),

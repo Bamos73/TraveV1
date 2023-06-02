@@ -8,10 +8,12 @@ class Body extends StatefulWidget {
     Key? key,
     required this.documentName,
     required this.Titre,
+    required this.FirstCollection,
   }) : super(key: key);
 
   final String documentName;
   final String Titre;
+  final String FirstCollection;
 
   @override
   State<Body> createState() => _BodyState();
@@ -32,7 +34,7 @@ class _BodyState extends State<Body> {
     _orderByField = 'date';
     _croissant=true;
     _productsStream = FirebaseFirestore.instance
-        .collection('Category')
+        .collection(widget.FirstCollection)
         .doc(widget.documentName)
         .collection(widget.documentName)
         .orderBy(_orderByField, descending: _croissant)
@@ -58,7 +60,7 @@ class _BodyState extends State<Body> {
       });
     }
     _productsStream = FirebaseFirestore.instance
-        .collection('Category')
+        .collection(widget.FirstCollection)
         .doc(widget.documentName)
         .collection(widget.documentName)
         .orderBy(_orderByField, descending: _croissant)
@@ -71,7 +73,7 @@ class _BodyState extends State<Body> {
       child: Column(
         children: [
           HeaderCategorie(titre_document: widget.Titre, onOrderByChanged: _onOrderByChanged),
-          ProductsCategorieCard(productsStream: _productsStream, collectionName: widget.documentName),
+          ProductsCategorieCard(productsStream: _productsStream, collectionName: widget.documentName, firstcollectionName: widget.FirstCollection,),
         ],
       ),
     );

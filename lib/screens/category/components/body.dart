@@ -60,9 +60,11 @@ class _BodyState extends State<Body> {
                   itemCount: categoryDocs.length,
                   itemBuilder: (context, index) {
                     String title =
-                        categoryDocs[index].data()['titre_categorie'] ?? "NOUVEAUTES";
+                        categoryDocs[index].data()['titre_categorie'] ?? "Nouveauté";
                     String image =
-                        categoryDocs[index].data()['image'] ?? "https://via.placeholder.com/150";
+                        categoryDocs[index].data()['image'] ?? "https://firebasestorage.googleapis.com/v0/b/singup-a9273.appspot.com/o/Cat%C3%A9gorie%2FAbaya%2FAY0001%2Fjilbab.jpg?alt=media&token=0537c680-7fed-443b-963a-61e43f7eec2d";
+                    String collectionName =
+                        categoryDocs[index].data()['nom_first_collection'] ?? "Category"; // Récupérer le nom de la collection
                     return Column(
                       children: [
                         ListTile(
@@ -84,6 +86,7 @@ class _BodyState extends State<Body> {
                                 arguments: {
                                   'nom_document': categoryDocs[index].id,
                                   'titre_categorie': categoryDocs[index]['titre_categorie'],
+                                  'first_collection': collectionName,
                                 });
                           },
                         ),
