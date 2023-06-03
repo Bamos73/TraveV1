@@ -8,6 +8,7 @@ import 'package:shopapp/screens/category/category_screen.dart';
 import 'package:shopapp/screens/complete_profile/complete_profile_screen.dart';
 import 'package:shopapp/screens/details/details_screen.dart';
 import 'package:shopapp/screens/details_categorie/details_categorie_screen.dart';
+import 'package:shopapp/screens/favorie/favorie_screen.dart';
 import 'package:shopapp/screens/forgot_password/forgot_password_screen.dart';
 import 'package:shopapp/screens/home/home_screen.dart';
 import 'package:shopapp/screens/login_success/login_success_screen.dart';
@@ -42,7 +43,6 @@ final Map<String, WidgetBuilder> routes = {
         DetailCtgScreen.routeName:(context) => DetailCtgScreen(),
         PaymentScreen.routeName:(context) => PaymentScreen(),
         AdresseLivraison.routeName:(context) => AdresseLivraison(),
-        AdresseLivraison.routeName:(context) => AdresseLivraison(),
-        MyApp.routeName:(context) => MyApp(),
+        FavorieScreen.routeName:(context) => FavorieScreen(),
 
 };

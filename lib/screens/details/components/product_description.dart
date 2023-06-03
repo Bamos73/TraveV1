@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopapp/constants.dart';
 import 'package:shopapp/size_config.dart';
@@ -15,6 +16,7 @@ class ProductDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -97,11 +99,16 @@ class ProductDescription extends StatelessWidget {
                     bottomLeft: Radius.circular(20),
                   ),
               ),
-              child: Icon(Icons.favorite,
-                size: 25,
-                color: product['isFavourite']
-                    ? Color(0xFFFF4848)
-                    : Color(0xFFDBDEE4),
+              child: GestureDetector(
+                onTap: () {
+                  addToFavourite(product);
+                },
+                child: Icon(Icons.favorite,
+                  size: 25,
+                  color: product['isFavourite']
+                      ? Color(0xFFFF4848)
+                      : Color(0xFFDBDEE4),
+                ),
               ),
             ),
           ],
@@ -109,4 +116,30 @@ class ProductDescription extends StatelessWidget {
       ],
     );
   }
+
+  void addToFavourite(DocumentSnapshot<Map<String, dynamic>>? product) async {
+    if (product == null) {
+      return;
+    }
+    User? user = FirebaseAuth.instance.currentUser;
+    final userId = user?.uid;
+
+    final userRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('Favourite')
+        .doc(product['code'].toString());
+
+    final userCardDoc = await userRef.get();
+    if (userCardDoc.exists) {
+      final userCardData = userCardDoc.data();
+    }else{
+      await userRef.set({
+        'first_Collection': product['first_collection'],
+        'first_Document': product['first_document'],
+        'code_Document': product['code'],
+      });
+    }
+  }
+
 }
