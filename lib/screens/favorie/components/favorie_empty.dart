@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shopapp/components/default_button.dart';
 import 'package:shopapp/components/main_screens.dart';
+import 'package:shopapp/screens/favorie/components/custom_app_bar.dart';
 import 'package:shopapp/size_config.dart';
 
 class EmptyFavorie extends StatelessWidget {
@@ -13,27 +14,34 @@ class EmptyFavorie extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: Lottie.asset("assets/lottiefiles/116422-shopping-cart.json",),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Lottie.asset("assets/lottiefiles/29384-favorite-heart.json",),
+                Text("TA LISTE DE PREFS NE CONTIENT AUCUN ARTICLE. DÉCOUVRE LES NOUVEAUTÉS.",
+                  style: TextStyle(
+                      color:Colors.black.withOpacity(0.8),
+                      fontWeight: FontWeight.bold,
+                      fontSize: getProportionateScreenWidth(15)
+                  ),
+                  textAlign: TextAlign.center,),
+                Spacer(),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: getProportionateScreenHeight(50),),
+                  child: DefaultButtonEmpty(text: "MAGASINE", press: (){
+                    Navigator.pushNamed(context, MainScreen.routeName);
+                  }),
+                ),
+                SizedBox(height: getProportionateScreenHeight(20),)
+              ],
           ),
-          Text("TON PANIER EST VIDE. DÉCOUVRE LES NOUVEAUTÉS.",
-            style: TextStyle(
-                color:Colors.black.withOpacity(0.8),
-                fontWeight: FontWeight.bold,
-                fontSize: getProportionateScreenWidth(15)
-            ),
-            textAlign: TextAlign.center,),
-          SizedBox(height: getProportionateScreenHeight(30),),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: getProportionateScreenHeight(50)),
-            child: DefaultButton(text: "MAGASINE", press: (){
-              Navigator.pushNamed(context, MainScreen.routeName);
-            }),
-          )
-        ],
+            CustomAppBar(),
+          ],
+        ),
       ),
     );
   }
