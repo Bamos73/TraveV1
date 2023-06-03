@@ -17,7 +17,6 @@ class CustomNavBarPayment extends StatefulWidget {
 
 class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
     with SingleTickerProviderStateMixin{
-  bool _isListViewVisible = false;
   String uid = FirebaseAuth.instance.currentUser?.uid ?? '';
   bool _showSecondContainer = false;
   late AnimationController _animationController;
@@ -330,8 +329,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
                                         text: "Total:\n",
                                         children: [
                                           TextSpan(
-                                            text: "${userModeLivraison + 2556 -
-                                                userReduction} FCFA",
+                                            text: "${userModeLivraison + total - userReduction} FCFA",
                                             style: TextStyle(
                                               fontSize: getProportionateScreenWidth(16),
                                               color: Colors.black,
