@@ -21,23 +21,22 @@ class _EmptyCartState extends State<EmptyCart> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Center(
-            child: Lottie.asset("assets/lottiefiles/96365-delivery-service-delivery-man.json"),
-          ),
+          Spacer(),
+          Lottie.asset("assets/lottiefiles/96365-delivery-service-delivery-man.json"),
           Text("Votre commande a été enregistrée avec succès.",
             style: TextStyle(
                 color:Colors.black.withOpacity(0.8),
                 fontSize: getProportionateScreenWidth(15)
             ),
             textAlign: TextAlign.center,),
-          SizedBox(height: getProportionateScreenHeight(30),),
+          Spacer(),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: getProportionateScreenHeight(50)),
-            child: DefaultButton(text: "PAGE D'ACCUEIL", press: (){
+            child: DefaultButtonEmpty(text: "PAGE D'ACCUEIL", press: (){
               Navigator.pushNamed(context, MainScreen.routeName);
             }),
           ),
-
+          SizedBox(height: getProportionateScreenHeight(20),),
         ],
       ),
     );
