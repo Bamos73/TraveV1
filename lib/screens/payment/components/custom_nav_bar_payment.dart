@@ -370,6 +370,36 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
 
   }
 
+  void HistoriqueCmd() async{
+
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) {
+      showCustomSnackBar(
+          context, "L'utilisateur n'a pas de compte", ContentType.failure);
+      return;
+    }
+
+    final userCardRef = FirebaseFirestore.instance.collection('Card').doc(userId).collection(userId);
+    final userRef = FirebaseFirestore.instance.collection('users').doc(userId).collection('history_commande').doc();
+    final userDoc = await userRef.get();
+    final userData = userDoc.data();
+
+    if (userData == null || userData['uid'] != userId) {
+      showCustomSnackBar(context, "L'utilisateur n'a pas de compte valide, veuillez creer un autre compte",
+          ContentType.failure);
+      return;
+    }
+
+    // await userRef.set({
+    //   'first_Collection': product['first_collection'],
+    //   'first_Document': product['first_document'],
+    //   'code_Document': product['code'],
+    // });
+
+  }
+
+
+
   void verificationOrder(BuildContext context,num total_commande) async {
     try {
       final userId = FirebaseAuth.instance.currentUser?.uid;
