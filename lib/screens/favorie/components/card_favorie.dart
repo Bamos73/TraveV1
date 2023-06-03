@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopapp/components/shimmer_box.dart';
 import 'package:shopapp/screens/favorie/components/card_item_favorie.dart';
+import 'package:shopapp/screens/favorie/components/favorie_empty.dart';
 
 class CardFavorie extends StatefulWidget {
   const CardFavorie({Key? key}) : super(key: key);
@@ -38,9 +39,16 @@ class _CardFavorieState extends State<CardFavorie> {
             child: ShimmerCard(),
           );
         } else if (snapshot.data!.docs.isEmpty) {
-          return Expanded(
-            child: Container(),
-          );
+
+            // Le document est vide, naviguer vers une autre page
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => EmptyFavorie()),
+                );
+              });
+            return Container();
+
         }
 
         final List<DocumentSnapshot> userFavData = snapshot.data!.docs;
@@ -67,7 +75,6 @@ class _CardFavorieState extends State<CardFavorie> {
                   } else if (snapshot.connectionState == ConnectionState.waiting) {
                     return Container();
                   }
-
                   final Map<String, dynamic>? cardData = snapshot.data!.data();
                   if (cardData == null) {
                     return Container();
