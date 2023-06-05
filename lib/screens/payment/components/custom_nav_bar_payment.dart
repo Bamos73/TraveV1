@@ -411,6 +411,12 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
         .collection('commande')
         .doc(Code_commande);
 
+    final userRef = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId).get();
+
+
+
     final userHistoryCartRef = FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
@@ -442,6 +448,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
         if (!userHistoryDoc.exists) {
           final articlesSnapshot = await userOrderCardRef.get();
           final nombreArticles = articlesSnapshot.size; // Nombre de documents dans la collection
+          final userData=  userRef.data();
 
           transaction.set(userHistoryRef, {
             'code_commande': Code_commande,
@@ -449,6 +456,12 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
             'statut': 'en Cours',
             'montant': montant,
             'nombre_article': nombreArticles,
+            'adresse_de_livraison': userData!['adresse_de_livraison'],
+            'mode_de_paiement': userData['mode_de_paiement'],
+            'nom_de_livraison': userData['nom_de_livraison'],
+            'frais_de_livraison': userData['frais_de_livraison'],
+            'numero_de_livraison': userData['mode_de_paiement'],
+
           });
 
           // Copier les documents de la sous-collection "Card" vers la sous-collection "Order"

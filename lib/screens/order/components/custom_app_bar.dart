@@ -34,7 +34,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               ButtonRetour(),
-              Text("COMMANDE"),
+              Text("MA COMMANDE",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
               ButtomCard(
                 svgSrc: "assets/icons/shopping_bag.svg",
                 press: () {

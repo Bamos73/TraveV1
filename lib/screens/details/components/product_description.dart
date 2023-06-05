@@ -127,7 +127,7 @@ class ProductDescription extends StatelessWidget {
     final userRef = FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
-        .collection('Favourite')
+        .collection('favourite')
         .doc(product['code'].toString());
 
     final userCardDoc = await userRef.get();
