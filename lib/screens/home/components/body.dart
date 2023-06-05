@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shopapp/screens/category/category_screen.dart';
-import 'package:shopapp/screens/details_categorie/details_categorie_screen.dart';
+import 'package:shopapp/screens/category_details/details_categorie_screen.dart';
 import 'package:shopapp/screens/home/components/card_nouveaute.dart';
 import 'package:shopapp/screens/home/components/categorie_popular.dart';
 import 'package:shopapp/screens/home/components/home_cover.dart';

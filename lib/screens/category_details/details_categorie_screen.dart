@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shopapp/screens/details_categorie/components/body.dart';
+import 'package:shopapp/screens/category_details/components/body.dart';
 
 class DetailCtgScreen extends StatefulWidget {
   const DetailCtgScreen({Key? key}) : super(key: key);

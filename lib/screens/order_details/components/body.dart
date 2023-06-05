@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shopapp/screens/ORDER/components/custom_app_bar.dart';
-import 'package:shopapp/screens/order/components/card_order.dart';
 import 'package:shopapp/size_config.dart';
 
 class Body extends StatefulWidget {
@@ -21,11 +20,10 @@ class _BodyState extends State<Body> {
             Column(
               children: [
                 SizedBox(height: getProportionateScreenHeight(60),),
-                CardOrder()
               ],
-          ),
+            ),
             CustomAppBar(),
-            ],
+          ],
         )
     );
   }

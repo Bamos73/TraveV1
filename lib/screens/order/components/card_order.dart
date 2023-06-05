@@ -1,20 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopapp/components/shimmer_box.dart';
-import 'package:shopapp/constants.dart';
-import 'package:shopapp/screens/favory/components/card_item_favorie.dart';
-import 'package:shopapp/screens/favory/components/favorie_empty.dart';
+import 'package:shopapp/screens/order/components/card_item_order.dart';
+import 'package:shopapp/screens/order/components/order_empty.dart';
+import 'package:intl/intl.dart';
 
-class CardFavorie extends StatefulWidget {
-  const CardFavorie({Key? key}) : super(key: key);
+
+class CardOrder extends StatefulWidget {
+  const CardOrder({Key? key}) : super(key: key);
 
   @override
-  State<CardFavorie> createState() => _CardFavorieState();
+  State<CardOrder> createState() => _CardOrderState();
 }
 
-class _CardFavorieState extends State<CardFavorie> {
+class _CardOrderState extends State<CardOrder> {
   late String currentUserID;
 
   @override
@@ -41,87 +41,35 @@ class _CardFavorieState extends State<CardFavorie> {
             child: ShimmerCard(),
           );
         } else if (snapshot.data!.docs.isEmpty) {
-            // Le document est vide, naviguer vers une autre page
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => EmptyFavorie()),
+                Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => EmptyOrder()),
                 );
               });
             return Container();
-
         }
-
-        final List<DocumentSnapshot> userFavData = snapshot.data!.docs;
-
+        final List<DocumentSnapshot> userOrderData = snapshot.data!.docs;
         return Expanded(
           child: ListView.builder(
-            itemCount: userFavData.length,
+            itemCount: userOrderData.length,
             itemBuilder: (BuildContext context, int index) {
-              final DocumentSnapshot favDoc = userFavData[index];
-              final String firstCollection = favDoc['first_Collection'] as String;
-              final String firstDocument = favDoc ['first_Document'] as String;
-              final String nomDocument = favDoc['code_Document'] as String;
+              final DocumentSnapshot favDoc = userOrderData[index];
+              final CodeCommande= favDoc['code_commande'];
+              final Date= favDoc['date'];
+              final formattedDate = DateFormat('dd/MM/yyyy').format(Date.toDate());
+              final formattedTime = DateFormat('HH:mm').format(Date.toDate());
+              final statut= favDoc['statut'];
+              final Montant= favDoc['montant'];
+              final Quantite= favDoc['nombre_article'];
 
-              return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-                stream: FirebaseFirestore.instance
-                    .collection(firstCollection)
-                    .doc(firstDocument)
-                    .collection(firstDocument)
-                    .doc(nomDocument)
-                    .snapshots(),
-                builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
-                  if (!snapshot.hasData) {
-                    return Container();
-                  } else if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Container();
-                  }
-                  final Map<String, dynamic>? cardData = snapshot.data!.data();
-                  if (cardData == null) {
-                    return Container();
-                  }
-                  return Dismissible(
-                    key: Key(cardData['code'].toString()),
-                    direction: DismissDirection.endToStart,
-                    background: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      decoration: BoxDecoration(
-                        gradient: kSecondaryGradientColor,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Row(
-                        children: [
-                          Spacer(),
-                          SvgPicture.asset("assets/icons/Trash.svg"),
-                        ],
-                      ),
-                    ),
-                    onDismissed: (direction) {
-                      // Supprimer le document correspondant ici
-                      FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(currentUserID)
-                          .collection('Favourite')
-                          .where('code_Document', isEqualTo: cardData['code']) // Filtrez par le champ 'code'
-                          .get()
-                          .then((querySnapshot) {
-                        querySnapshot.docs.forEach((document) {
-                          document.reference.delete(); // Supprimez le document correspondant
-                        });
-                      });
-                    },
-                    child: Card_item_Favorie(
-                      cardImages: cardData['images'][0],
-                      cardTitles: cardData['title'],
-                      cardStyles: cardData['style'],
-                      cardColors: cardData['color'],
-                      cardCodes: cardData['code'],
-                      cardPrices: cardData['price'],
-                      documentId: cardData['code'],
-                    ),
-                  );
-                },
-              );
+                  return  card_item_order(
+                      CodeCommande: CodeCommande,
+                      Quantite: Quantite,
+                      Montant: Montant,
+                      statut: statut,
+                      formattedDate:
+                      formattedDate,
+                      formattedTime: formattedTime);
             },
           ),
         );
@@ -129,3 +77,4 @@ class _CardFavorieState extends State<CardFavorie> {
     );
   }
 }
+

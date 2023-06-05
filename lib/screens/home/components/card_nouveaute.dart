@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shopapp/components/shimmer_box.dart';
 import 'package:shopapp/provider/internet_provider.dart';
-import 'package:shopapp/screens/details_categorie/details_categorie_screen.dart';
+import 'package:shopapp/screens/category_details/details_categorie_screen.dart';
 import 'package:shopapp/size_config.dart';
 
 class CardNouveaute extends StatelessWidget {

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shopapp/components/default_button.dart';
 import 'package:shopapp/components/main_screens.dart';
-import 'package:shopapp/screens/favory/components/custom_app_bar.dart';
+import 'package:shopapp/screens/order/components/custom_app_bar.dart';
 import 'package:shopapp/size_config.dart';
 
-class EmptyFavorie extends StatelessWidget {
+class EmptyOrder extends StatelessWidget {
   static String routeName='favorie/components';
-  const EmptyFavorie({
+  const EmptyOrder({
     super.key,
   });
 
@@ -20,8 +20,8 @@ class EmptyFavorie extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Lottie.asset("assets/lottiefiles/29384-favorite-heart.json",),
-                Text("TA LISTE DE PREFS NE CONTIENT AUCUN ARTICLE. DÉCOUVRE LES NOUVEAUTÉS.",
+                Lottie.asset("assets/lottiefiles/93134-not-found.json",),
+                Text("TA LISTE DE COMMANDE EST VIDE. DÉCOUVRE LES NOUVEAUTÉS.",
                   style: TextStyle(
                       color:Colors.black.withOpacity(0.8),
                       fontWeight: FontWeight.bold,

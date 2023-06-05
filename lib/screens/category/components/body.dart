@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shopapp/components/shimmer_box.dart';
 import 'package:shopapp/constants.dart';
 import 'package:shopapp/screens/Category/components/category_shimmer.dart';
-import 'package:shopapp/screens/details_categorie/details_categorie_screen.dart';
+import 'package:shopapp/screens/category_details/details_categorie_screen.dart';
 import 'package:shopapp/screens/home/components/home_header.dart';
 import 'package:shopapp/size_config.dart';
 import 'package:http/http.dart' as http;

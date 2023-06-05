@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:shopapp/screens/details_categorie/components/header_categorie.dart';
-import 'package:shopapp/screens/details_categorie/components/product_categorie_card.dart';
+import 'package:shopapp/screens/category_details/components/header_categorie.dart';
+import 'package:shopapp/screens/category_details/components/product_categorie_card.dart';
 
 class Body extends StatefulWidget {
   const Body({
