@@ -15,14 +15,14 @@ class NoAccountText extends StatelessWidget {
       children: [
         Text(
           "Vous n'avez pas de compte ?",
-          style: TextStyle(fontSize: getProportionateScreenHeight(13)),
+          style: TextStyle(fontSize: getProportionateScreenWidth(15)),
         ),
         GestureDetector(
           onTap: () => Navigator.pushNamed(context, SignUpScreen.routeName),
           child: Text(
             "  S'inscrire",
             style: TextStyle(
-              fontSize: getProportionateScreenHeight(13),
+              fontSize: getProportionateScreenWidth(15),
               color: kPrimaryColor,
             ),
           ),

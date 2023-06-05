@@ -69,6 +69,8 @@ class _BodyState extends State<Body> {
         .collection(widget.documentName)
         .orderBy(_orderByField, descending: _croissant)
         .snapshots();
+    print(widget.FirstCollection);
+    print(widget.documentName);
   }
 
   void _onOrderByChangedFitre() {

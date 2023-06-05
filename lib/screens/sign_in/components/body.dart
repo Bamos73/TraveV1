@@ -41,10 +41,7 @@ class _BodyState extends State<Body> {
                   "assets/icons/logo_svg.svg",
                   height: getProportionateScreenWidth(150),
                 ),
-                const Text(
-                  "Connectez-vous avec votre adresse e-mail et votre mot de passe ou continuez avec les réseaux sociaux",
-                  textAlign: TextAlign.center,
-                ),
+
                 SizedBox(
                   height: SizeConfig.screenHeight * 0.05,
                 ),

@@ -61,7 +61,7 @@ class _BodyState extends State<Body> {
               SectionTitle(text: "Collection Femme", press: () {
                 Navigator.pushNamed(context, DetailCtgScreen.routeName,
                     arguments: {
-                      'nom_document': ' Home_WomanCollection_product',
+                      'nom_document': 'Home_WomanCollection_product',
                       'titre_categorie': 'Collection Femme',
                       'first_collection': 'Home_Collection',
                     });
@@ -74,7 +74,7 @@ class _BodyState extends State<Body> {
               SectionTitle(text: "Collection Homme", press: () {
                 Navigator.pushNamed(context, DetailCtgScreen.routeName,
                     arguments: {
-                      'nom_document': ' Home_MenCollection_product',
+                      'nom_document': 'Home_MenCollection_product',
                       'titre_categorie': 'Collection Homme',
                       'first_collection': 'Home_Collection',
                     });
