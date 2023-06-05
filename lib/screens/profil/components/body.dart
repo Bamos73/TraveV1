@@ -9,6 +9,7 @@ import 'package:shopapp/constants.dart';
 import 'package:shopapp/provider/sign_in_provider.dart';
 import 'package:shopapp/screens/Privacy_Policy/Privacy_Policy_Screen.dart';
 import 'package:shopapp/screens/my_account/my_account_screen.dart';
+import 'package:shopapp/screens/order/order_screen.dart';
 import 'package:shopapp/screens/profil/components/profil_menu.dart';
 import 'package:shopapp/screens/profil/components/profile_pic.dart';
 import 'package:shopapp/screens/sign_in/sign_in_screen.dart';
@@ -53,7 +54,7 @@ class _BodyState extends State<Body> {
             text: "Mes commandes",
             icon: LineAwesomeIcons.wallet,
             press: () =>
-                Navigator.pushNamed(context, MyAccountScreen.routeName),
+                Navigator.pushNamed(context, OrderScreen.routeName),
           ),
           ProfilMenu(
             text: "Politique de confidentialité",

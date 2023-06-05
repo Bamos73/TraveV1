@@ -29,7 +29,7 @@ class _CardFavorieState extends State<CardFavorie> {
       stream: FirebaseFirestore.instance
           .collection('users')
           .doc(currentUserID)
-          .collection('favourite')
+          .collection('commande')
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) {
@@ -41,7 +41,6 @@ class _CardFavorieState extends State<CardFavorie> {
             child: ShimmerCard(),
           );
         } else if (snapshot.data!.docs.isEmpty) {
-
             // Le document est vide, naviguer vers une autre page
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushReplacement(
@@ -102,7 +101,7 @@ class _CardFavorieState extends State<CardFavorie> {
                       FirebaseFirestore.instance
                           .collection('users')
                           .doc(currentUserID)
-                          .collection('favourite')
+                          .collection('Favourite')
                           .where('code_Document', isEqualTo: cardData['code']) // Filtrez par le champ 'code'
                           .get()
                           .then((querySnapshot) {

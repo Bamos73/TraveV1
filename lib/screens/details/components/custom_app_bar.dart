@@ -38,7 +38,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 svgSrc: "assets/icons/shopping_bag.svg",
                 press: () {
                   Navigator.pushNamed(context, CartScreen.routeName);
-                  UpdateLivraisonAndPaiement();
+                  CartUpdateLivraison();
                 },
                 height: 35,
                 width: 35,
@@ -72,30 +72,5 @@ class _CustomAppBarState extends State<CustomAppBar> {
       ),
     );
   }
-  void UpdateLivraisonAndPaiement() async {
 
-    //Ajouter le mode de livraison et le mode de paiement
-    final userId = FirebaseAuth.instance.currentUser?.uid;
-    if (userId != null) {
-      final userCardRefLiv = FirebaseFirestore.instance.collection('Livraison').doc('Mode_Livraison');
-      final userCardDocLiv = await userCardRefLiv.get();
-
-      if (userCardDocLiv.exists) {
-        final userCardData = userCardDocLiv.data();
-
-        //Changement du mode de Livraison par defaut a Régulier
-        final userCardRefMode = FirebaseFirestore.instance.collection('users').doc(userId);
-        await userCardRefMode.set({
-          'frais_de_livraison': userCardData!['Regulier'],
-        }, SetOptions(merge: true));
-
-        //Changement du mode de paiement par defaut a Expèces
-        final userCardRefPaie = FirebaseFirestore.instance.collection('users').doc(userId);
-        await userCardRefPaie.set({
-          'mode_de_paiement': 'Espèces',
-        }, SetOptions(merge: true));
-
-      }
-    }
-  }
 }
