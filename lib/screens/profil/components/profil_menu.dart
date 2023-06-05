@@ -45,7 +45,7 @@ class ProfilMenu extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
-            const Icon(LineAwesomeIcons.angle_right),
+            const Icon(LineAwesomeIcons.angle_right,color: kPrimaryColor,),
           ],
         ),
       ),

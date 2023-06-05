@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
 import 'package:shopapp/screens/category/category_screen.dart';
-import 'package:shopapp/screens/favorie/favorie_screen.dart';
+import 'package:shopapp/screens/favory/favorie_screen.dart';
 import 'package:shopapp/screens/otp/otp_screen.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/profil/profil_screen.dart';

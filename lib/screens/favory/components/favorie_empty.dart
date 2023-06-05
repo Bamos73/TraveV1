@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shopapp/components/default_button.dart';
 import 'package:shopapp/components/main_screens.dart';
-import 'package:shopapp/screens/favorie/components/custom_app_bar.dart';
+import 'package:shopapp/screens/favory/components/custom_app_bar.dart';
 import 'package:shopapp/size_config.dart';
 
 class EmptyFavorie extends StatelessWidget {

@@ -22,9 +22,8 @@ class _NewAdresseState extends State<NewAdresse> {
   final _ctrfirstname = TextEditingController();
   final _ctrlastname = TextEditingController();
   final _ctrphonenumber = TextEditingController();
-  final _ctrcommune = TextEditingController();
-  final _ctrquartier = TextEditingController();
-
+  String? _selectedCommune;
+  String? _selectedQuartier;
 
   void addError({required String error}) {
     if (!errors.contains(error)) {
@@ -41,6 +40,36 @@ class _NewAdresseState extends State<NewAdresse> {
       });
     }
   }
+
+  List<String> communes = [
+    'Abobo',
+    'Adjamé',
+    'Attécoubé',
+    'Anyama',
+    'Bingerville',
+    'Cocody',
+    'Koumassi',
+    'Marcory',
+    'Plateau',
+    'Port-Bouët',
+    'Treichville',
+    'Yopougon',
+  ];
+
+  Map<String, List<String>> quartiers = {
+    'Abobo': ['Abobo-Doumé', 'Abobo-Sagbé', 'Abobo-Baoulé', 'Abobo-Avocatier'],
+    'Adjamé': ['Plateau Dokui', 'Williamsville', 'Alafiarou', 'Abattoirs'],
+    'Attécoubé': ['Camp Militaire', 'Belleville', 'Sainte Cécile', 'Banco'],
+    'Anyama': ['Quartier 1', 'Quartier 2', 'Quartier 3', 'Quartier 4'],
+    'Bingerville': ['Quartier 1', 'Quartier 2', 'Quartier 3', 'Quartier 4'],
+    'Cocody': ['Angré', 'Deux-Plateaux', 'Riviera', 'Cocody-les-Deux-Plateaux'],
+    'Koumassi': ['Koumassi Remblais', 'Vridi Cité', 'Koumassi Port', 'Koumassi Sicogi'],
+    'Marcory': ['Zone 4', 'Biétry', 'Zone 3', 'Anoumabo'],
+    'Plateau': ['Plateau Centre', 'Plateau Dokui', 'Plateau Saint Michel', 'Plateau Attoban'],
+    'Port-Bouët': ['Gonzagueville','Vridi', 'Port-Bouët Centre', 'Port-Bouët Cité', 'Port-Bouët Wharf',],
+    'Treichville': ['Treichville Centre', 'Treichville Wharf', 'Treichville Zone 1', 'Treichville Zone 3'],
+    'Yopougon': ['Yopougon Siporex', 'Yopougon Niangon', 'Yopougon Maroc', 'Yopougon Selmer'],
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -68,22 +97,21 @@ class _NewAdresseState extends State<NewAdresse> {
           key: _formKey,
           child: Column(
             children: [
-              SizedBox(height: getProportionateScreenWidth(30),),
+              SizedBox(height: getProportionateScreenWidth(30)),
               buildFirstName(),
-              SizedBox(height: getProportionateScreenWidth(30),),
+              SizedBox(height: getProportionateScreenWidth(30)),
               buildLastName(),
-              SizedBox(height: getProportionateScreenWidth(30),),
+              SizedBox(height: getProportionateScreenWidth(30)),
               buildNumber(),
-              SizedBox(height: getProportionateScreenWidth(30),),
-              buildCommune(),
-              SizedBox(height: getProportionateScreenWidth(30),),
-              buildQuartier(),
+              SizedBox(height: getProportionateScreenWidth(30)),
+              buildCommuneDropdown(),
+              SizedBox(height: getProportionateScreenWidth(30)),
+              buildQuartierDropdown(),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(30)),
                 child: FormError(errors: errors),
               ),
-              SizedBox(height: getProportionateScreenWidth(30),),
-
+              SizedBox(height: getProportionateScreenWidth(30)),
             ],
           ),
         ),
@@ -99,19 +127,18 @@ class _NewAdresseState extends State<NewAdresse> {
           press: () {
             if (_formKey.currentState!.validate()) {
               final user = UserAuth(
-                  nom: _ctrfirstname.text.trim(),
-                  prenom: _ctrlastname.text,
-                  phonenumber: _ctrphonenumber.text.trim(),
-                  commune: _ctrcommune.text.trim(),
-                  quartier: _ctrquartier.text.trim(),
-
+                nom: _ctrfirstname.text.trim(),
+                prenom: _ctrlastname.text,
+                phonenumber: _ctrphonenumber.text.trim(),
+                commune: _selectedCommune!,
+                quartier: _selectedQuartier!,
               );
               addUser(user);
               _ctrfirstname.text = '';
               _ctrlastname.text = '';
               _ctrphonenumber.text = '';
-              _ctrcommune.text = '';
-              _ctrquartier.text = '';
+              _selectedCommune = null;
+              _selectedQuartier = null;
               nextScreenReplace(context, AdresseLivraison());
             }
           },
@@ -122,31 +149,31 @@ class _NewAdresseState extends State<NewAdresse> {
 
   Padding buildFirstName() {
     return Padding(
-            padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(30)),
-            child: TextFormField(
-              controller: _ctrfirstname,
-              onChanged: (value) {
-                if (value.isNotEmpty) {
-                  removeError(error: kNamelNullError);
-                } else {
-                  addError(error: kNamelNullError);
-                }
-              },
-              validator: (value) {
-                if (value!.isEmpty) {
-                  addError(error: kNamelNullError);
-                  return "";
-                }
-                return null;
-              },
-              decoration: const InputDecoration(
-                labelText: "Nom",
-                hintText: "Entrer votre nom",
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                suffixIcon: Icon(Icons.person_pin_circle),
-              ),
-            ),
-          );
+      padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(30)),
+      child: TextFormField(
+        controller: _ctrfirstname,
+        onChanged: (value) {
+          if (value.isNotEmpty) {
+            removeError(error: kNamelNullError);
+          } else {
+            addError(error: kNamelNullError);
+          }
+        },
+        validator: (value) {
+          if (value!.isEmpty) {
+            addError(error: kNamelNullError);
+            return "";
+          }
+          return null;
+        },
+        decoration: const InputDecoration(
+          labelText: "Nom",
+          hintText: "Entrer votre nom",
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          suffixIcon: Icon(Icons.person_pin_circle),
+        ),
+      ),
+    );
   }
 
   Padding buildLastName() {
@@ -178,20 +205,27 @@ class _NewAdresseState extends State<NewAdresse> {
     );
   }
 
-  Padding buildCommune() {
+  Padding buildCommuneDropdown() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(30)),
-      child: TextFormField(
-        controller: _ctrcommune,
-        onChanged: (value) {
-          if (value.isNotEmpty) {
-            removeError(error: kCommuneNullError);
-          } else {
-            addError(error: kCommuneNullError);
-          }
+      child: DropdownButtonFormField<String>(
+        value: _selectedCommune,
+        onChanged: (newValue) {
+          setState(() {
+            _selectedCommune = newValue!;
+            _selectedQuartier = null; // Réinitialiser le quartier sélectionné
+          });
         },
+        items: communes
+            .map<DropdownMenuItem<String>>(
+              (value) => DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          ),
+        )
+            .toList(),
         validator: (value) {
-          if (value!.isEmpty) {
+          if (value == null) {
             addError(error: kCommuneNullError);
             return "";
           }
@@ -199,27 +233,35 @@ class _NewAdresseState extends State<NewAdresse> {
         },
         decoration: const InputDecoration(
           labelText: "Commune",
-          hintText: "Entrer le nom de votre commune",
+          hintText: "Sélectionner votre commune",
           floatingLabelBehavior: FloatingLabelBehavior.always,
-          suffixIcon: Icon(Icons.map),
         ),
       ),
     );
   }
-  Padding buildQuartier() {
+
+
+  Padding buildQuartierDropdown() {
+    List<String>? quartierList = quartiers[_selectedCommune];
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(30)),
-      child: TextFormField(
-        controller: _ctrquartier,
-        onChanged: (value) {
-          if (value.isNotEmpty) {
-            removeError(error: kQuartierNullError);
-          } else {
-            addError(error: kQuartierNullError);
-          }
+      child: DropdownButtonFormField<String>(
+        value: _selectedQuartier,
+        onChanged: (newValue) {
+          setState(() {
+            _selectedQuartier = newValue!;
+          });
         },
+        items: quartierList
+            ?.map<DropdownMenuItem<String>>(
+              (value) => DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          ),
+        )
+            .toList(),
         validator: (value) {
-          if (value!.isEmpty) {
+          if (value == null) {
             addError(error: kQuartierNullError);
             return "";
           }
@@ -227,13 +269,14 @@ class _NewAdresseState extends State<NewAdresse> {
         },
         decoration: const InputDecoration(
           labelText: "Quartier",
-          hintText: "Entrer le nom de votre quartier",
+          hintText: "Sélectionner votre quartier",
           floatingLabelBehavior: FloatingLabelBehavior.always,
-          suffixIcon: Icon(Icons.pin_drop),
         ),
       ),
     );
   }
+
+
   Padding buildNumber() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(30)),
@@ -256,12 +299,12 @@ class _NewAdresseState extends State<NewAdresse> {
         },
         decoration: const InputDecoration(
           labelText: "Numéro",
-          hintText: "Entrer votre numero de téléphone",
+          hintText: "Entrer votre numéro de téléphone",
           floatingLabelBehavior: FloatingLabelBehavior.always,
           suffixIcon: Icon(Icons.call),
         ),
       ),
     );
   }
-
 }
+

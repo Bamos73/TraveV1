@@ -50,6 +50,12 @@ class _BodyState extends State<Body> {
                 Navigator.pushNamed(context, MyAccountScreen.routeName),
           ),
           ProfilMenu(
+            text: "Mes commandes",
+            icon: LineAwesomeIcons.wallet,
+            press: () =>
+                Navigator.pushNamed(context, MyAccountScreen.routeName),
+          ),
+          ProfilMenu(
             text: "Politique de confidentialité",
             icon: LineAwesomeIcons.user_shield,
             press: () {

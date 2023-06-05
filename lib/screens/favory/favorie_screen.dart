@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shopapp/screens/favorie/components/body.dart';
+import 'package:shopapp/screens/favory/components/body.dart';
 
 class FavorieScreen extends StatelessWidget {
   const FavorieScreen({super.key});

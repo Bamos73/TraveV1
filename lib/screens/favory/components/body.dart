@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shopapp/screens/favorie/components/card_favorie.dart';
+import 'package:shopapp/screens/favory/components/card_favorie.dart';
 import 'package:shopapp/screens/home/components/home_header.dart';
 import 'package:shopapp/size_config.dart';
 

@@ -398,6 +398,77 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
 
   }
 
+  void AddOrderUserHistory(String Code_commande, num montant) async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) {
+      print("Utilisateur non connecté.");
+      return;
+    }
+
+    final userHistoryRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('commande')
+        .doc(Code_commande);
+
+    final userHistoryCartRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('commande')
+        .doc(Code_commande)
+        .collection(Code_commande);
+
+    final userCardRef = FirebaseFirestore.instance
+        .collection('Card')
+        .doc(userId)
+        .collection(userId);
+
+    final userCardQuerySnapshot = await userCardRef.get();
+    final userCardData = userCardQuerySnapshot.docs.map((doc) => doc.data()).toList();
+
+
+    final userOrderCardRef = FirebaseFirestore.instance
+        .collection('Order')
+        .doc(userId)
+        .collection(Code_commande)
+        .doc(Code_commande)
+        .collection('Articles');
+
+    final userHistoryDoc = await userHistoryRef.get();
+    if (!userHistoryDoc.exists) {
+      // Utilisation d'une transaction
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        final userHistoryDoc = await transaction.get(userHistoryRef);
+        if (!userHistoryDoc.exists) {
+          final articlesSnapshot = await userOrderCardRef.get();
+          final nombreArticles = articlesSnapshot.size; // Nombre de documents dans la collection
+
+          transaction.set(userHistoryRef, {
+            'code_commande': Code_commande,
+            'date': FieldValue.serverTimestamp(),
+            'statut': 'en Cours',
+            'montant': montant,
+            'nombre_article': nombreArticles,
+          });
+
+          // Copier les documents de la sous-collection "Card" vers la sous-collection "Order"
+          for (var docData in userCardData) {
+            final code = docData['code'];
+            await userHistoryCartRef.doc(code).set(docData);
+          }
+
+        } else {
+          print("La commande existe déjà.");
+        }
+      });
+
+    } else {
+      print("La commande existe déjà.");
+    }
+  }
+
+
+
 
 
   void verificationOrder(BuildContext context,num total_commande) async {
@@ -546,6 +617,9 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
           await userOrderCardRef.doc(code).set(docData);
         }
 
+        //Ajouter le resumé de la commande dans la collection "users"
+        AddOrderUserHistory(orderNumber,total_commande);
+
         // Supprimer la sous-collection dans card
         final subcollectionSnapshot = await FirebaseFirestore.instance
             .collection('Card')
@@ -633,6 +707,9 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
           final code = docData['code'];
           await userOrderCardRef.doc(code).set(docData);
         }
+
+        //Ajouter le resumé de la commande dans la collection "users"
+        AddOrderUserHistory(orderNumber,total_commande);
 
         // Supprimer la sous-collection dans card
         final subcollectionSnapshot = await FirebaseFirestore.instance

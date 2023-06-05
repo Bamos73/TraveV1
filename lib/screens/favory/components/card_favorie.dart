@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopapp/components/shimmer_box.dart';
 import 'package:shopapp/constants.dart';
-import 'package:shopapp/screens/favorie/components/card_item_favorie.dart';
-import 'package:shopapp/screens/favorie/components/favorie_empty.dart';
+import 'package:shopapp/screens/favory/components/card_item_favorie.dart';
+import 'package:shopapp/screens/favory/components/favorie_empty.dart';
 
 class CardFavorie extends StatefulWidget {
   const CardFavorie({Key? key}) : super(key: key);
