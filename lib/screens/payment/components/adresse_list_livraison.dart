@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shopapp/components/default_button.dart';
 import 'package:shopapp/constants.dart';
 import 'package:shopapp/screens/payment/components/adresse_new_livraison.dart';
@@ -67,7 +68,9 @@ class _AdresseLivraisonState extends State<AdresseLivraison> {
         stream: addressesCollection.snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            return Center(child: Text('Erreur de chargement des adresses.'));
+            return Center(
+                child: Text('Erreur de chargement des adresses.')
+            );
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Container();
@@ -99,11 +102,16 @@ class _AdresseLivraisonState extends State<AdresseLivraison> {
 
 
           if (addresses.isEmpty) {
-            return Center(
-              child: Text(
-                'Aucune adresse enregistrée.',
-                style: TextStyle(fontSize: getProportionateScreenHeight(18)),
-              ),
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Lottie.asset("assets/lottiefiles/12587-delivery-address.json",),
+                Text(
+                  'Aucune adresse enregistrée.',
+                  style: TextStyle(fontSize: getProportionateScreenHeight(18)),
+                ),
+              ],
             );
           }
           return Column(
@@ -162,7 +170,7 @@ class _AdresseLivraisonState extends State<AdresseLivraison> {
           top: getProportionateScreenHeight(20),
           bottom: getProportionateScreenHeight(30),
         ),
-        child: DefaultButton(
+        child: DefaultButtonEmpty(
           text: "AJOUTER UNE ADRESSE",
           press: () {
             nextScreenReplace(context, NewAdresse());

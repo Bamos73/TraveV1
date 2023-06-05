@@ -44,13 +44,13 @@ class _BodyState extends State<Body> {
             height: 20,
           ),
           ProfilMenu(
-            text: "My Account",
+            text: "Mon compte",
             icon: LineAwesomeIcons.user,
             press: () =>
                 Navigator.pushNamed(context, MyAccountScreen.routeName),
           ),
           ProfilMenu(
-            text: "Privacy Policy",
+            text: "Politique de confidentialité",
             icon: LineAwesomeIcons.user_shield,
             press: () {
               nextScreenReplace(context, const PrivacyPolicyScreen());
@@ -62,17 +62,17 @@ class _BodyState extends State<Body> {
             press: () {},
           ),
           ProfilMenu(
-            text: "Settings",
+            text: "Paramètres",
             icon: LineAwesomeIcons.cog,
             press: () {},
           ),
           ProfilMenu(
-            text: 'Help Center',
+            text: 'Centre d\'aide',
             icon: LineAwesomeIcons.question_circle,
             press: () {},
           ),
           ProfilMenu(
-              text: "Log Out",
+              text: "Déconnexion",
               icon: LineAwesomeIcons.alternate_sign_out,
               press: () async {
                 sp.userSignOut();
@@ -81,5 +81,6 @@ class _BodyState extends State<Body> {
         ],
       ),
     );
+
   }
 }
