@@ -370,33 +370,42 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
 
   }
 
-  void HistoriqueCmd() async{
-
+  void ReductQuantite(String Code_commande) async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
-    if (userId == null) {
-      showCustomSnackBar(
-          context, "L'utilisateur n'a pas de compte", ContentType.failure);
-      return;
+
+    final userOrderCardRef = FirebaseFirestore.instance
+        .collection('Order')
+        .doc(userId)
+        .collection(Code_commande)
+        .doc(Code_commande)
+        .collection('Articles');
+
+    final userOrderHistoryQuerySnapshot = await userOrderCardRef.get();
+    final userHistoryOrderData = userOrderHistoryQuerySnapshot.docs
+        .map((doc) => doc.data())
+        .toList();
+
+    if (userOrderHistoryQuerySnapshot.docs.isNotEmpty) {
+      // Réduire la quantité du produit
+      for (var docData in userHistoryOrderData) {
+        final ProductRef = FirebaseFirestore.instance
+            .collection(docData['first_collection'] as String)
+            .doc(docData['first_document'] as String)
+            .collection(docData['first_document'] as String)
+            .doc(docData['code'] as String);
+
+        final ProductDoc = await ProductRef.get();
+        final ProductData = ProductDoc.data();
+
+        if (ProductData != null) {
+          ProductRef.update({
+            'quantité': ProductData['quantité'] - docData['quantite'],
+          });
+        }
+      }
     }
-
-    final userCardRef = FirebaseFirestore.instance.collection('Card').doc(userId).collection(userId);
-    final userRef = FirebaseFirestore.instance.collection('users').doc(userId).collection('history_commande').doc();
-    final userDoc = await userRef.get();
-    final userData = userDoc.data();
-
-    if (userData == null || userData['uid'] != userId) {
-      showCustomSnackBar(context, "L'utilisateur n'a pas de compte valide, veuillez creer un autre compte",
-          ContentType.failure);
-      return;
-    }
-
-    // await userRef.set({
-    //   'first_Collection': product['first_collection'],
-    //   'first_Document': product['first_document'],
-    //   'code_Document': product['code'],
-    // });
-
   }
+
 
   void AddOrderUserHistory(String Code_commande, num montant) async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
@@ -456,7 +465,6 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
             'nom_de_livraison': userData['nom_de_livraison'],
             'frais_de_livraison': userData['frais_de_livraison'],
             'numero_de_livraison': userData['numero_de_livraison'],
-
           });
 
           // Copier les documents de la sous-collection "Card" vers la sous-collection "Order"
@@ -646,6 +654,8 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
 
         //Ajouter le resumé de la commande dans la collection "users"
         AddOrderUserHistory(orderNumber,total_commande);
+        ReductQuantite(orderNumber);
+
 
         // Supprimer la sous-collection dans card
         final subcollectionSnapshot = await FirebaseFirestore.instance
@@ -737,6 +747,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
 
         //Ajouter le resumé de la commande dans la collection "users"
         AddOrderUserHistory(orderNumber,total_commande);
+        ReductQuantite(orderNumber);
 
         // Supprimer la sous-collection dans card
         final subcollectionSnapshot = await FirebaseFirestore.instance

@@ -155,6 +155,8 @@ class _CustomNavBarState extends State<CustomNavBar> {
         'taille': product['tailles'][index],
         'quantite': quantiteSelectionnee,
         'quantite_Max': product['quantité'],
+        'first_document': product['first_document'],
+        'first_collection': product['first_collection'],
       });
       Navigator.of(context).pop();
     }
