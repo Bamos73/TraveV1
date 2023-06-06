@@ -14,6 +14,8 @@ import 'package:shopapp/screens/profil/components/profil_menu.dart';
 import 'package:shopapp/screens/profil/components/profile_pic.dart';
 import 'package:shopapp/screens/sign_in/sign_in_screen.dart';
 
+import '../../Term_And_Condition/term_and_condition_screen.dart';
+
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
 
@@ -57,6 +59,11 @@ class _BodyState extends State<Body> {
                 Navigator.pushNamed(context, OrderScreen.routeName),
           ),
           ProfilMenu(
+            text: "Notifications",
+            icon: LineAwesomeIcons.bell,
+            press: () {},
+          ),
+          ProfilMenu(
             text: "Politique de confidentialité",
             icon: LineAwesomeIcons.user_shield,
             press: () {
@@ -64,14 +71,11 @@ class _BodyState extends State<Body> {
             },
           ),
           ProfilMenu(
-            text: "Notifications",
-            icon: LineAwesomeIcons.bell,
-            press: () {},
-          ),
-          ProfilMenu(
-            text: "Paramètres",
-            icon: LineAwesomeIcons.cog,
-            press: () {},
+            text: "Conditions d'utilisation",
+            icon: LineAwesomeIcons.copyright,
+            press: () {
+              nextScreenReplace(context, const TermAndConditionScreen());
+            },
           ),
           ProfilMenu(
             text: 'Centre d\'aide',

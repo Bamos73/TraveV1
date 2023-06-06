@@ -24,10 +24,10 @@ class ButtonRetour extends StatelessWidget {
           padding: EdgeInsets.zero,
         ),
         onPressed: () => Navigator.pop(context),
-        child: SvgPicture.asset(
-          "assets/icons/Back ICon.svg",
-          height: 20,
-        ),
+        child: Icon(Icons.arrow_back_ios,
+          color: Colors.black,
+            size: getProportionateScreenWidth(20),
+        )
       ),
     );
   }

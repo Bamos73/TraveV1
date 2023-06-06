@@ -24,30 +24,36 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding:
-      EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(10)),
-      child: Column(
-        children: [
-          SizedBox(height: getProportionateScreenHeight(10)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ButtonRetour(),
-              Text("MA COMMANDE",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
-              ButtomCard(
-                svgSrc: "assets/icons/shopping_bag.svg",
-                press: () {
-                  Navigator.pushNamed(context, CartScreen.routeName);
-                  CartUpdateLivraison();
-                },
-                height: 35,
-                width: 35,
-                padding: 5,
-              ),
-            ],
-          ),
-        ],
+    return Container(
+      width: double.infinity,
+      height: getProportionateScreenHeight(50),
+      color: Colors.white,
+      
+      child: Padding(
+        padding:
+        EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(10)),
+        child: Column(
+          children: [
+            SizedBox(height: getProportionateScreenHeight(10)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ButtonRetour(),
+                Text("MA COMMANDE",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
+                ButtomCard(
+                  svgSrc: "assets/icons/shopping_bag.svg",
+                  press: () {
+                    Navigator.pushNamed(context, CartScreen.routeName);
+                    CartUpdateLivraison();
+                  },
+                  height: 35,
+                  width: 35,
+                  padding: 5,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

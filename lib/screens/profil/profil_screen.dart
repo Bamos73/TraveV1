@@ -16,7 +16,7 @@ class ProfileScreen extends StatelessWidget {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: const Text(
-            "Profil",
+            "PLUS",
           ),
           centerTitle: true,
         ),

@@ -107,6 +107,7 @@ class _PanierPaymentState extends State<PanierPayment> {
                 final cardDataList = snapshot.data!.docs.map((doc) => doc.data()).toList();
                 return ListView.builder(
                   shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
                   itemCount: cardDataList.length,
                   itemBuilder: (BuildContext context, int index) {
                     final cardData = cardDataList[index];

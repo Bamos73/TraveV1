@@ -46,204 +46,274 @@ class _BodyState extends State<Body> {
     return SafeArea(
       child: Stack(
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: getProportionateScreenHeight(60)),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(17)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "COMMANDE\n${widget.CodeCommande}",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: getProportionateScreenWidth(14),
-                        color: Colors.black,
+          SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: getProportionateScreenHeight(60)),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(17)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "COMMANDE\n#${widget.CodeCommande}",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: getProportionateScreenWidth(14),
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _showContainer = !_showContainer;
-                        });
-                      },
-                      child: Text(
-                        "CODE-BARRES",
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _showContainer = !_showContainer;
+                          });
+                        },
+                        child: Text(
+                          "CODE-BARRES",
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(height: getProportionateScreenHeight(10),),
-              Center(
-                child: AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  height: _showContainer ? getProportionateScreenHeight(50) : 10,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
-                    child: BarcodeWidget(
-                      barcode: Barcode.code128(),
-                      data: '${widget.CodeCommande}',
-                      drawText: false,
-                      width: getProportionateScreenWidth(250),
-                      height: getProportionateScreenHeight(50),
+                SizedBox(height: getProportionateScreenHeight(10),),
+                Center(
+                  child: AnimatedContainer(
+                    duration: Duration(milliseconds: 300),
+                    height: _showContainer ? getProportionateScreenHeight(50) : 10,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: BarcodeWidget(
+                        barcode: Barcode.code128(),
+                        data: '${widget.CodeCommande}',
+                        drawText: false,
+                        width: getProportionateScreenWidth(250),
+                        height: getProportionateScreenHeight(50),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(height: getProportionateScreenHeight(10),),
-              Divider(height: 1,thickness: 1,),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(17)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(height: getProportionateScreenHeight(10),),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: getProportionateScreenWidth(160),
-                          height: getProportionateScreenHeight(40),
-                          child: Text(
-                            "STATUS",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: getProportionateScreenWidth(12),
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                         Text(
-                            "${widget.statut}",
-                            style: TextStyle(
-                              fontSize: getProportionateScreenWidth(12),
-                              color: Colors.black
-                            ),
-                          ),
-                      ],
-                    ),
-                    SizedBox(height: getProportionateScreenHeight(10),),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: getProportionateScreenWidth(160),
-                          height: getProportionateScreenHeight(40),
-                          child: Text(
-                            "DATE",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: getProportionateScreenWidth(12),
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          "${widget.date}",
-                          style: TextStyle(
-                              fontSize: getProportionateScreenWidth(12),
-                              color: Colors.black
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: getProportionateScreenHeight(10),),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: getProportionateScreenWidth(160),
-                          height: getProportionateScreenHeight(40),
-                          child: Text(
-                            "ADRESSE",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: getProportionateScreenWidth(12),
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "${widget.nom_de_livraison}",
+                SizedBox(height: getProportionateScreenHeight(10),),
+                Divider(height: 1,thickness: 1,),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(17)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(height: getProportionateScreenHeight(10),),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: getProportionateScreenWidth(160),
+                            height: getProportionateScreenHeight(40),
+                            child: Text(
+                              "STATUS",
                               style: TextStyle(
-                                  fontSize: getProportionateScreenWidth(12),
-                                  color: Colors.black
+                                fontWeight: FontWeight.bold,
+                                fontSize: getProportionateScreenWidth(12),
+                                color: Colors.black,
                               ),
                             ),
-                            Text(
-                              "${widget.adresse}",
+                          ),
+                           Text(
+                              "${widget.statut}",
                               style: TextStyle(
-                                  fontSize: getProportionateScreenWidth(12),
-                                  color: Colors.black
+                                fontSize: getProportionateScreenWidth(12),
+                                color: Colors.black
                               ),
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: getProportionateScreenHeight(10),),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: getProportionateScreenWidth(160),
-                          height: getProportionateScreenHeight(40),
-                          child: Text(
-                            "MODE DE LIVRAISON",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: getProportionateScreenWidth(12),
-                              color: Colors.black,
+                        ],
+                      ),
+                      SizedBox(height: getProportionateScreenHeight(10),),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: getProportionateScreenWidth(160),
+                            height: getProportionateScreenHeight(40),
+                            child: Text(
+                              "DATE",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: getProportionateScreenWidth(12),
+                                color: Colors.black,
+                              ),
                             ),
                           ),
-                        ),
-                        Text(
-                          "${widget.mode_livraison}",
-                          style: TextStyle(
-                              fontSize: getProportionateScreenWidth(12),
-                              color: Colors.black
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: getProportionateScreenHeight(10),),
-                    Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.start,
-                      children: [
-                        Container(
-                          width: getProportionateScreenWidth(160),
-                          height: getProportionateScreenHeight(40),
-                          child: Text(
-                            "MODE DE PAIEMENT",
+                          Text(
+                            "${widget.date}",
                             style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: getProportionateScreenWidth(12),
-                              color: Colors.black,
+                                fontSize: getProportionateScreenWidth(12),
+                                color: Colors.black
                             ),
                           ),
-                        ),
-                        Text(
-                          "${widget.mode_paiement}",
-                          style: TextStyle(
-                              fontSize: getProportionateScreenWidth(12),
-                              color: Colors.black
+                        ],
+                      ),
+                      SizedBox(height: getProportionateScreenHeight(10),),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: getProportionateScreenWidth(160),
+                            height: getProportionateScreenHeight(40),
+                            child: Text(
+                              "ADRESSE",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: getProportionateScreenWidth(12),
+                                color: Colors.black,
+                              ),
+                            ),
                           ),
-                          maxLines: 2,
-                        ),
-                      ],
-                    ),
-                ],),
-              ),
-              PanierOrder(CodeCommande: widget.CodeCommande,),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${widget.nom_de_livraison}",
+                                style: TextStyle(
+                                    fontSize: getProportionateScreenWidth(12),
+                                    color: Colors.black
+                                ),
+                              ),
+                              Text(
+                                "${widget.adresse}",
+                                style: TextStyle(
+                                    fontSize: getProportionateScreenWidth(12),
+                                    color: Colors.black
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: getProportionateScreenHeight(10),),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: getProportionateScreenWidth(160),
+                            height: getProportionateScreenHeight(40),
+                            child: Text(
+                              "MODE DE LIVRAISON",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: getProportionateScreenWidth(12),
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            "${widget.mode_livraison}",
+                            style: TextStyle(
+                                fontSize: getProportionateScreenWidth(12),
+                                color: Colors.black
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: getProportionateScreenHeight(10),),
+                      Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.start,
+                        children: [
+                          Container(
+                            width: getProportionateScreenWidth(160),
+                            height: getProportionateScreenHeight(40),
+                            child: Text(
+                              "MODE DE PAIEMENT",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: getProportionateScreenWidth(12),
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            "${widget.mode_paiement}",
+                            style: TextStyle(
+                                fontSize: getProportionateScreenWidth(12),
+                                color: Colors.black
+                            ),
+                            maxLines: 2,
+                          ),
+                        ],
+                      ),
+                  ],),
+                ),
+                PanierOrder(CodeCommande: widget.CodeCommande,),
+                SizedBox(height: getProportionateScreenHeight(15),),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(17)),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('SOUS-TOTAL:', style: TextStyle(
+                            fontSize: getProportionateScreenWidth(12),
+                            color: Colors.black,
+                          ),),
+                          Text('${widget.Montant-widget.fraie_livraison-widget.code_promo} FCFA', style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: getProportionateScreenWidth(12),
+                            color: Colors.black,
+                          ),),
+                        ],
+                      ),
+                      SizedBox(height: getProportionateScreenHeight(10),),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('REDUCTION:', style: TextStyle(
+                            fontSize: getProportionateScreenWidth(12),
+                            color: Colors.black,
+                          ),),
+                          Text('${widget.code_promo} FCFA', style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: getProportionateScreenWidth(12),
+                            color: Colors.black,
+                          ),),
+                        ],
+                      ),
+                      SizedBox(height: getProportionateScreenHeight(10),),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('LIVRAISON:', style: TextStyle(
+                            fontSize: getProportionateScreenWidth(12),
+                            color: Colors.black,
+                          ),),
+                          Text('${widget.fraie_livraison} FCFA', style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: getProportionateScreenWidth(12),
+                            color: Colors.black,
+                          ),),
+                        ],
+                      ),
+                      SizedBox(height: getProportionateScreenHeight(20),),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('TOTAL:', style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: getProportionateScreenWidth(15),
+                            color: Colors.black,
+                          ),),
+                          Text('${widget.Montant} FCFA', style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: getProportionateScreenWidth(15),
+                            color: Colors.black,
+                          ),),
+                        ],
+                      ),
+                    ],
+                  ),
+                )
 
-            ],
+              ],
+            ),
           ),
 
           CustomAppBar(),

@@ -25,9 +25,9 @@ class ButtonClose extends StatelessWidget {
           padding: EdgeInsets.zero,
         ),
         onPressed: () => Navigator.pop(context),
-        child: SvgPicture.asset(
-          "assets/icons/close_2.svg",
-          height: 25,
+        child: Icon(Icons.close,
+          color: Colors.black,
+          size: getProportionateScreenWidth(20),
         ),
       ),
     );
