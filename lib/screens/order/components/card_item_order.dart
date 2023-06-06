@@ -46,10 +46,20 @@ class _card_item_orderState extends State<card_item_order> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, OrderDetailScreen.routeName,
-            arguments: {
-              'code_commande': widget.CodeCommande,
-            });
+        Navigator.pushNamed(context, OrderDetailScreen.routeName, arguments: {
+          'code_commande': widget.CodeCommande,
+          'Quantite': widget.Quantite,
+          'Montant': widget.Montant,
+          'statut': widget.statut,
+          'nom_de_livraison': widget.nom_de_livraison,
+          'adresse': widget.adresse,
+          'mode_livraison': widget.mode_livraison,
+          'mode_paiement': widget.mode_paiement,
+          'fraie_livraison': widget.fraie_livraison,
+          'code_promo': widget.code_promo,
+          'numero': widget.numero,
+          'date': widget.formattedDate,
+        });
       },
       child: Container(
         color: Colors.transparent,

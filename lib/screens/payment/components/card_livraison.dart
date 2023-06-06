@@ -128,7 +128,7 @@ class _ListPaymentLivraisonState extends State<ListPaymentLivraison> {
                       _selectedOption = value as String;
                     });
                     Navigator.of(context).pop();
-                    UpdateselectedOption(userCardData['Regulier']);
+                    UpdateselectedOption(userCardData['Regulier'],value as String);
                   },
                 ),
                 Divider(thickness: 1, height: 1),
@@ -145,7 +145,7 @@ class _ListPaymentLivraisonState extends State<ListPaymentLivraison> {
                       _selectedOption = value as String;
                     });
                     Navigator.of(context).pop();
-                    UpdateselectedOption(userCardData['Express']);
+                    UpdateselectedOption(userCardData['Express'],value as String);
                   },
                 ),
               ],
@@ -158,12 +158,13 @@ class _ListPaymentLivraisonState extends State<ListPaymentLivraison> {
     }
   }
 
-  void UpdateselectedOption(int optionTake) async {
+  void UpdateselectedOption(int optionTake,String modeName) async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId != null) {
       final userCardRef = FirebaseFirestore.instance.collection('users').doc(userId);
       await userCardRef.set({
         'frais_de_livraison': optionTake,
+        'mode_de_livraison': modeName,
       }, SetOptions(merge: true));
     }
   }

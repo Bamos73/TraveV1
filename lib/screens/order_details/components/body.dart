@@ -7,9 +7,31 @@ class Body extends StatefulWidget {
   const Body({
     Key? key,
     required this.CodeCommande,
+    required this.Quantite,
+    required this.Montant,
+    required this.statut,
+    required this.nom_de_livraison,
+    required this.adresse,
+    required this.mode_livraison,
+    required this.mode_paiement,
+    required this.fraie_livraison,
+    required this.code_promo,
+    required this.numero,
+    required this.date,
   }) : super(key: key);
 
   final String CodeCommande;
+  final  Quantite;
+  final  Montant;
+  final  statut;
+  final  nom_de_livraison;
+  final  adresse;
+  final  mode_livraison;
+  final  mode_paiement;
+  final  fraie_livraison;
+  final  code_promo;
+  final  numero;
+  final  date;
 
   @override
   State<Body> createState() => _BodyState();
@@ -83,7 +105,6 @@ class _BodyState extends State<Body> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          color: Colors.blue,
                           width: getProportionateScreenWidth(160),
                           height: getProportionateScreenHeight(40),
                           child: Text(
@@ -96,7 +117,7 @@ class _BodyState extends State<Body> {
                           ),
                         ),
                          Text(
-                            "Livré",
+                            "${widget.statut}",
                             style: TextStyle(
                               fontSize: getProportionateScreenWidth(12),
                               color: Colors.black
@@ -121,7 +142,7 @@ class _BodyState extends State<Body> {
                           ),
                         ),
                         Text(
-                          "Livré",
+                          "${widget.date}",
                           style: TextStyle(
                               fontSize: getProportionateScreenWidth(12),
                               color: Colors.black
@@ -145,12 +166,24 @@ class _BodyState extends State<Body> {
                             ),
                           ),
                         ),
-                        Text(
-                          "Livré",
-                          style: TextStyle(
-                              fontSize: getProportionateScreenWidth(12),
-                              color: Colors.black
-                          ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${widget.nom_de_livraison}",
+                              style: TextStyle(
+                                  fontSize: getProportionateScreenWidth(12),
+                                  color: Colors.black
+                              ),
+                            ),
+                            Text(
+                              "${widget.adresse}",
+                              style: TextStyle(
+                                  fontSize: getProportionateScreenWidth(12),
+                                  color: Colors.black
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -171,7 +204,7 @@ class _BodyState extends State<Body> {
                           ),
                         ),
                         Text(
-                          "Livré",
+                          "${widget.mode_livraison}",
                           style: TextStyle(
                               fontSize: getProportionateScreenWidth(12),
                               color: Colors.black
@@ -180,8 +213,8 @@ class _BodyState extends State<Body> {
                       ],
                     ),
                     SizedBox(height: getProportionateScreenHeight(10),),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.start,
                       children: [
                         Container(
                           width: getProportionateScreenWidth(160),
@@ -196,11 +229,12 @@ class _BodyState extends State<Body> {
                           ),
                         ),
                         Text(
-                          "Livré",
+                          "${widget.mode_paiement}",
                           style: TextStyle(
                               fontSize: getProportionateScreenWidth(12),
                               color: Colors.black
                           ),
+                          maxLines: 2,
                         ),
                       ],
                     ),

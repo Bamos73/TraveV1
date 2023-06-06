@@ -123,6 +123,7 @@ class CartUpdateLivraison {
         final userCardRefMode = FirebaseFirestore.instance.collection('users').doc(userId);
         await userCardRefMode.set({
           'frais_de_livraison': userCardData!['Regulier'],
+          'mode_de_livraison': 'Regulier',
         }, SetOptions(merge: true));
 
         //Changement du mode de paiement par defaut a Expèces

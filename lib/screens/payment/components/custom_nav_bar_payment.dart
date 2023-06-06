@@ -460,12 +460,12 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
             'nombre_article': nombreArticles,
             'adresse_de_livraison': userData!['adresse_de_livraison'],
             'mode_de_paiement': userData['mode_de_paiement'],
+            'mode_de_livraison': userData['mode_de_livraison'],
             'nom_de_livraison': userData['nom_de_livraison'],
             'frais_de_livraison': userData['frais_de_livraison'],
             'numero_de_livraison': userData['numero_de_livraison'],
-            'mode_de_livraison': userData['mode_de_paiement'],
-          });
 
+          });
 
           // Au cas où l'utilisateur a un code de réduction
           if (userData['code_reduction_name'] != null) {
@@ -488,7 +488,6 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
           for (var docData in userCardData) {
             final code = docData['code'];
             await userHistoryCartRef.doc(code).set(docData);
-            print("Lojokokoooo");
           }
 
         } else {

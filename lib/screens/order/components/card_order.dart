@@ -84,10 +84,6 @@ class _CardOrderState extends State<CardOrder> {
                       code_promo:code_reduction,
                       numero: numero_de_livraison,
 
-
-
-
-
                   );
             },
           ),
