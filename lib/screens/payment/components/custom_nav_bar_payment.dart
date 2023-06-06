@@ -440,6 +440,8 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
         .doc(Code_commande)
         .collection('Articles');
 
+
+
     final userHistoryDoc = await userHistoryRef.get();
     if (!userHistoryDoc.exists) {
       // Utilisation d'une transaction
@@ -460,14 +462,33 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
             'mode_de_paiement': userData['mode_de_paiement'],
             'nom_de_livraison': userData['nom_de_livraison'],
             'frais_de_livraison': userData['frais_de_livraison'],
-            'numero_de_livraison': userData['mode_de_paiement'],
-
+            'numero_de_livraison': userData['numero_de_livraison'],
+            'mode_de_livraison': userData['mode_de_paiement'],
           });
+
+
+          // Au cas où l'utilisateur a un code de réduction
+          if (userData['code_reduction_name'] != null) {
+            final promoCodeDoc = await FirebaseFirestore.instance
+                .collection('CodesPromo')
+                .doc(userData['code_reduction_name'] as String)
+                .get();
+            final promoCodeData = await promoCodeDoc.data();
+
+            transaction.update(userHistoryRef, {
+              'code_reduction': promoCodeData!['montant'],
+            });
+          } else {
+            transaction.update(userHistoryRef, {
+              'code_reduction': 0,
+            });
+          }
 
           // Copier les documents de la sous-collection "Card" vers la sous-collection "Order"
           for (var docData in userCardData) {
             final code = docData['code'];
             await userHistoryCartRef.doc(code).set(docData);
+            print("Lojokokoooo");
           }
 
         } else {

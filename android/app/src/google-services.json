@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "423632900833",
+    "project_id": "singup-a9273",
+    "storage_bucket": "singup-a9273.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:423632900833:android:5db1bbbc4bfc5e36011da0",
+        "android_client_info": {
+          "package_name": "com.example.shopapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "423632900833-qrqabg7l6l3imr6ottvs5def9i6a6s09.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.shopapp",
+            "certificate_hash": "0b843312e396cb67ff88d9735bc892c5350f00a3"
+          }
+        },
+        {
+          "client_id": "423632900833-go5s2db7i8k046e8q6m00453rq0th9b6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvAUgpe4ytJKCKmFcGQsOjq_PZKrIUtWI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "423632900833-go5s2db7i8k046e8q6m00453rq0th9b6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "423632900833-0g4s608dnv81cruotloqk0j3um68hpsi.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.shopapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

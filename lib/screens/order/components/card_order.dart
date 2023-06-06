@@ -61,15 +61,34 @@ class _CardOrderState extends State<CardOrder> {
               final statut= favDoc['statut'];
               final Montant= favDoc['montant'];
               final Quantite= favDoc['nombre_article'];
+              final adresse_de_livraison= favDoc['adresse_de_livraison'];
+              final frais_de_livraison= favDoc['frais_de_livraison'];
+              final mode_de_livraison= favDoc['mode_de_livraison'];
+              final mode_de_paiement= favDoc['mode_de_paiement'];
+              final nom_de_livraison= favDoc['nom_de_livraison'];
+              final numero_de_livraison= favDoc['numero_de_livraison'];
+              final code_reduction= favDoc['code_reduction'];
 
                   return  card_item_order(
                       CodeCommande: CodeCommande,
                       Quantite: Quantite,
                       Montant: Montant,
                       statut: statut,
-                      formattedDate:
-                      formattedDate,
-                      formattedTime: formattedTime);
+                      formattedDate: formattedDate,
+                      formattedTime: formattedTime,
+                      nom_de_livraison:nom_de_livraison,
+                      adresse:adresse_de_livraison,
+                      mode_livraison:mode_de_livraison,
+                      mode_paiement:mode_de_paiement,
+                      fraie_livraison:frais_de_livraison,
+                      code_promo:code_reduction,
+                      numero: numero_de_livraison,
+
+
+
+
+
+                  );
             },
           ),
         );

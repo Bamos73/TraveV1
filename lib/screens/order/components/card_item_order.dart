@@ -5,7 +5,7 @@ import 'package:shopapp/size_config.dart';
 import '../../order_details/order_detail_screen.dart';
 
 
-class card_item_order extends StatelessWidget {
+class card_item_order extends StatefulWidget {
   const card_item_order({
     super.key,
     required this.CodeCommande,
@@ -14,22 +14,41 @@ class card_item_order extends StatelessWidget {
     required this.statut,
     required this.formattedDate,
     required this.formattedTime,
+    required this.nom_de_livraison,
+    required this.adresse,
+    required this.mode_livraison,
+    required this.mode_paiement,
+    required this.fraie_livraison,
+    required this.code_promo,
+    required this.numero,
   });
 
   final  CodeCommande;
   final  Quantite;
   final  Montant;
   final  statut;
+  final  nom_de_livraison;
+  final  adresse;
+  final  mode_livraison;
+  final  mode_paiement;
+  final  fraie_livraison;
+  final  code_promo;
+  final  numero;
   final String formattedDate;
   final String formattedTime;
 
+  @override
+  State<card_item_order> createState() => _card_item_orderState();
+}
+
+class _card_item_orderState extends State<card_item_order> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, OrderDetailScreen.routeName,
             arguments: {
-              'code_commande': CodeCommande,
+              'code_commande': widget.CodeCommande,
             });
       },
       child: Container(
@@ -47,22 +66,22 @@ class card_item_order extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
 
                     children: [
-                      Text("COMMANDE N° $CodeCommande",
+                      Text("COMMANDE N° ${widget.CodeCommande}",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: getProportionateScreenWidth(13),
                             color: Colors.black
                         ),
                       ),
-                      Text(Quantite==1
-                          ?"$Quantite ARTICLE"
-                          :"$Quantite ARTICLES",
+                      Text(widget.Quantite==1
+                          ?"${widget.Quantite} ARTICLE"
+                          :"${widget.Quantite} ARTICLES",
                         style: TextStyle(
                             fontSize: getProportionateScreenWidth(12),
                             color: Colors.black
                         ),
                       ),
-                      Text("$Montant FCFA",
+                      Text("${widget.Montant} FCFA",
                         style: TextStyle(
                             fontSize: getProportionateScreenWidth(12),
                             color: Colors.black
@@ -75,14 +94,14 @@ class card_item_order extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          StatusText(statut: "$statut"),
-                          Text("$formattedDate",
+                          StatusText(statut: "${widget.statut}"),
+                          Text("${widget.formattedDate}",
                             style: TextStyle(
                                 fontSize: getProportionateScreenWidth(12),
                                 color: Colors.black
                             ),
                           ),
-                          Text("$formattedTime",
+                          Text("${widget.formattedTime}",
                             style: TextStyle(
                                 fontSize: getProportionateScreenWidth(12),
                                 color: Colors.black

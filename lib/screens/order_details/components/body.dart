@@ -57,7 +57,7 @@ class _BodyState extends State<Body> {
               Center(
                 child: AnimatedContainer(
                   duration: Duration(milliseconds: 300),
-                  height: _showContainer ? getProportionateScreenHeight(50) : 0,
+                  height: _showContainer ? getProportionateScreenHeight(50) : 10,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
                     child: BarcodeWidget(
@@ -80,59 +80,129 @@ class _BodyState extends State<Body> {
                   children: [
                     SizedBox(height: getProportionateScreenHeight(10),),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "STATUS",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: getProportionateScreenWidth(13),
-                            color: Colors.black,
+                        Container(
+                          color: Colors.blue,
+                          width: getProportionateScreenWidth(160),
+                          height: getProportionateScreenHeight(40),
+                          child: Text(
+                            "STATUS",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: getProportionateScreenWidth(12),
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                         Text(
+                            "Livré",
+                            style: TextStyle(
+                              fontSize: getProportionateScreenWidth(12),
+                              color: Colors.black
+                            ),
+                          ),
+                      ],
+                    ),
+                    SizedBox(height: getProportionateScreenHeight(10),),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: getProportionateScreenWidth(160),
+                          height: getProportionateScreenHeight(40),
+                          child: Text(
+                            "DATE",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: getProportionateScreenWidth(12),
+                              color: Colors.black,
+                            ),
                           ),
                         ),
                         Text(
                           "Livré",
                           style: TextStyle(
-                            fontSize: getProportionateScreenWidth(12),
+                              fontSize: getProportionateScreenWidth(12),
+                              color: Colors.black
                           ),
                         ),
                       ],
                     ),
                     SizedBox(height: getProportionateScreenHeight(10),),
-                    Text(
-                      "DATE",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: getProportionateScreenWidth(13),
-                        color: Colors.black,
-                      ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: getProportionateScreenWidth(160),
+                          height: getProportionateScreenHeight(40),
+                          child: Text(
+                            "ADRESSE",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: getProportionateScreenWidth(12),
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          "Livré",
+                          style: TextStyle(
+                              fontSize: getProportionateScreenWidth(12),
+                              color: Colors.black
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(height: getProportionateScreenHeight(10),),
-                    Text(
-                      "ADRESSE",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: getProportionateScreenWidth(13),
-                        color: Colors.black,
-                      ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: getProportionateScreenWidth(160),
+                          height: getProportionateScreenHeight(40),
+                          child: Text(
+                            "MODE DE LIVRAISON",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: getProportionateScreenWidth(12),
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          "Livré",
+                          style: TextStyle(
+                              fontSize: getProportionateScreenWidth(12),
+                              color: Colors.black
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(height: getProportionateScreenHeight(10),),
-                    Text(
-                      "MODE DE LIVRAISON",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: getProportionateScreenWidth(13),
-                        color: Colors.black,
-                      ),
-                    ),
-                    SizedBox(height: getProportionateScreenHeight(10),),
-                    Text(
-                      "MODE DE PAIEMENT",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: getProportionateScreenWidth(13),
-                        color: Colors.black,
-                      ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: getProportionateScreenWidth(160),
+                          height: getProportionateScreenHeight(40),
+                          child: Text(
+                            "MODE DE PAIEMENT",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: getProportionateScreenWidth(12),
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          "Livré",
+                          style: TextStyle(
+                              fontSize: getProportionateScreenWidth(12),
+                              color: Colors.black
+                          ),
+                        ),
+                      ],
                     ),
                 ],),
               )
