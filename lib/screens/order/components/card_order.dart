@@ -8,7 +8,8 @@ import 'package:intl/intl.dart';
 
 
 class CardOrder extends StatefulWidget {
-  const CardOrder({Key? key}) : super(key: key);
+  const CardOrder({Key? key,
+  }) : super(key: key);
 
   @override
   State<CardOrder> createState() => _CardOrderState();

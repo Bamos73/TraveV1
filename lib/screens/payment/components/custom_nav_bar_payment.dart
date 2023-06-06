@@ -416,22 +416,12 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
         .doc(userId).get();
 
 
-
-    final userHistoryCartRef = FirebaseFirestore.instance
+    final userHistoryCardRef = FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
         .collection('commande')
         .doc(Code_commande)
         .collection(Code_commande);
-
-    final userCardRef = FirebaseFirestore.instance
-        .collection('Card')
-        .doc(userId)
-        .collection(userId);
-
-    final userCardQuerySnapshot = await userCardRef.get();
-    final userCardData = userCardQuerySnapshot.docs.map((doc) => doc.data()).toList();
-
 
     final userOrderCardRef = FirebaseFirestore.instance
         .collection('Order')
@@ -440,6 +430,8 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
         .doc(Code_commande)
         .collection('Articles');
 
+    final userOrderHistoryQuerySnapshot = await userOrderCardRef.get();
+    final userHistoryOrderData = userOrderHistoryQuerySnapshot .docs.map((doc) => doc.data()).toList();
 
 
     final userHistoryDoc = await userHistoryRef.get();
@@ -467,6 +459,12 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
 
           });
 
+          // Copier les documents de la sous-collection "Card" vers la sous-collection "Order"
+          for (var docData in userHistoryOrderData) {
+            final code = docData['code'];
+            await userHistoryCardRef.doc(code).set(docData);
+          }
+
           // Au cas où l'utilisateur a un code de réduction
           if (userData['code_reduction_name'] != null) {
             final promoCodeDoc = await FirebaseFirestore.instance
@@ -484,11 +482,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
             });
           }
 
-          // Copier les documents de la sous-collection "Card" vers la sous-collection "Order"
-          for (var docData in userCardData) {
-            final code = docData['code'];
-            await userHistoryCartRef.doc(code).set(docData);
-          }
+
 
         } else {
           print("La commande existe déjà.");
