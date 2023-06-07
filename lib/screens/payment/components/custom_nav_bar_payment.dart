@@ -398,13 +398,21 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
         final ProductData = ProductDoc.data();
 
         if (ProductData != null) {
-          ProductRef.update({
-            'quantité': ProductData['quantité'] - docData['quantite'],
-          });
+          final int quantiteDemandee = docData['quantite'];
+          final int quantiteDisponible = ProductData['quantité'];
+
+          if (quantiteDemandee <= quantiteDisponible) {
+            ProductRef.update({
+              'quantite': quantiteDisponible - quantiteDemandee,
+            });
+          } else {
+            showCustomSnackBar(context, "La quantité demandée n'est plus disponible.", ContentType.failure);
+          }
         }
       }
     }
   }
+
 
 
   void AddOrderUserHistory(String Code_commande, num montant) async {
