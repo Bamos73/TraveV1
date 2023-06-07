@@ -5,7 +5,7 @@ import 'package:shopapp/components/custom_surfix_icon.dart';
 import 'package:shopapp/components/default_button.dart';
 import 'package:shopapp/constants.dart';
 import 'package:shopapp/provider/sign_in_provider.dart';
-import 'package:shopapp/screens/profil/components/profile_pic.dart';
+import 'package:shopapp/screens/plus/components/profile_pic.dart';
 import 'package:shopapp/size_config.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

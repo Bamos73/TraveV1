@@ -18,7 +18,7 @@ import 'package:shopapp/screens/order_details/order_detail_screen.dart';
 import 'package:shopapp/screens/otp/otp_screen.dart';
 import 'package:shopapp/screens/payment/components/adresse_list_livraison.dart';
 import 'package:shopapp/screens/payment/payment_screen.dart';
-import 'package:shopapp/screens/profil/profil_screen.dart';
+import 'package:shopapp/screens/plus/profil_screen.dart';
 import 'package:shopapp/screens/sign_in/sign_in_screen.dart';
 import 'package:shopapp/screens/sign_up/sign_up_screen.dart';
 import 'package:shopapp/screens/splash_screen.dart';

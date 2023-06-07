@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shopapp/constants.dart';
 import 'package:shopapp/size_config.dart';
 
 class ButtomBell extends StatefulWidget {
@@ -36,7 +37,7 @@ class _ButtomBellState extends State<ButtomBell> {
                 color: Colors.white,
                 shape: BoxShape.circle,
               ),
-              child: SvgPicture.asset(widget.svgSrc)
+              child: SvgPicture.asset(widget.svgSrc,color: kPrimaryColor,)
           ),
           if (widget.numOfItems != 0)
             Positioned(

@@ -4,7 +4,7 @@ import 'package:shopapp/screens/category/category_screen.dart';
 import 'package:shopapp/screens/favory/favorie_screen.dart';
 import 'package:shopapp/screens/otp/otp_screen.dart';
 import '../screens/home/home_screen.dart';
-import '../screens/profil/profil_screen.dart';
+import '../screens/plus/profil_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);

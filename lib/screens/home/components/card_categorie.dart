@@ -25,7 +25,7 @@ class CardCategorie extends StatelessWidget {
           Expanded(
             child: Container(
               width: double.maxFinite,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Color.fromRGBO(255, 0, 0, 0.0),
               ),
               child: FutureBuilder(
@@ -54,7 +54,7 @@ class CardCategorie extends StatelessWidget {
                                   "ÉPUISÉ",
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 18,
+                                    fontSize: getProportionateScreenWidth(18),
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -68,35 +68,42 @@ class CardCategorie extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 5),
-          Wrap(
-            alignment: WrapAlignment.start,
-            children: [
-              Text(
-                products[index]['title'] != null && products[index]['title'].isNotEmpty
-                    ? "${products[index]['title']}"
-                    : "titre non defini",
-                style: TextStyle(color: Colors.black),
-                maxLines: 1,
-                textAlign: TextAlign.start,
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Text(
-                products[index]['price'] != null
-                    ? "${products[index]['price'].toInt()} FCFA"
-                    : "prix non defini",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: getProportionateScreenWidth(15),
-                  fontWeight: FontWeight.w600,
+          SizedBox(height: getProportionateScreenHeight(5)),
+          Container(
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Wrap(
+                  alignment: WrapAlignment.start,
+                  children: [
+                    Text(
+                      products[index]['title'] != null && products[index]['title'].isNotEmpty
+                          ? "${products[index]['title']}"
+                          : "titre non defini",
+                      style: TextStyle(
+                          color: Colors.black,
+                        fontSize: getProportionateScreenWidth(12),),
+                      maxLines: 1,
+                      textAlign: TextAlign.start,
+                    ),
+                  ],
                 ),
-                maxLines: 1,
-              ),
-            ],
+                Text(
+                  products[index]['price'] != null
+                      ? "${products[index]['price'].toInt()} FCFA"
+                      : "prix non defini",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: getProportionateScreenWidth(15),
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 1,
+                ),
+              ],
+            ),
           ),
+
         ],
       ),
     );

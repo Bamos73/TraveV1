@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shopapp/constants.dart';
 import 'package:shopapp/size_config.dart';
 
 
@@ -72,7 +73,7 @@ class CardButton extends StatelessWidget {
               color: Colors.white,
               shape: BoxShape.circle,
             ),
-            child: SvgPicture.asset(widget.svgSrc),
+            child: SvgPicture.asset(widget.svgSrc,color: kPrimaryColor),
           ),
           if (numOfItems > 0)
             Positioned(

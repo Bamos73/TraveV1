@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopapp/constants.dart';
 import 'package:shopapp/size_config.dart';
 
@@ -9,10 +8,9 @@ class ButtonClose extends StatelessWidget {
     super.key
   });
 
-
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       height: getProportionateScreenWidth(35),
       width: getProportionateScreenWidth(35),
       child: TextButton(
@@ -26,7 +24,7 @@ class ButtonClose extends StatelessWidget {
         ),
         onPressed: () => Navigator.pop(context),
         child: Icon(Icons.close,
-          color: Colors.black,
+          color: kPrimaryColor,
           size: getProportionateScreenWidth(20),
         ),
       ),
