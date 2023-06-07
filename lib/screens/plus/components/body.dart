@@ -8,9 +8,9 @@ import 'package:provider/provider.dart';
 import 'package:shopapp/constants.dart';
 import 'package:shopapp/provider/sign_in_provider.dart';
 import 'package:shopapp/screens/Privacy_Policy/Privacy_Policy_Screen.dart';
+import 'package:shopapp/screens/address/address_screen.dart';
 import 'package:shopapp/screens/my_account/my_account_screen.dart';
 import 'package:shopapp/screens/order/order_screen.dart';
-import 'package:shopapp/screens/payment/components/adresse_list_livraison.dart';
 import 'package:shopapp/screens/plus/components/profil_menu.dart';
 import 'package:shopapp/screens/plus/components/profile_pic.dart';
 import 'package:shopapp/screens/sign_in/sign_in_screen.dart';
@@ -63,7 +63,7 @@ class _BodyState extends State<Body> {
             text: "Mes adresses",
             icon: LineAwesomeIcons.map_marked,
             press: () =>
-                Navigator.pushNamed(context, AdresseLivraison.routeName),
+                Navigator.pushNamed(context, AddressScreen.routeName),
           ),
           ProfilMenu(
             text: "Notifications",

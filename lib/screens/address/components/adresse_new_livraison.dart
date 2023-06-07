@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:shopapp/authentification/user_add_livraison_address.dart';
-import 'package:shopapp/components/custom_surfix_icon.dart';
 import 'package:shopapp/components/default_button.dart';
 import 'package:shopapp/components/form_error.dart';
 import 'package:shopapp/constants.dart';
-import 'package:shopapp/screens/payment/components/adresse_list_livraison.dart';
 import 'package:shopapp/size_config.dart';
 
 class NewAdresse extends StatefulWidget {
   const NewAdresse({Key? key}) : super(key: key);
-  static String routeName = "payment/components";
+  static String routeName = "address/components";
 
   @override
   State<NewAdresse> createState() => _NewAdresseState();
@@ -87,7 +85,7 @@ class _NewAdresseState extends State<NewAdresse> {
         centerTitle: true,
         leading: GestureDetector(
           onTap: () {
-            nextScreenReplace(context, AdresseLivraison());
+            Navigator.pop(context);
           },
           child: Icon(Icons.arrow_back_ios, weight: 100),
         ),
@@ -139,7 +137,7 @@ class _NewAdresseState extends State<NewAdresse> {
               _ctrphonenumber.text = '';
               _selectedCommune = null;
               _selectedQuartier = null;
-              nextScreenReplace(context, AdresseLivraison());
+              Navigator.pop(context);
             }
           },
         ),

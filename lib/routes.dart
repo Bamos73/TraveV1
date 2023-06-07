@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shopapp/components/main_screens.dart';
 import 'package:shopapp/screens/Privacy_Policy/Privacy_Policy_Screen.dart';
 import 'package:shopapp/screens/Term_And_Condition/term_and_condition_screen.dart';
+import 'package:shopapp/screens/address/address_screen.dart';
 import 'package:shopapp/screens/cart/cart_screen.dart';
 import 'package:shopapp/screens/cart/components/test.dart';
 import 'package:shopapp/screens/category/category_screen.dart';
@@ -16,7 +17,6 @@ import 'package:shopapp/screens/my_account/my_account_screen.dart';
 import 'package:shopapp/screens/order/order_screen.dart';
 import 'package:shopapp/screens/order_details/order_detail_screen.dart';
 import 'package:shopapp/screens/otp/otp_screen.dart';
-import 'package:shopapp/screens/payment/components/adresse_list_livraison.dart';
 import 'package:shopapp/screens/payment/payment_screen.dart';
 import 'package:shopapp/screens/plus/profil_screen.dart';
 import 'package:shopapp/screens/sign_in/sign_in_screen.dart';
@@ -44,9 +44,10 @@ final Map<String, WidgetBuilder> routes = {
         CategoryScreen.routeName:(context) => CategoryScreen(),
         DetailCtgScreen.routeName:(context) => DetailCtgScreen(),
         PaymentScreen.routeName:(context) => PaymentScreen(),
-        AdresseLivraison.routeName:(context) => AdresseLivraison(),
+        AddressScreen.routeName:(context) => AddressScreen(),
         FavorieScreen.routeName:(context) => FavorieScreen(),
         OrderScreen.routeName:(context) => OrderScreen(),
         OrderDetailScreen.routeName:(context) =>OrderDetailScreen(),
+        AddressScreen.routeName:(context) =>AddressScreen(),
 
 };

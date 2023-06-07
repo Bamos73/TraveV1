@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shopapp/components/default_button.dart';
 import 'package:shopapp/constants.dart';
-import 'package:shopapp/screens/payment/components/adresse_new_livraison.dart';
-import 'package:shopapp/screens/payment/payment_screen.dart';
+import 'package:shopapp/screens/address/components/adresse_new_livraison.dart';
 import 'package:shopapp/size_config.dart';
-
 class Address {
   String commune;
   String quartier;
@@ -26,15 +24,17 @@ class Address {
   });
 }
 
-class AdresseLivraison extends StatefulWidget {
-  const AdresseLivraison({Key? key}) : super(key: key);
-  static String routeName = "payment/components";
+class AddressScreen extends StatefulWidget {
+  const AddressScreen({super.key});
+
+  static String routeName="/address";
+
 
   @override
-  State<AdresseLivraison> createState() => _AdresseLivraisonState();
+  State<AddressScreen> createState() => _AddressScreenState();
 }
 
-class _AdresseLivraisonState extends State<AdresseLivraison> {
+class _AddressScreenState extends State<AddressScreen> {
   String _selectedOption = "";
 
   CollectionReference addressesCollection = FirebaseFirestore.instance
@@ -87,8 +87,7 @@ class _AdresseLivraisonState extends State<AdresseLivraison> {
                 code: data['Code'] ?? '',
               );
             } else {
-              // Gérer le cas où les données sont nulles ou ne contiennent pas les champs attendus
-              // Vous pouvez retourner une valeur par défaut ou afficher un message d'erreur approprié
+
               return Address(
                 commune: '',
                 quartier: '',
@@ -99,7 +98,6 @@ class _AdresseLivraisonState extends State<AdresseLivraison> {
               );
             }
           }).toList();
-
 
           if (addresses.isEmpty) {
             return Column(

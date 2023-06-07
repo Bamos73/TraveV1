@@ -131,11 +131,3 @@ class _BodyState extends State<Body> {
             'Home_AccessoireCollection_product').snapshots();
   }
 }
-
-
-
-
-
-
-
-

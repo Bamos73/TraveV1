@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopapp/constants.dart';
-import 'package:shopapp/screens/payment/components/adresse_list_livraison.dart';
+import 'package:shopapp/screens/address/address_screen.dart';
 import 'package:shopapp/size_config.dart';
 
 class ListPaymentAdresse extends StatefulWidget {
@@ -91,7 +91,7 @@ class _ListPaymentAdresseState extends State<ListPaymentAdresse> {
             ) ,
             GestureDetector(
               onTap: () {
-                nextScreenReplace(context, AdresseLivraison());
+                nextScreenReplace(context, AddressScreen());
               },
               child: Text("MODIFIER",style: TextStyle(
                 fontSize: getProportionateScreenHeight(13),
