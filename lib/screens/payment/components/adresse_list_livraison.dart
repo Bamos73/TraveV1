@@ -59,7 +59,7 @@ class _AdresseLivraisonState extends State<AdresseLivraison> {
         centerTitle: true,
         leading: GestureDetector(
           onTap: () {
-            nextScreenReplace(context, PaymentScreen());
+            Navigator.pop(context);
           },
           child: Icon(Icons.arrow_back_ios, weight: 100),
         ),
@@ -152,7 +152,7 @@ class _AdresseLivraisonState extends State<AdresseLivraison> {
                             _selectedOption = value as String;
                           });
                           UpdateselectedOption(_selectedOption, address.numero as String,address.nom as String,address.prenom as String);
-                          nextScreenReplace(context, PaymentScreen());
+                          Navigator.pop(context);
                         },
                       ),
                     );
