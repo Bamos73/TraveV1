@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:shopapp/authentification/user_add_livraison_address.dart';
 import 'package:shopapp/components/default_button.dart';
 import 'package:shopapp/components/form_error.dart';
@@ -39,6 +41,23 @@ class _NewAdresseState extends State<NewAdresse> {
     }
   }
 
+  late GoogleMapController mapController;
+  late LatLng currentPosition;
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLocation();
+  }
+
+  void _getCurrentLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    setState(() {
+      currentPosition = LatLng(position.latitude, position.longitude);
+    });
+  }
+
   List<String> communes = [
     'Abobo',
     'Adjamé',
@@ -72,7 +91,7 @@ class _NewAdresseState extends State<NewAdresse> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF5F6F9),
+      backgroundColor: const Color(0xFFF5F6F9),
       appBar: AppBar(
         title: Text(
           "AJOUTER UNE NOUVELLE ADRESSE",
@@ -87,38 +106,79 @@ class _NewAdresseState extends State<NewAdresse> {
           onTap: () {
             Navigator.pop(context);
           },
-          child: Icon(Icons.arrow_back_ios, weight: 100),
+          child: const Icon(Icons.arrow_back_ios, weight: 100),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              SizedBox(height: getProportionateScreenWidth(30)),
-              buildFirstName(),
-              SizedBox(height: getProportionateScreenWidth(30)),
-              buildLastName(),
-              SizedBox(height: getProportionateScreenWidth(30)),
-              buildNumber(),
-              SizedBox(height: getProportionateScreenWidth(30)),
-              buildCommuneDropdown(),
-              SizedBox(height: getProportionateScreenWidth(30)),
-              buildQuartierDropdown(),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(30)),
-                child: FormError(errors: errors),
+      body: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            height: getProportionateScreenHeight(340),
+            width: double.infinity,
+            child:GoogleMap(
+              onMapCreated: (GoogleMapController controller) {
+                mapController = controller;
+              },
+              initialCameraPosition: CameraPosition(
+                target: currentPosition ?? LatLng(0, 0), // Default position if not available
+                zoom: 15,
               ),
-              SizedBox(height: getProportionateScreenWidth(30)),
-            ],
+              markers: Set<Marker>.from([
+                Marker(
+                  markerId: MarkerId('currentPosition'),
+                  position: currentPosition ?? LatLng(0, 0), // Default position if not available
+                  infoWindow: InfoWindow(
+                    title: 'Ma position',
+                  ),
+                ),
+              ]),
+            ),
+
           ),
-        ),
+          Positioned(
+            top: getProportionateScreenHeight(300),
+            child: Container(
+              width: getProportionateScreenWidth(375),
+              height: getProportionateScreenHeight(350),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(50),
+                    topRight: Radius.circular(50),)
+              ),
+              child: SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      SizedBox(height: getProportionateScreenWidth(30)),
+                      buildFirstName(),
+                      SizedBox(height: getProportionateScreenWidth(30)),
+                      buildLastName(),
+                      SizedBox(height: getProportionateScreenWidth(30)),
+                      buildNumber(),
+                      SizedBox(height: getProportionateScreenWidth(30)),
+                      buildCommuneDropdown(),
+                      SizedBox(height: getProportionateScreenWidth(30)),
+                      buildQuartierDropdown(),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(30)),
+                        child: FormError(errors: errors),
+                      ),
+                      SizedBox(height: getProportionateScreenWidth(30)),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.only(
           left: getProportionateScreenWidth(80),
           right: getProportionateScreenWidth(80),
-          bottom: getProportionateScreenHeight(30),
+          bottom: getProportionateScreenHeight(10),
         ),
         child: DefaultButton(
           text: "AJOUTER UNE ADRESSE",
