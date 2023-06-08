@@ -29,6 +29,7 @@ apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'com.google.firebase.crashlytics'
 
 
+
 android {
     compileSdkVersion 33
     ndkVersion '25.2.9519653'
@@ -66,6 +67,7 @@ android {
         }
     }
     namespace 'com.example.shopapp'
+    buildToolsVersion '33.0.2'
 }
 
 flutter {

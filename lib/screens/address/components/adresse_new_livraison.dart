@@ -1,11 +1,17 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:flutter_animator/flutter_animator.dart';
 import 'package:shopapp/authentification/user_add_livraison_address.dart';
 import 'package:shopapp/components/default_button.dart';
 import 'package:shopapp/components/form_error.dart';
 import 'package:shopapp/constants.dart';
 import 'package:shopapp/size_config.dart';
+import 'package:flutter_map/plugin_api.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
+
 
 class NewAdresse extends StatefulWidget {
   const NewAdresse({Key? key}) : super(key: key);
@@ -18,12 +24,14 @@ class NewAdresse extends StatefulWidget {
 class _NewAdresseState extends State<NewAdresse> {
   final _formKey = GlobalKey<FormState>();
   final List<String?> errors = [];
-
+  MapController mapController = MapController();
+  Position? _currentPosition;
   final _ctrfirstname = TextEditingController();
-  final _ctrlastname = TextEditingController();
   final _ctrphonenumber = TextEditingController();
-  String? _selectedCommune;
-  String? _selectedQuartier;
+  final _ctrLocalisation = TextEditingController();
+  bool ignorePointer =true;
+
+  String _selectedCommune='Abidjan, Cocody';
 
   void addError({required String error}) {
     if (!errors.contains(error)) {
@@ -41,52 +49,61 @@ class _NewAdresseState extends State<NewAdresse> {
     }
   }
 
-  late GoogleMapController mapController;
-  late LatLng currentPosition;
+
+
+  Future<void> getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Vérifier si le service de localisation est activé
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await Geolocator.openLocationSettings();
+      if (!serviceEnabled) {
+        return;
+      }
+    }
+
+    // Vérifier si l'autorisation de localisation est accordée
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission != LocationPermission.whileInUse &&
+          permission != LocationPermission.always) {
+        showCustomSnackBar(context, "Autorisation de localisation non approuvée", ContentType.warning);
+        return;
+      }
+    }
+
+    // Obtenir la localisation de l'utilisateur
+    _currentPosition = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.best,
+    );
+
+    // Récupérer l'adresse à partir des coordonnées
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+      _currentPosition?.latitude ?? 5.3517217,
+      _currentPosition?.longitude ?? -3.9617874,
+    );
+
+    if (placemarks.isNotEmpty) {
+      setState(() {
+        Placemark placemark = placemarks.last;
+        _selectedCommune = placemark.locality.toString() + ","+placemark.subLocality.toString() ;
+        _ctrLocalisation.text = _selectedCommune;
+        _currentPosition = _currentPosition;
+        ignorePointer;
+      });
+    }
+  }
+
 
   @override
   void initState() {
     super.initState();
-    _getCurrentLocation();
+    getCurrentLocation();
+
   }
-
-  void _getCurrentLocation() async {
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    setState(() {
-      currentPosition = LatLng(position.latitude, position.longitude);
-    });
-  }
-
-  List<String> communes = [
-    'Abobo',
-    'Adjamé',
-    'Attécoubé',
-    'Anyama',
-    'Bingerville',
-    'Cocody',
-    'Koumassi',
-    'Marcory',
-    'Plateau',
-    'Port-Bouët',
-    'Treichville',
-    'Yopougon',
-  ];
-
-  Map<String, List<String>> quartiers = {
-    'Abobo': ['Abobo-Doumé', 'Abobo-Sagbé', 'Abobo-Baoulé', 'Abobo-Avocatier'],
-    'Adjamé': ['Plateau Dokui', 'Williamsville', 'Alafiarou', 'Abattoirs'],
-    'Attécoubé': ['Camp Militaire', 'Belleville', 'Sainte Cécile', 'Banco'],
-    'Anyama': ['Quartier 1', 'Quartier 2', 'Quartier 3', 'Quartier 4'],
-    'Bingerville': ['Quartier 1', 'Quartier 2', 'Quartier 3', 'Quartier 4'],
-    'Cocody': ['Angré', 'Deux-Plateaux', 'Riviera', 'Cocody-les-Deux-Plateaux'],
-    'Koumassi': ['Koumassi Remblais', 'Vridi Cité', 'Koumassi Port', 'Koumassi Sicogi'],
-    'Marcory': ['Zone 4', 'Biétry', 'Zone 3', 'Anoumabo'],
-    'Plateau': ['Plateau Centre', 'Plateau Dokui', 'Plateau Saint Michel', 'Plateau Attoban'],
-    'Port-Bouët': ['Gonzagueville','Vridi', 'Port-Bouët Centre', 'Port-Bouët Cité', 'Port-Bouët Wharf',],
-    'Treichville': ['Treichville Centre', 'Treichville Wharf', 'Treichville Zone 1', 'Treichville Zone 3'],
-    'Yopougon': ['Yopougon Siporex', 'Yopougon Niangon', 'Yopougon Maroc', 'Yopougon Selmer'],
-  };
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +111,7 @@ class _NewAdresseState extends State<NewAdresse> {
       backgroundColor: const Color(0xFFF5F6F9),
       appBar: AppBar(
         title: Text(
-          "AJOUTER UNE NOUVELLE ADRESSE",
+          "NOUVELLE ADRESSE DE LIVRAISON",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: getProportionateScreenWidth(15),
@@ -111,99 +128,204 @@ class _NewAdresseState extends State<NewAdresse> {
       ),
       body: Stack(
         clipBehavior: Clip.none,
+        fit: StackFit.expand,
         children: [
           Container(
-            height: getProportionateScreenHeight(340),
-            width: double.infinity,
-            child:GoogleMap(
-              onMapCreated: (GoogleMapController controller) {
-                mapController = controller;
-              },
-              initialCameraPosition: CameraPosition(
-                target: currentPosition ?? LatLng(0, 0), // Default position if not available
-                zoom: 15,
-              ),
-              markers: Set<Marker>.from([
-                Marker(
-                  markerId: MarkerId('currentPosition'),
-                  position: currentPosition ?? LatLng(0, 0), // Default position if not available
-                  infoWindow: InfoWindow(
-                    title: 'Ma position',
+          height: getProportionateScreenHeight(340),
+          width: double.infinity,
+          child: StreamBuilder<Position>(
+              stream: Geolocator.getPositionStream(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  // Mise à jour de la position de la carte
+                  mapController.move(
+                    LatLng(
+                      snapshot.data!.latitude,
+                      snapshot.data!.longitude,
+                    ),
+                    mapController.zoom,
+                  );
+                }
+              return IgnorePointer(
+                ignoring: ignorePointer,
+                child: FlutterMap(
+                  mapController: mapController,
+                  options: MapOptions(
+                    center: LatLng(
+                      _currentPosition?.latitude ?? 5.3517217,
+                      _currentPosition?.longitude ?? -3.9617874,
+                    ),
+                    maxZoom: 25,
+                    zoom: 18,
                   ),
+                  children: [
+                    TileLayer(
+                      urlTemplate: MapBoxUrlTemplate,
+                      userAgentPackageName: 'com.example.shopapp',
+                      additionalOptions: {
+                        'accessToken': MapBoxToken,
+                        'id': MapBoxId,
+                      },
+                    ),
+                    MarkerLayer(
+                      markers: [
+                        Marker(
+                          width: 80,
+                          height: 80,
+                          point: LatLng(
+                            _currentPosition?.latitude ?? 5.3517217,
+                            _currentPosition?.longitude ?? -3.9617874,
+                          ),
+                          builder: (ctx) =>
+                              Container(
+                                child: Icon(
+                                    Icons.location_on, color: kPrimaryColor),
+                              ),
+                        )
+                      ],
+                    )
+                  ],
                 ),
-              ]),
-            ),
-
+              );
+            }
+            )
           ),
-          Positioned(
-            top: getProportionateScreenHeight(300),
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeInOut,
+            top: MediaQuery.of(context).viewInsets.bottom > 0
+                ? getProportionateScreenHeight(140)
+                : (ignorePointer
+                ?getProportionateScreenHeight(330)
+                :  getProportionateScreenHeight(510)),
             child: Container(
               width: getProportionateScreenWidth(375),
-              height: getProportionateScreenHeight(350),
+              height: getProportionateScreenHeight(500),
               decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(50),
-                    topRight: Radius.circular(50),)
+                  topLeft: Radius.circular(50),
+                  topRight: Radius.circular(50),
+                ),
               ),
               child: SingleChildScrollView(
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      SizedBox(height: getProportionateScreenWidth(30)),
-                      buildFirstName(),
-                      SizedBox(height: getProportionateScreenWidth(30)),
-                      buildLastName(),
-                      SizedBox(height: getProportionateScreenWidth(30)),
-                      buildNumber(),
-                      SizedBox(height: getProportionateScreenWidth(30)),
-                      buildCommuneDropdown(),
-                      SizedBox(height: getProportionateScreenWidth(30)),
-                      buildQuartierDropdown(),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(30)),
-                        child: FormError(errors: errors),
+                child: Column(
+                  children: [
+                    SizedBox(height: getProportionateScreenHeight(10)),
+                    Text(
+                      'ADRESSE',
+                      style: TextStyle(
+                          color: kPrimaryColor,
+                          fontSize: getProportionateScreenWidth(16)),
+                    ),
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          SizedBox(height: getProportionateScreenWidth(20)),
+                          buildLocalisation(),
+                          SizedBox(height: getProportionateScreenWidth(30)),
+                          buildFirstName(),
+                          SizedBox(height: getProportionateScreenWidth(30)),
+                          buildNumber(),
+                          Padding(padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(30)),
+                            child: FormError(errors: errors),
+                          ),
+                          SizedBox(height: getProportionateScreenWidth(30)),
+                        ],
                       ),
-                      SizedBox(height: getProportionateScreenWidth(30)),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
           ),
         ],
       ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(
-          left: getProportionateScreenWidth(80),
-          right: getProportionateScreenWidth(80),
-          bottom: getProportionateScreenHeight(10),
-        ),
-        child: DefaultButton(
-          text: "AJOUTER UNE ADRESSE",
-          press: () {
-            if (_formKey.currentState!.validate()) {
-              final user = UserAuth(
-                nom: _ctrfirstname.text.trim(),
-                prenom: _ctrlastname.text,
-                phonenumber: _ctrphonenumber.text.trim(),
-                commune: _selectedCommune!,
-                quartier: _selectedQuartier!,
-              );
-              addUser(user);
-              _ctrfirstname.text = '';
-              _ctrlastname.text = '';
-              _ctrphonenumber.text = '';
-              _selectedCommune = null;
-              _selectedQuartier = null;
-              Navigator.pop(context);
-            }
-          },
+      bottomNavigationBar: Container(
+        color: Colors.white,
+        child: Padding(
+          padding: EdgeInsets.only(
+            top: getProportionateScreenHeight(10),
+            left: getProportionateScreenWidth(80),
+            right: getProportionateScreenWidth(80),
+            bottom: getProportionateScreenHeight(10),
+          ),
+          child: DefaultButton(
+            text: "AJOUTER UNE ADRESSE",
+            press: () {
+              if (_formKey.currentState!.validate()) {
+                final user = UserAuth(
+                  nom: _ctrfirstname.text.trim(),
+                  phonenumber: _ctrphonenumber.text.trim(),
+                  commune: _ctrLocalisation.text.trim()
+                );
+                addUser(user);
+                _ctrfirstname.text = '';
+                _ctrphonenumber.text = '';
+                Navigator.pop(context);
+                setState(() {
+
+                });
+              }
+            },
+          ),
         ),
       ),
     );
   }
+
+  Stack buildLocalisation() {
+    return Stack(
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(30)),
+          child: TextFormField(
+            controller: _ctrLocalisation,
+            enabled: !ignorePointer,
+            onChanged: (value) {
+              if (value.isNotEmpty) {
+                removeError(error: kNamelNullError);
+              } else {
+                addError(error: kNamelNullError);
+              }
+            },
+            validator: (value) {
+              if (value!.isEmpty) {
+                addError(error: kNamelNullError);
+                return "";
+              }
+              return null;
+            },
+            decoration: InputDecoration(
+              labelText: "Votre localisation",
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+            ),
+          ),
+        ),
+        Positioned(
+          left: getProportionateScreenWidth(280),
+          top: getProportionateScreenHeight(20),
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                ignorePointer = !ignorePointer;
+              });
+            },
+            child: Text(
+              ignorePointer ?  "Modifier" : "Valider",
+              style: TextStyle(
+                color: kPrimaryColor,
+                fontSize: getProportionateScreenWidth(14),
+              ),
+            ),
+          ),
+        ),
+
+      ],
+    );
+  }
+
 
   Padding buildFirstName() {
     return Padding(
@@ -225,114 +347,15 @@ class _NewAdresseState extends State<NewAdresse> {
           return null;
         },
         decoration: const InputDecoration(
-          labelText: "Nom",
+          labelText: "Nom et prénom",
           hintText: "Entrer votre nom",
           floatingLabelBehavior: FloatingLabelBehavior.always,
-          suffixIcon: Icon(Icons.person_pin_circle),
+          suffixIcon: Icon(Icons.person_pin_circle,color: kPrimaryColor,),
         ),
       ),
     );
   }
 
-  Padding buildLastName() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(30)),
-      child: TextFormField(
-        controller: _ctrlastname,
-        onChanged: (value) {
-          if (value.isNotEmpty) {
-            removeError(error: kLastNamelNullError);
-          } else {
-            addError(error: kLastNamelNullError);
-          }
-        },
-        validator: (value) {
-          if (value!.isEmpty) {
-            addError(error: kLastNamelNullError);
-            return "";
-          }
-          return null;
-        },
-        decoration: const InputDecoration(
-          labelText: "Prénom",
-          hintText: "Entrer votre prénom",
-          floatingLabelBehavior: FloatingLabelBehavior.always,
-          suffixIcon: Icon(Icons.person_pin_circle),
-        ),
-      ),
-    );
-  }
-
-  Padding buildCommuneDropdown() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(30)),
-      child: DropdownButtonFormField<String>(
-        value: _selectedCommune,
-        onChanged: (newValue) {
-          setState(() {
-            _selectedCommune = newValue!;
-            _selectedQuartier = null; // Réinitialiser le quartier sélectionné
-          });
-        },
-        items: communes
-            .map<DropdownMenuItem<String>>(
-              (value) => DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          ),
-        )
-            .toList(),
-        validator: (value) {
-          if (value == null) {
-            addError(error: kCommuneNullError);
-            return "";
-          }
-          return null;
-        },
-        decoration: const InputDecoration(
-          labelText: "Commune",
-          hintText: "Sélectionner votre commune",
-          floatingLabelBehavior: FloatingLabelBehavior.always,
-        ),
-      ),
-    );
-  }
-
-
-  Padding buildQuartierDropdown() {
-    List<String>? quartierList = quartiers[_selectedCommune];
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(30)),
-      child: DropdownButtonFormField<String>(
-        value: _selectedQuartier,
-        onChanged: (newValue) {
-          setState(() {
-            _selectedQuartier = newValue!;
-          });
-        },
-        items: quartierList
-            ?.map<DropdownMenuItem<String>>(
-              (value) => DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          ),
-        )
-            .toList(),
-        validator: (value) {
-          if (value == null) {
-            addError(error: kQuartierNullError);
-            return "";
-          }
-          return null;
-        },
-        decoration: const InputDecoration(
-          labelText: "Quartier",
-          hintText: "Sélectionner votre quartier",
-          floatingLabelBehavior: FloatingLabelBehavior.always,
-        ),
-      ),
-    );
-  }
 
 
   Padding buildNumber() {
@@ -359,7 +382,23 @@ class _NewAdresseState extends State<NewAdresse> {
           labelText: "Numéro",
           hintText: "Entrer votre numéro de téléphone",
           floatingLabelBehavior: FloatingLabelBehavior.always,
-          suffixIcon: Icon(Icons.call),
+          suffixIcon: Icon(Icons.call,color: kPrimaryColor,),
+        ),
+      ),
+    );
+  }
+  void showCustomSnackBar(BuildContext context, String message,
+      ContentType contentType) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.fixed,
+        backgroundColor: Color(0x00FFFFFF),
+        elevation: 0,
+        content: AwesomeSnackbarContent(
+          title: 'Ohh Ohh!!',
+          message: message,
+          contentType: contentType,
+          messageFontSize: getProportionateScreenWidth(15),
         ),
       ),
     );

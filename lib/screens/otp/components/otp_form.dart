@@ -19,11 +19,16 @@ class _OtpFormState extends State<OtpForm> {
   FocusNode? pin2FocusNode;
   FocusNode? pin3FocusNode;
   FocusNode? pin4FocusNode;
+  FocusNode? pin5FocusNode;
+  FocusNode? pin6FocusNode;
+
   final _code1 = TextEditingController();
   final _code2 = TextEditingController();
   final _code3 = TextEditingController();
   final _code4 = TextEditingController();
-  late String CodeOtp='0000';
+  final _code5 = TextEditingController();
+  final _code6 = TextEditingController();
+  late String CodeOtp='000000';
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
@@ -32,6 +37,8 @@ class _OtpFormState extends State<OtpForm> {
     pin2FocusNode = FocusNode();
     pin3FocusNode = FocusNode();
     pin4FocusNode = FocusNode();
+    pin5FocusNode = FocusNode();
+    pin6FocusNode = FocusNode();
   }
 
   @override
@@ -40,6 +47,8 @@ class _OtpFormState extends State<OtpForm> {
     pin2FocusNode!.dispose();
     pin3FocusNode!.dispose();
     pin4FocusNode!.dispose();
+    pin5FocusNode!.dispose();
+    pin6FocusNode!.dispose();
   }
 
   void nextField({String? value, FocusNode? focusNode}) {
@@ -47,6 +56,7 @@ class _OtpFormState extends State<OtpForm> {
       focusNode!.requestFocus();
     }
   }
+
 
 
   @override
@@ -59,7 +69,7 @@ class _OtpFormState extends State<OtpForm> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               SizedBox(
-                width: getProportionateScreenWidth(60),
+                width: getProportionateScreenWidth(50),
                 child: TextFormField(
                   controller: _code1,
                   autofocus: true,
@@ -74,7 +84,7 @@ class _OtpFormState extends State<OtpForm> {
                 ),
               ),
               SizedBox(
-                width: getProportionateScreenWidth(60),
+                width: getProportionateScreenWidth(50),
                 child: TextFormField(
                   controller: _code2,
                   focusNode: pin2FocusNode,
@@ -89,7 +99,7 @@ class _OtpFormState extends State<OtpForm> {
                 ),
               ),
               SizedBox(
-                width: getProportionateScreenWidth(60),
+                width: getProportionateScreenWidth(50),
                 child: TextFormField(
                   controller: _code3,
                   focusNode: pin3FocusNode,
@@ -104,20 +114,51 @@ class _OtpFormState extends State<OtpForm> {
                 ),
               ),
               SizedBox(
-                width: getProportionateScreenWidth(60),
+                width: getProportionateScreenWidth(50),
                 child: TextFormField(
                   controller: _code4,
-                  focusNode: pin4FocusNode,
+                  focusNode: pin4FocusNode, // Utilisez pin4FocusNode pour le champ 4
                   obscureText: true,
                   keyboardType: TextInputType.number,
                   style: const TextStyle(fontSize: 24),
                   textAlign: TextAlign.center,
                   decoration: otpInputDecoration,
                   onChanged: (value) {
-                    pin4FocusNode!.unfocus();
+                    nextField(value: value, focusNode: pin5FocusNode); // Utilisez pin5FocusNode pour passer au champ 5
                   },
                 ),
               ),
+              SizedBox(
+                width: getProportionateScreenWidth(50),
+                child: TextFormField(
+                  controller: _code5,
+                  focusNode: pin5FocusNode, // Utilisez pin5FocusNode pour le champ 5
+                  obscureText: true,
+                  keyboardType: TextInputType.number,
+                  style: const TextStyle(fontSize: 24),
+                  textAlign: TextAlign.center,
+                  decoration: otpInputDecoration,
+                  onChanged: (value) {
+                    nextField(value: value, focusNode: pin6FocusNode); // Utilisez pin6FocusNode pour passer au champ 6
+                  },
+                ),
+              ),
+              SizedBox(
+                width: getProportionateScreenWidth(50),
+                child: TextFormField(
+                  controller: _code6,
+                  focusNode: pin6FocusNode, // Utilisez pin6FocusNode pour le champ 6
+                  obscureText: true,
+                  keyboardType: TextInputType.number,
+                  style: const TextStyle(fontSize: 24),
+                  textAlign: TextAlign.center,
+                  decoration: otpInputDecoration,
+                  onChanged: (value) {
+                    pin6FocusNode!.unfocus();
+                  },
+                ),
+              ),
+
             ],
           ),
           SizedBox(
@@ -129,10 +170,11 @@ class _OtpFormState extends State<OtpForm> {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
                   //Après la verification
-                  CodeOtp = _code1.text+ _code2.text+_code3.text+_code4.text;
+                  CodeOtp = _code1.text+_code2.text+_code3.text+_code4.text+_code5.text+_code6.text;
                   verifyOTP(CodeOtp);
                 }
-              }),
+              }
+              ),
         ],
       ),
     );
@@ -149,7 +191,6 @@ class _OtpFormState extends State<OtpForm> {
     try {
       FirebaseAuth auth = FirebaseAuth.instance;
       UserCredential userCredential = await auth.signInWithCredential(credential);
-
       nextScreenReplace(context, MainScreen());
     } catch (e) {
       showCustomSnackBar("Veuillez saisir le code OTP correct.", ContentType.failure);

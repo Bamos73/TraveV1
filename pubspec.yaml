@@ -65,11 +65,10 @@ dependencies:
   path_provider: ^2.0.15
   barcode_widget: ^2.0.4
   flutter_map: ^4.0.0
-  google_maps_flutter: ^2.3.0
-  geolocator: ^9.0.2
-  google_maps_flutter_android: ^2.4.15
-  google_maps_flutter_ios: ^2.2.3
   latlng: ^1.0.0
+  geolocator: ^9.0.2
+  geocoding: ^2.0.0
+  flutter_animator: ^3.2.2
 
 
 

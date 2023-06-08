@@ -100,13 +100,18 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
                           .then((value) => sp.setSignIn().then((value) {})));
 
                       await FirebaseAuth.instance.verifyPhoneNumber(
-                        phoneNumber: '+2250787406257',
+                        phoneNumber: '+225${_ctrphonenumber.text.trim()}',
                         verificationCompleted: (PhoneAuthCredential credential) {},
                         verificationFailed: (FirebaseAuthException e) {},
-                        codeSent: (String verificationId, int? resendToken) {},
+                        codeSent: (String verificationId, int? resendToken) {
+                          Navigator.pushNamed(context, OTPScreen.routeName,
+                              arguments: {
+                            'verificationId': verificationId,
+                          });
+                        },
                         codeAutoRetrievalTimeout: (String verificationId) {},
                       );
-                      Navigator.pushNamed(context, MainScreen.routeName,);
+
                       print('+225${_ctrphonenumber.text.trim()}');
 
                     }

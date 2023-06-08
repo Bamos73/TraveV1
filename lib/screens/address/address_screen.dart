@@ -8,17 +8,13 @@ import 'package:shopapp/screens/address/components/adresse_new_livraison.dart';
 import 'package:shopapp/size_config.dart';
 class Address {
   String commune;
-  String quartier;
   String nom;
-  String prenom;
   String numero;
   String code;
 
   Address({
     required this.commune,
-    required this.quartier,
     required this.nom,
-    required this.prenom,
     required this.numero,
     required this.code,
   });
@@ -80,9 +76,7 @@ class _AddressScreenState extends State<AddressScreen> {
             if (data != null) {
               return Address(
                 commune: data['Commune'] ?? '',
-                quartier: data['Quartier'] ?? '',
                 nom: data['Nom'] ?? '',
-                prenom: data['Prenom'] ?? '',
                 numero: data['numero_de_livraison'] ?? '',
                 code: data['Code'] ?? '',
               );
@@ -90,9 +84,7 @@ class _AddressScreenState extends State<AddressScreen> {
 
               return Address(
                 commune: '',
-                quartier: '',
                 nom: '',
-                prenom: '',
                 numero: '',
                 code: '',
               );
@@ -123,16 +115,16 @@ class _AddressScreenState extends State<AddressScreen> {
                       color: Colors.white,
                       child: RadioListTile(
                         title: Text(
-                          "${address.nom} ${address.prenom}",
+                          "${address.nom}",
                           style: TextStyle(
                             fontSize: getProportionateScreenWidth(13),
                           ),
                         ),
-                        value: "${address.commune}, ${address.quartier}",
+                        value: "${address.commune}",
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("${address.commune}, ${address.quartier}"),
+                            Text("${address.commune}"),
                             Text(address.numero),
                           ],
                         ),
@@ -149,7 +141,7 @@ class _AddressScreenState extends State<AddressScreen> {
                           setState(() {
                             _selectedOption = value as String;
                           });
-                          UpdateselectedOption(_selectedOption, address.numero as String,address.nom as String,address.prenom as String);
+                          UpdateselectedOption(_selectedOption, address.numero as String,address.nom as String);
                           Navigator.pop(context);
                         },
                       ),
@@ -178,14 +170,14 @@ class _AddressScreenState extends State<AddressScreen> {
     );
   }
 
-  void UpdateselectedOption(String optionTake,String numero,String nom,String prenom) async {
+  void UpdateselectedOption(String optionTake,String numero,String nom,) async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId != null) {
       final userCardRef = FirebaseFirestore.instance.collection('users').doc(userId);
       await userCardRef.set({
         'adresse_de_livraison': optionTake,
         'numero_de_livraison': numero,
-        'nom_de_livraison': '$nom $prenom',
+        'nom_de_livraison': '$nom',
       }, SetOptions(merge: true));
     }
   }

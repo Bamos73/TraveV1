@@ -4,20 +4,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class UserAuth {
    String nom;
-   String prenom;
    String phonenumber;
    String commune;
-   String quartier;
-  String code;
+   String code;
 
 
   UserAuth({
     this.code = '',
     this.nom = '',
-     this.prenom = '',
      this.phonenumber = '',
      this.commune = '',
-     this.quartier = '',
 
   });
 
@@ -25,10 +21,8 @@ class UserAuth {
   Map<String, dynamic> toJson() {
     return {
       'Nom': nom,
-      'Prenom': prenom,
       'numero_de_livraison': phonenumber,
       'Commune': commune,
-      'Quartier': quartier,
       'Code': code,
     };
   }
@@ -37,10 +31,8 @@ class UserAuth {
   factory UserAuth.fromJson(Map<String, dynamic> json) {
     return UserAuth(
       nom: json['Nom'],
-      prenom: json['Prenom'],
       phonenumber: json['numero_de_livraison'],
       commune:  json['Commune'],
-      quartier:  json['Quartier'],
       code: json['Code'],
 
     );

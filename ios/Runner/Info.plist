@@ -48,6 +48,10 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Utiliser une image comme photos de profil</string>
+	<string>A definir dans le Info plist</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>A definir dans le Info plist</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>A definir dans le Info plist</string>
 </dict>
 </plist>
