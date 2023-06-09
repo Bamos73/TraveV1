@@ -1,487 +1,502 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:shopapp/authentification/user_add_livraison_address.dart';
+import 'package:shopapp/components/default_button.dart';
+import 'package:shopapp/constants.dart';
+import 'package:shopapp/size_config.dart';
+import 'package:flutter_map/plugin_api.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 
-
-class HomeHeader extends StatefulWidget {
-  const HomeHeader({
-    super.key,
-  });
+class NewAdresse extends StatefulWidget {
+  const NewAdresse({Key? key}) : super(key: key);
+  static String routeName = "address/components";
 
   @override
-  State<HomeHeader> createState() => _HomeHeaderState();
+  State<NewAdresse> createState() => _NewAdresseState();
 }
 
-class _HomeHeaderState extends State<HomeHeader> {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding:  EdgeInsets.symmetric(
-        horizontal: getProportionateScreenWidth(20),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SearchField(),
-          IconBtnWithCounter(
-            svgSrc: "assets/icons/Cart Icon.svg",
-            numOfItems: demoCarts.length, // le nombre de Item a parametrer après
-            press: () =>Navigator.pushNamed(context, CartScreen.routeName),
-          ),
-          IconBtnWithCounter(
-            svgSrc: "assets/icons/Bell.svg",
-            numOfItems: 3, // le nombre de Notification a parametrer après
-            press: () {  },
-          ),
-        ],
-      ),
+class _NewAdresseState extends State<NewAdresse> {
+  final _formKey = GlobalKey<FormState>();
+  final List<String?> errors = [];
+  List<Marker> markers = [];
+
+  final _ctrfirstname = TextEditingController();
+  final _ctrphonenumber = TextEditingController();
+  final _ctrLocalisation = TextEditingController();
+
+  MapController mapController = MapController();
+  Position? _currentPosition;
+  bool ignorePointer =true;
+  LatLng markerPosition = LatLng(5.3517217, -3.9617874);
+  LatLng lastPosition = LatLng(5.3517217, -3.9617874);
+  LatLng CurrentPosition = LatLng(5.3517217, -3.9617874);
+  String _selectedCommune='Abidjan, Coco';
+  bool isLoading = false;
+
+
+  void addError({required String error}) {
+    if (!errors.contains(error)) {
+      setState(() {
+        errors.add(error);
+      });
+    }
+  }
+
+  void removeError({required String error}) {
+    if (errors.contains(error)) {
+      setState(() {
+        errors.remove(error);
+      });
+    }
+  }
+
+
+
+  Future<void> getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Vérifier si le service de localisation est activé
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await Geolocator.openLocationSettings();
+      if (!serviceEnabled) {
+        return;
+      }
+    }
+
+    // Vérifier si l'autorisation de localisation est accordée
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission != LocationPermission.whileInUse &&
+          permission != LocationPermission.always) {
+        showCustomSnackBar(context, "Autorisation de localisation non approuvée", ContentType.warning);
+        return;
+      }
+    }
+
+    // Obtenir la localisation de l'utilisateur
+    _currentPosition = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.best,
     );
-  }
-}
 
-
-
-class Product {
-  final int id;
-  final String title, description;
-  final List<String> images;
-  final List<Color> colors;
-  final double rating, price;
-  final bool isFavourite, isPopular;
-
-  Product({
-    required this.id,
-    required this.images,
-    required this.colors,
-    this.rating = 0.0,
-    this.isFavourite = false,
-    this.isPopular = false,
-    required this.title,
-    required this.price,
-    required this.description,
-  });
-}
-
-List<Product> demoProducts = [
-  Product(
-    id: 1,
-    images: [
-      "assets/images/Image Popular Product 1.png",
-    ],
-    colors: [
-      Color(0xFFF6625E),
-      Color(0xFF836DB8),
-      Color(0xFFDECB9C),
-      Colors.white,
-    ],
-    title: "Wireles Controller for PS4™",
-    price: 10000,
-    description: description,
-    rating: 4.8,
-    isFavourite: true,
-    isPopular: false,
-
-  ),
-  Product(
-    id: 2,
-    images: [
-      "assets/images/Image Popular Product LOGO_Png_sans_fond.png",
-    ],
-    colors: [
-      Color(0xFFF6625E),
-      Color(0xFF836DB8),
-      Color(0xFFDECB9C),
-      Colors.white,
-    ],
-    title: "Sac a main",
-    price: 8000,
-    description: description,
-    rating: 4.1,
-    isFavourite: true,
-    isPopular: false,
-
-  ),
-  Product(
-    id: 3,
-    images: [
-      "assets/images/Image Popular Product 3.png",
-      "assets/images/Image Popular Product 1.png",
-      "assets/images/Image Popular Product LOGO_Png_sans_fond.png",
-      "assets/images/Image Popular Product 3.png",
-    ],
-    colors: [
-      Color(0xFFF6625E),
-      Color(0xFF836DB8),
-      Color(0xFFDECB9C),
-      Colors.white,
-    ],
-    title: "Gloves XC Omega - Polygon",
-    price: 7000,
-    description: description,
-    rating: 4.1,
-    isFavourite: false,
-    isPopular: true,
-
-  ),
-  Product(
-    id: 4,
-    images: [
-      "assets/images/wireless headset.png",
-    ],
-    colors: [
-      Color(0xFFF6625E),
-      Color(0xFF836DB8),
-      Color(0xFFDECB9C),
-      Colors.white,
-    ],
-    title: "Logitech Head",
-    price: 100000,
-    description: description,
-    rating: 4.1,
-    isFavourite: false,
-    isPopular: true,
-
-  ),
-];
-
-const String description =
-    "Wireless Controller for PS4™ gives you what you want in your gaming from over precision control your games to sharing …";
-
-
-
-class Cart {
-  final Product product;
-  final int numOfItem;
-
-  Cart({required this.product, required this.numOfItem});
-}
-
-// Demo data for our cart
-
-List<Cart> demoCarts = [
-  Cart(product: demoProducts[0], numOfItem: 2),
-  Cart(product: demoProducts[1], numOfItem: 1),
-  Cart(product: demoProducts[3], numOfItem: 1),
-];
-
-
-
-class SearchField extends StatelessWidget {
-  const SearchField({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: SizeConfig.screenWidth * 0.6,
-      decoration: BoxDecoration(
-        color: kSecondaryColor.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: TextField(
-        onChanged: (value) {
-        },
-        decoration: InputDecoration(
-          enabledBorder: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          hintText: "Search Product",
-          prefixIcon: Icon(Icons.search,color: kPrimaryColor),
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: getProportionateScreenWidth(20),
-            vertical: getProportionateScreenWidth(9),
-          ),
-        ),
-      ),
+    // Récupérer l'adresse à partir des coordonnées
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+      _currentPosition?.latitude ?? 5.3517217,
+      _currentPosition?.longitude ?? -3.9617874,
     );
+
+    if (placemarks.isNotEmpty) {
+      setState(() {
+        Placemark placemark = placemarks.last;
+        _selectedCommune = placemark.locality.toString() + " "+placemark.subLocality.toString() ;
+        _ctrLocalisation.text = _selectedCommune;
+        print('Commune ${_selectedCommune}');
+        _currentPosition = _currentPosition;
+        ignorePointer;
+        CurrentPosition = LatLng(_currentPosition?.latitude ?? 5.3517217, _currentPosition?.longitude ?? -3.9617874);
+      });
+    }
   }
-}
 
-const kPrimaryColor = Color(0xFF0FADFF);
-// 0xFF48B82C  vert
-// 0xFF0FADFF bleu
-const kPrimaryLightColor = Color(0xFFFFECDF);
-const kPrimaryGradientColor = LinearGradient(
-  begin: Alignment.topLeft,
-  end: Alignment.bottomRight,
-  colors: [Color(0xFFFFA53E), Color(0xFFFF7643)],
-);
-
-const kSecondaryGradientColor = LinearGradient(
-  begin: Alignment.centerLeft,
-  end: Alignment.centerRight,
-  colors: [Color(0xFFF13B3B), Color(0xFFF8ACAC)],
-);
-
-
-const kSecondaryColor = Color(0xFF979797);
-// 0xFF979797
-const kTextColor = Color(0xFF757575);
-
-const kAnimationDuration = Duration(milliseconds: 200);
-
-final headingStyle = TextStyle(
-  fontSize: getProportionateScreenWidth(28),
-  fontWeight: FontWeight.bold,
-  color: Colors.black,
-  height: 1.5,
-);
-
-final RegExp emailValidatorRegExp =
-RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-const String kEmailNullError = "Please Enter your email";
-const String kInvalidEmailError = "Please Enter Valid Email";
-const String kPassNullError = "Please Enter your password";
-const String kShortPassError = "Password is too short";
-const String kMatchPassError = "Passwords don't match";
-const String kNamelNullError = "Please Enter your name";
-const String kPhoneNumberNullError = "Please Enter your phone number";
-const String kAddressNullError = "Please Enter your address";
-
-final otpInputDecoration = InputDecoration(
-  contentPadding: EdgeInsets.symmetric(vertical: getProportionateScreenWidth(15)),
-  enabledBorder:
-  outlineInputBorder(),
-  focusedBorder: outlineInputBorder(),
-  border: outlineInputBorder(),
-);
-
-OutlineInputBorder outlineInputBorder() {
-  return OutlineInputBorder(
-    borderRadius: BorderRadius.circular(15),
-    borderSide: BorderSide(color: kPrimaryColor,),
-  );
-}
-
-class IconBtnWithCounter extends StatefulWidget {
-  const IconBtnWithCounter({
-    super.key,
-    required this.svgSrc,
-    this.numOfItems =0,
-    required this.press,
-  });
-
-  final String svgSrc;
-  final int numOfItems;
-  final GestureTapCallback press;
 
   @override
-  State<IconBtnWithCounter> createState() => _IconBtnWithCounterState();
-}
+  void initState() {
+    super.initState();
+    getCurrentLocation();
 
-class _IconBtnWithCounterState extends State<IconBtnWithCounter> {
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: widget.press,
-      borderRadius: BorderRadius.circular(50),
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Container(
-              padding: EdgeInsets.all(getProportionateScreenWidth(12)) ,
-              height: 46,
-              width:46,
-              decoration: BoxDecoration(
-                color: kSecondaryColor.withOpacity(0.1),
-                shape: BoxShape.circle,
-              ),
-              child: SvgPicture.asset(widget.svgSrc)
-          ),
-          if (widget.numOfItems != 0)
-            Positioned(
-              top: -3,
-              right: 0,
-              child: Container(
-                height: getProportionateScreenWidth(16),
-                width: getProportionateScreenHeight(16),
-                decoration: BoxDecoration(
-                  color: Color(0xFFFF4848),
-                  shape: BoxShape.circle,
-                  border: Border.all(width: 1.5, color: Colors.white),
-                ),
-                child: Center(
-                  child: Text("${widget.numOfItems}",
-                    style: TextStyle(
-                      fontSize: getProportionateScreenWidth(10),
-                      height: 1,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
-        ],
-      ),
-    );
   }
-}
 
-
-class SizeConfig {
-  static late MediaQueryData _mediaQueryData;
-  static late double screenWidth;
-  static late double screenHeight;
-  static late double defaultSize;
-  static late Orientation orientation;
-
-  void init(BuildContext context) {
-    _mediaQueryData = MediaQuery.of(context);
-    screenWidth = _mediaQueryData.size.width;
-    screenHeight = _mediaQueryData.size.height;
-    orientation = _mediaQueryData.orientation;
-  }
-}
-
-// Get the proportionate height as per screen size
-double getProportionateScreenHeight(double inputHeight) {
-  double screenHeight = SizeConfig.screenHeight;
-  // 812 is the layout height that designer use
-  return (inputHeight / 812.0) * screenHeight;
-}
-
-// Get the proportionate height as per screen size
-double getProportionateScreenWidth(double inputWidth) {
-  double screenWidth = SizeConfig.screenWidth;
-  // 375 is the layout width that designer use
-  return (inputWidth / 375.0) * screenWidth;
-}
-
-
-class CartScreen extends StatefulWidget {
-  const CartScreen({Key? key}) : super(key: key);
-  static String routeName="/cart";
-
-  @override
-  State<CartScreen> createState() => _CartScreenState();
-}
-class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(context),
-      body: Padding(
-        padding:EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
-        child: ListView.builder(
-          itemCount: demoCarts.length,
-          itemBuilder: (context, index) => Padding(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            child: Dismissible(
-              key: Key(demoCarts[index].product.id.toString()),
-              direction: DismissDirection.endToStart,
-              background: Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                    gradient: kSecondaryGradientColor,
-                    borderRadius: BorderRadius.circular(15)
+      backgroundColor: const Color(0xFFF5F6F9),
+      appBar: AppBar(
+        title: Text(
+          "NOUVELLE ADRESSE DE LIVRAISON",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: getProportionateScreenWidth(15),
+            color: Colors.black,
+          ),
+        ),
+        centerTitle: true,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: const Icon(Icons.arrow_back_ios, weight: 100),
+        ),
+      ),
+      body: Stack(
+        clipBehavior: Clip.none,
+        fit: StackFit.expand,
+        children: [
+          Container(
+            height: getProportionateScreenHeight(340),
+            width: double.infinity,
+            child:  IgnorePointer(
+              ignoring: ignorePointer,
+              child: FlutterMap(
+                mapController: mapController,
+                options: MapOptions(
+                  center: CurrentPosition,
+                  maxZoom: 25,
+                  zoom: 18,
+                  interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
+                  onPositionChanged: (position, hasGesture) {
+                    updateLocation(LatLng(position.center!.latitude, position.center!.longitude));
+                  },
+
+
                 ),
-                child: Row(
+                children: <Widget>[
+                  TileLayer(
+                    urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    subdomains: ['a', 'b', 'c'],
+                  ),
+                  MarkerLayer(
+                    markers: [
+                      Marker(
+                        width: 80,
+                        height: 80,
+                        point:CurrentPosition,
+                        builder: (ctx) =>
+                            Container(
+                              child: Icon(
+                                Icons.location_on, color: kPrimaryColor,size: getProportionateScreenWidth(15),),
+                            ),
+                      )
+                    ],
+                  ),
+                  MarkerClusterLayerWidget(
+                    options: MarkerClusterLayerOptions(
+                      maxClusterRadius: 45,
+                      size:const Size(40, 40),
+                      anchor: AnchorPos.align(AnchorAlign.center),
+                      fitBoundsOptions: const FitBoundsOptions(
+                        padding: EdgeInsets.all(50),
+                        maxZoom: 15,
+                      ),
+                      markers: markers,
+                      builder: (context, markers) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.blue,
+                          ),
+                          child: Text(
+                            markers.length.toString(),
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        );
+                      },
+
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeInOut,
+            top: MediaQuery.of(context).viewInsets.bottom > 0
+                ? getProportionateScreenHeight(140)
+                : (ignorePointer
+                ?getProportionateScreenHeight(300)
+                :  getProportionateScreenHeight(510)),
+            child: Container(
+              width: getProportionateScreenWidth(375),
+              height: getProportionateScreenHeight(500),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(50),
+                  topRight: Radius.circular(50),
+                ),
+              ),
+              child: SingleChildScrollView(
+                child: Column(
                   children: [
-                    Spacer(),
-                    SvgPicture.asset("assets/icons/Trash.svg")
+                    SizedBox(height: getProportionateScreenHeight(10)),
+                    Text(
+                      'ADRESSE',
+                      style: TextStyle(
+                          color: kPrimaryColor,
+                          fontSize: getProportionateScreenWidth(16)),
+                    ),
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          SizedBox(height: getProportionateScreenWidth(20)),
+                          if (isLoading)
+                            buildLocalisation()
+                          else buildLocalisation2(),
+                          SizedBox(height: getProportionateScreenWidth(30)),
+                          buildFirstName(),
+                          SizedBox(height: getProportionateScreenWidth(30)),
+                          buildNumber(),
+                          SizedBox(height: getProportionateScreenWidth(30)),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
-              onDismissed:(direction) {
-                demoCarts.removeAt(index);
-              },
-              child: CartItemCard(cart: demoCarts[index]),
             ),
           ),
-
-        ),
-      ),
-    );
-  }
-
-  AppBar buildAppBar(BuildContext context) {
-    return AppBar(
-      title: Column(
-        children: [
-          Text("Your Cart",
-            style: TextStyle(
-              color:Colors.black,
-            ),
-          ),
-          Text("${demoCarts.length} items",style: Theme.of(context).textTheme.caption,)
         ],
       ),
-      centerTitle: true,
+      bottomNavigationBar: Container(
+        color: Colors.white,
+        child: Padding(
+          padding: EdgeInsets.only(
+            top: getProportionateScreenHeight(10),
+            left: getProportionateScreenWidth(80),
+            right: getProportionateScreenWidth(80),
+            bottom: getProportionateScreenHeight(10),
+          ),
+          child: DefaultButton(
+            text: "AJOUTER UNE ADRESSE",
+            press: () {
+              if (_formKey.currentState!.validate()) {
+                final user = UserAuth(
+                    nom: _ctrfirstname.text.trim(),
+                    phonenumber: _ctrphonenumber.text.trim(),
+                    commune: _ctrLocalisation.text.trim()
+                );
+                addUser(user);
+                _ctrfirstname.text = '';
+                _ctrphonenumber.text = '';
+                Navigator.pop(context);
+                setState(() {
+
+                });
+              }
+            },
+          ),
+        ),
+      ),
     );
   }
-}
 
-
-
-
-class CartItemCard extends StatelessWidget {
-  const CartItemCard({
-    super.key, required this.cart,
-  });
-  final Cart cart;
-  @override
-  Widget build(BuildContext context) {
-    return Row(
+  Stack buildLocalisation() {
+    return Stack(
       children: [
-        SizedBox(
-          width: getProportionateScreenWidth(88),
-          child: AspectRatio(aspectRatio: 0.88,
-            child: Container(
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Color(0xFFF5F6F9),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              //*****************************Pour l'image de l'article *************************
-              child:Image.asset(cart.product.images[0]) ,
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(30)),
+          child: TextFormField(
+            controller: _ctrLocalisation,
+            enabled: !ignorePointer,
+            onChanged: (value) {
+              if (value.isNotEmpty) {
+                removeError(error: kNamelNullError);
+              } else {
+                addError(error: kNamelNullError);
+              }
+            },
+            validator: (value) {
+              if (value!.isEmpty) {
+                addError(error: kNamelNullError);
+                return "";
+              }
+              return null;
+            },
+            decoration: InputDecoration(
+              labelText: "Votre localisation",
+              floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
           ),
         ),
-        SizedBox(width: getProportionateScreenWidth(20)),
-        //*****************************Pour le titre de l'article **************************
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(cart.product.title,
+        Positioned(
+          left: getProportionateScreenWidth(280),
+          top: getProportionateScreenHeight(20),
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                ignorePointer = !ignorePointer;
+              });
+            },
+            child: Text(
+              ignorePointer ?  "Modifier" : "Valider",
               style: TextStyle(
-                fontSize: 16,
-                color: Colors.black,
+                color: Colors.red,
+                fontSize: getProportionateScreenWidth(14),
               ),
             ),
-            const SizedBox(height: 10,),
-            //*****************************Pour le prix de l'article **************************
-            Text.rich(
-              TextSpan(
-                  text: "${cart.product.price.toInt()} FCFA",
-                  style: TextStyle(
-                    color: kPrimaryColor,
-                    fontSize: 16,
-                  ),
-                  children: [
-                    TextSpan(text: " x ${cart.numOfItem}",
-                      style: TextStyle(
-                        color: kTextColor,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ]
-              ),
-            ),
-          ],
-        )
+          ),
+        ),
+
       ],
     );
   }
+
+  Stack buildLocalisation2() {
+    return Stack(
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(30)),
+          child: TextFormField(
+            controller: _ctrLocalisation,
+            enabled: !ignorePointer,
+            onChanged: (value) {
+              if (value.isNotEmpty) {
+                removeError(error: kNamelNullError);
+              } else {
+                addError(error: kNamelNullError);
+              }
+            },
+            validator: (value) {
+              if (value!.isEmpty) {
+                addError(error: kNamelNullError);
+                return "";
+              }
+              return null;
+            },
+            decoration: InputDecoration(
+              labelText: "Votre localisation",
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+            ),
+          ),
+        ),
+        Positioned(
+          left: getProportionateScreenWidth(280),
+          top: getProportionateScreenHeight(20),
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                ignorePointer = !ignorePointer;
+              });
+            },
+            child: Text(
+              ignorePointer ?  "Modifier" : "Valider",
+              style: TextStyle(
+                color: kPrimaryColor,
+                fontSize: getProportionateScreenWidth(14),
+              ),
+            ),
+          ),
+        ),
+
+      ],
+    );
+  }
+
+
+  Padding buildFirstName() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(30)),
+      child: TextFormField(
+        controller: _ctrfirstname,
+        onChanged: (value) {
+          if (value.isNotEmpty) {
+            removeError(error: kNamelNullError);
+          } else {
+            addError(error: kNamelNullError);
+          }
+        },
+        validator: (value) {
+          if (value!.isEmpty) {
+            addError(error: kNamelNullError);
+            return "";
+          }
+          return null;
+        },
+        decoration: const InputDecoration(
+          labelText: "Nom et prénom",
+          hintText: "Entrer votre nom",
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          suffixIcon: Icon(Icons.person_pin_circle,color: kPrimaryColor,),
+        ),
+      ),
+    );
+  }
+
+
+
+  Padding buildNumber() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(30)),
+      child: TextFormField(
+        controller: _ctrphonenumber,
+        keyboardType: TextInputType.number,
+        onChanged: (value) {
+          if (value.isNotEmpty) {
+            removeError(error: kPhoneNumberNullError);
+          } else {
+            addError(error: kPhoneNumberNullError);
+          }
+        },
+        validator: (value) {
+          if (value!.isEmpty) {
+            addError(error: kPhoneNumberNullError);
+            return "";
+          }
+          return null;
+        },
+        decoration: const InputDecoration(
+          labelText: "Numéro",
+          hintText: "Entrer votre numéro de téléphone",
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          suffixIcon: Icon(Icons.call,color: kPrimaryColor,),
+        ),
+      ),
+    );
+  }
+  void showCustomSnackBar(BuildContext context, String message,
+      ContentType contentType) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.fixed,
+        backgroundColor: Color(0x00FFFFFF),
+        elevation: 0,
+        content: AwesomeSnackbarContent(
+          title: 'Ohh Ohh!!',
+          message: message,
+          contentType: contentType,
+          messageFontSize: getProportionateScreenWidth(15),
+        ),
+      ),
+    );
+  }
+
+  void updateLocation(LatLng position) async {
+    if (mounted) {
+      setState(() {
+        CurrentPosition = position;
+        isLoading = true; // Activer l'animation de chargement
+      });
+    }
+
+    // Vérifier si la position a changé
+    if (position != lastPosition) {
+      lastPosition = position;
+
+      // Récupérer l'adresse à partir des nouvelles coordonnées
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        CurrentPosition.latitude,
+        CurrentPosition.longitude,
+      );
+
+      if (placemarks.isNotEmpty) {
+        Placemark placemark = placemarks.last;
+        String selectedCommune = placemark.locality.toString() + "," + placemark.subLocality.toString();
+
+        setState(() {
+          _selectedCommune = selectedCommune;
+          _ctrLocalisation.text = _selectedCommune;
+          isLoading = false; // Désactiver l'animation de chargement
+        });
+      }
+    }
+  }
+
 }
-
-
-
-
-
-
-
-
-
-

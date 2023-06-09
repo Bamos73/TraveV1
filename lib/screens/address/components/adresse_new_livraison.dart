@@ -154,7 +154,6 @@ class _NewAdresseState extends State<NewAdresse> {
                     updateLocation(LatLng(position.center!.latitude, position.center!.longitude));
                   },
 
-
                 ),
                 children: <Widget>[
                   TileLayer(
@@ -499,8 +498,4 @@ class _NewAdresseState extends State<NewAdresse> {
     }
   }
 
-
-
-
 }
-
