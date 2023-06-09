@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.0"
+  animated_stack_widget:
+    dependency: transitive
+    description:
+      name: animated_stack_widget
+      sha256: ce4788dd158768c9d4388354b6fb72600b78e041a37afc4c279c63ecafcb9408
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.4"
   animated_theme_switcher:
     dependency: "direct main"
     description:
@@ -342,14 +350,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_animator:
-    dependency: "direct main"
-    description:
-      name: flutter_animator
-      sha256: e020529278d891ece0c420bc2f8801c38160b2fc69c377a0c9a5bec2596fd7af
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.2.2"
   flutter_facebook_auth:
     dependency: "direct main"
     description:
@@ -395,6 +395,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
+  flutter_map_marker_cluster:
+    dependency: "direct main"
+    description:
+      name: flutter_map_marker_cluster
+      sha256: "362088b16311b6743a7930857129ec6c7c807ecca777fe1033c0ad6688339e36"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
+  flutter_map_marker_popup:
+    dependency: transitive
+    description:
+      name: flutter_map_marker_popup
+      sha256: "7cf30fab25ffe1ba04a9e0fbe1227f44a83c73256d4d70be1c26cf141ce5c41d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.0"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -633,10 +649,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_android
-      sha256: "3083c3a3245adf9f3eb7bacf0eaa6a1f087dd538fab73a13a2f7907602601692"
+      sha256: "1ec6830289f5b6aeff3aa8239ea737c71950178dda389342dc2215adb06b4bd8"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.6+19"
+    version: "0.8.6+20"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -657,10 +673,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_platform_interface
-      sha256: "57e66df4d3850fae4c9e45b3ac4c53cda0e35fe8a833914d3502d2faa0b48597"
+      sha256: fa04ce0917536f478c34a9febc3a49fca5466dfe3e04892119aec08fe87029a1
       url: "https://pub.dev"
     source: hosted
-    version: "2.6.4"
+    version: "2.7.0"
   intl:
     dependency: transitive
     description:

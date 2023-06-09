@@ -91,6 +91,6 @@ class Config {
   static final secretkey_twitter ="Mr7DhA7BQfskqeQvZVAZbkkFmvpPEbeugIR8mJuEJmQ9vGEdkd";
 }
 
-const String MapBoxToken = 'pk.eyJ1IjoidHJhdmVhcHAiLCJhIjoiY2xpbXdlOXk4MGloOTNxcXJjd3dlMjcyeiJ9._rTseXD442UKgZfsMQZZCQ';
+const String MapBoxToken = 'pk.eyJ1IjoidHJhdmVhcHAiLCJhIjoiY2xpb285YmN3MGFvdjNlbzFlM2IxdWM1NCJ9.sPOpAb5of3ovAKlTlHWbOw';
 const String MapBoxId ='mapbox.mapbox-streets-v8';
 const String MapBoxUrlTemplate ='https://api.mapbox.com/styles/v1/traveapp/climwptmh00lc01r17h234fjo/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoidHJhdmVhcHAiLCJhIjoiY2xpbXdlOXk4MGloOTNxcXJjd3dlMjcyeiJ9._rTseXD442UKgZfsMQZZCQ';

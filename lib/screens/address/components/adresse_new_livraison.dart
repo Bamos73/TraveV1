@@ -1,11 +1,10 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:flutter_animator/flutter_animator.dart';
 import 'package:shopapp/authentification/user_add_livraison_address.dart';
 import 'package:shopapp/components/default_button.dart';
-import 'package:shopapp/components/form_error.dart';
 import 'package:shopapp/constants.dart';
 import 'package:shopapp/size_config.dart';
 import 'package:flutter_map/plugin_api.dart';
@@ -24,14 +23,21 @@ class NewAdresse extends StatefulWidget {
 class _NewAdresseState extends State<NewAdresse> {
   final _formKey = GlobalKey<FormState>();
   final List<String?> errors = [];
-  MapController mapController = MapController();
-  Position? _currentPosition;
+  List<Marker> markers = [];
+
   final _ctrfirstname = TextEditingController();
   final _ctrphonenumber = TextEditingController();
   final _ctrLocalisation = TextEditingController();
-  bool ignorePointer =true;
 
-  String _selectedCommune='Abidjan, Cocody';
+  MapController mapController = MapController();
+  Position? _currentPosition;
+  bool ignorePointer =true;
+  LatLng markerPosition = LatLng(5.3517217, -3.9617874);
+  LatLng lastPosition = LatLng(5.3517217, -3.9617874);
+  LatLng CurrentPosition = LatLng(5.3517217, -3.9617874);
+  String _selectedCommune='Abidjan, Coco';
+  bool isLoading = false;
+
 
   void addError({required String error}) {
     if (!errors.contains(error)) {
@@ -89,10 +95,12 @@ class _NewAdresseState extends State<NewAdresse> {
     if (placemarks.isNotEmpty) {
       setState(() {
         Placemark placemark = placemarks.last;
-        _selectedCommune = placemark.locality.toString() + ","+placemark.subLocality.toString() ;
+        _selectedCommune = placemark.locality.toString() + " "+placemark.subLocality.toString() ;
         _ctrLocalisation.text = _selectedCommune;
+        print('Commune ${_selectedCommune}');
         _currentPosition = _currentPosition;
         ignorePointer;
+        CurrentPosition = LatLng(_currentPosition?.latitude ?? 5.3517217, _currentPosition?.longitude ?? -3.9617874);
       });
     }
   }
@@ -131,64 +139,70 @@ class _NewAdresseState extends State<NewAdresse> {
         fit: StackFit.expand,
         children: [
           Container(
-          height: getProportionateScreenHeight(340),
-          width: double.infinity,
-          child: StreamBuilder<Position>(
-              stream: Geolocator.getPositionStream(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  // Mise à jour de la position de la carte
-                  mapController.move(
-                    LatLng(
-                      snapshot.data!.latitude,
-                      snapshot.data!.longitude,
-                    ),
-                    mapController.zoom,
-                  );
-                }
-              return IgnorePointer(
-                ignoring: ignorePointer,
-                child: FlutterMap(
-                  mapController: mapController,
-                  options: MapOptions(
-                    center: LatLng(
-                      _currentPosition?.latitude ?? 5.3517217,
-                      _currentPosition?.longitude ?? -3.9617874,
-                    ),
-                    maxZoom: 25,
-                    zoom: 18,
-                  ),
-                  children: [
-                    TileLayer(
-                      urlTemplate: MapBoxUrlTemplate,
-                      userAgentPackageName: 'com.example.shopapp',
-                      additionalOptions: {
-                        'accessToken': MapBoxToken,
-                        'id': MapBoxId,
-                      },
-                    ),
-                    MarkerLayer(
-                      markers: [
-                        Marker(
-                          width: 80,
-                          height: 80,
-                          point: LatLng(
-                            _currentPosition?.latitude ?? 5.3517217,
-                            _currentPosition?.longitude ?? -3.9617874,
-                          ),
-                          builder: (ctx) =>
-                              Container(
-                                child: Icon(
-                                    Icons.location_on, color: kPrimaryColor),
-                              ),
-                        )
-                      ],
-                    )
-                  ],
+            height: getProportionateScreenHeight(340),
+            width: double.infinity,
+            child:  IgnorePointer(
+              ignoring: ignorePointer,
+              child: FlutterMap(
+                mapController: mapController,
+                options: MapOptions(
+                  center: CurrentPosition,
+                  maxZoom: 25,
+                  zoom: 18,
+                  interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
+                  onPositionChanged: (position, hasGesture) {
+                    updateLocation(LatLng(position.center!.latitude, position.center!.longitude));
+                  },
+
+
                 ),
-              );
-            }
-            )
+                children: <Widget>[
+                  TileLayer(
+                    urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    subdomains: ['a', 'b', 'c'],
+                  ),
+                  MarkerLayer(
+                    markers: [
+                      Marker(
+                        width: 80,
+                        height: 80,
+                        point:CurrentPosition,
+                        builder: (ctx) =>
+                            Container(
+                              child: Icon(
+                                Icons.location_on, color: kPrimaryColor,size: getProportionateScreenWidth(15),),
+                            ),
+                      )
+                    ],
+                  ),
+                  MarkerClusterLayerWidget(
+                    options: MarkerClusterLayerOptions(
+                      maxClusterRadius: 45,
+                      size:const Size(40, 40),
+                      anchor: AnchorPos.align(AnchorAlign.center),
+                      fitBoundsOptions: const FitBoundsOptions(
+                        padding: EdgeInsets.all(50),
+                        maxZoom: 15,
+                      ),
+                      markers: markers,
+                      builder: (context, markers) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.blue,
+                          ),
+                          child: Text(
+                            markers.length.toString(),
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        );
+                      },
+
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
           AnimatedPositioned(
             duration: const Duration(milliseconds: 200),
@@ -223,7 +237,9 @@ class _NewAdresseState extends State<NewAdresse> {
                       child: Column(
                         children: [
                           SizedBox(height: getProportionateScreenWidth(20)),
-                          buildLocalisation(),
+                          if (isLoading)
+                            buildLocalisation()
+                          else buildLocalisation2(),
                           SizedBox(height: getProportionateScreenWidth(30)),
                           buildFirstName(),
                           SizedBox(height: getProportionateScreenWidth(30)),
@@ -253,9 +269,9 @@ class _NewAdresseState extends State<NewAdresse> {
             press: () {
               if (_formKey.currentState!.validate()) {
                 final user = UserAuth(
-                  nom: _ctrfirstname.text.trim(),
-                  phonenumber: _ctrphonenumber.text.trim(),
-                  commune: _ctrLocalisation.text.trim()
+                    nom: _ctrfirstname.text.trim(),
+                    phonenumber: _ctrphonenumber.text.trim(),
+                    commune: _ctrLocalisation.text.trim()
                 );
                 addUser(user);
                 _ctrfirstname.text = '';
@@ -273,6 +289,57 @@ class _NewAdresseState extends State<NewAdresse> {
   }
 
   Stack buildLocalisation() {
+    return Stack(
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(30)),
+          child: TextFormField(
+            controller: _ctrLocalisation,
+            enabled: !ignorePointer,
+            onChanged: (value) {
+              if (value.isNotEmpty) {
+                removeError(error: kNamelNullError);
+              } else {
+                addError(error: kNamelNullError);
+              }
+            },
+            validator: (value) {
+              if (value!.isEmpty) {
+                addError(error: kNamelNullError);
+                return "";
+              }
+              return null;
+            },
+            decoration: InputDecoration(
+              labelText: "Votre localisation",
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+            ),
+          ),
+        ),
+        Positioned(
+          left: getProportionateScreenWidth(280),
+          top: getProportionateScreenHeight(20),
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                ignorePointer = !ignorePointer;
+              });
+            },
+            child: Text(
+              ignorePointer ?  "Modifier" : "Valider",
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: getProportionateScreenWidth(14),
+              ),
+            ),
+          ),
+        ),
+
+      ],
+    );
+  }
+
+  Stack buildLocalisation2() {
     return Stack(
       children: [
         Padding(
@@ -400,5 +467,40 @@ class _NewAdresseState extends State<NewAdresse> {
       ),
     );
   }
+
+  void updateLocation(LatLng position) async {
+    if (mounted) {
+      setState(() {
+        CurrentPosition = position;
+        isLoading = true; // Activer l'animation de chargement
+      });
+    }
+
+    // Vérifier si la position a changé
+    if (position != lastPosition) {
+      lastPosition = position;
+
+      // Récupérer l'adresse à partir des nouvelles coordonnées
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        CurrentPosition.latitude,
+        CurrentPosition.longitude,
+      );
+
+      if (placemarks.isNotEmpty) {
+        Placemark placemark = placemarks.last;
+        String selectedCommune = placemark.locality.toString() + "," + placemark.subLocality.toString();
+
+        setState(() {
+          _selectedCommune = selectedCommune;
+          _ctrLocalisation.text = _selectedCommune;
+          isLoading = false; // Désactiver l'animation de chargement
+        });
+      }
+    }
+  }
+
+
+
+
 }
 
