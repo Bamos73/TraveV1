@@ -196,7 +196,7 @@ class _NewAdresseState extends State<NewAdresse> {
             top: MediaQuery.of(context).viewInsets.bottom > 0
                 ? getProportionateScreenHeight(140)
                 : (ignorePointer
-                ?getProportionateScreenHeight(330)
+                ?getProportionateScreenHeight(300)
                 :  getProportionateScreenHeight(510)),
             child: Container(
               width: getProportionateScreenWidth(375),
@@ -228,9 +228,6 @@ class _NewAdresseState extends State<NewAdresse> {
                           buildFirstName(),
                           SizedBox(height: getProportionateScreenWidth(30)),
                           buildNumber(),
-                          Padding(padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(30)),
-                            child: FormError(errors: errors),
-                          ),
                           SizedBox(height: getProportionateScreenWidth(30)),
                         ],
                       ),
