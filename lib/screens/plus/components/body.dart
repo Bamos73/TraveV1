@@ -66,11 +66,6 @@ class _BodyState extends State<Body> {
                 Navigator.pushNamed(context, AddressScreen.routeName),
           ),
           ProfilMenu(
-            text: "Notifications",
-            icon: LineAwesomeIcons.bell,
-            press: () {},
-          ),
-          ProfilMenu(
             text: "Politique de confidentialité",
             icon: LineAwesomeIcons.user_shield,
             press: () {

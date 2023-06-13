@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:shopapp/components/default_button.dart';
 import 'package:shopapp/size_config.dart';
 
 class shimmer_box_line extends StatelessWidget {
@@ -398,4 +399,104 @@ class ShimmerNouveaute extends StatelessWidget {
 }
 
 
+class ShimmerPaiementResume extends StatelessWidget {
+  const ShimmerPaiementResume({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Column(
+        children: [
+          SizedBox(height: getProportionateScreenHeight(10)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                height: getProportionateScreenHeight(16),
+                width: getProportionateScreenWidth(100),
+                color: Colors.grey[300],
+              ),
+              Container(
+                height: getProportionateScreenHeight(16),
+                width: getProportionateScreenWidth(60),
+                color: Colors.grey[300],
+              ),
+            ],
+          ),
+          SizedBox(height: getProportionateScreenHeight(10)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                height: getProportionateScreenHeight(16),
+                width: getProportionateScreenWidth(90),
+                color: Colors.grey[300],
+              ),
+              Container(
+                height: getProportionateScreenHeight(16),
+                width: getProportionateScreenWidth(60),
+                color: Colors.grey[300],
+              ),
+            ],
+          ),
+          SizedBox(height: getProportionateScreenHeight(10)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                height: getProportionateScreenHeight(16),
+                width: getProportionateScreenWidth(80),
+                color: Colors.grey[300],
+              ),
+              Container(
+                height: getProportionateScreenHeight(16),
+                width: getProportionateScreenWidth(60),
+                color: Colors.grey[300],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ShimmerPaiementCommande extends StatelessWidget {
+  const ShimmerPaiementCommande({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            children: [
+              Text("Total:"),
+              Container(
+                height: getProportionateScreenHeight(18),
+                width: getProportionateScreenWidth(70),
+                color: Colors.grey[300],
+              ),
+            ],
+          ),
+          SizedBox(
+            width: getProportionateScreenWidth(190),
+            child: DefaultButton(
+                text: "Commande", press: () {}
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 

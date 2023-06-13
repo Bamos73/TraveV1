@@ -14,14 +14,15 @@ class _OTPScreenState extends State<OTPScreen> {
 
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final verificationId = args['verificationId'] as String;
+    final VerificationId = args['verificationId'] as String;
+    final PhoneNumber = args['phoneNumber'] as String;
 
     return Scaffold(
       appBar: AppBar(
         title: Text("OTP Verification"),
         centerTitle: true,
       ),
-      body: Body(verificationId: verificationId,),
+      body: Body(verificationId: VerificationId,phoneNumber:PhoneNumber),
     );
   }
 }

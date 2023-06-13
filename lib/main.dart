@@ -1,4 +1,5 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -11,9 +12,14 @@ import 'package:shopapp/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_performance/firebase_performance.dart';
 
+Future<void> BackgroundMessageHandler(RemoteMessage message) async {
+}
+
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(BackgroundMessageHandler);
   runApp(MyApp());
 }
 FirebasePerformance performance = FirebasePerformance.instance;

@@ -180,6 +180,8 @@ class _OtpFormState extends State<OtpForm> {
     );
   }
 
+
+
   void verifyOTP(String otpCode) async {
     String verificationId = widget.verificationId; // Récupérez l'ID de vérification depuis les paramètres de la classe
 
@@ -196,6 +198,8 @@ class _OtpFormState extends State<OtpForm> {
       showCustomSnackBar("Veuillez saisir le code OTP correct.", ContentType.failure);
     }
   }
+
+
 
 
   void showCustomSnackBar(String message, ContentType Content) {

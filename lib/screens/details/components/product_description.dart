@@ -87,13 +87,38 @@ class ProductDescription extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
+            StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                  .collection('favourite')
+                  .doc(product['code'])
+                  .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<DocumentSnapshot> userSnapshot) {
+                  if (!userSnapshot.hasData) {
+                    return buildNotFavourite() ;
+                  } else if (userSnapshot.connectionState == ConnectionState.waiting) {
+                    return buildNotFavourite() ;
+                  }
+                  else if (!userSnapshot.data!.exists) {
+                    return buildNotFavourite();
+                  }
+              return buildIsFavourite();
+              }
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Container buildIsFavourite() {
+    return Container(
               padding:EdgeInsets.all(getProportionateScreenWidth(10),),
               width: getProportionateScreenWidth(55),
               decoration: BoxDecoration(
-                  color: product['isFavourite']
-                      ? Color(0xFFFFE6E6)
-                      : Color(0xFFF5F6F9),
+                  color: Color(0xFFFFE6E6),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
                     bottomLeft: Radius.circular(20),
@@ -105,15 +130,32 @@ class ProductDescription extends StatelessWidget {
                 },
                 child: Icon(Icons.favorite,
                   size: 25,
-                  color: product['isFavourite']
-                      ? Color(0xFFFF4848)
-                      : Color(0xFFDBDEE4),
+                  color: Color(0xFFFF4848),
                 ),
               ),
-            ),
-          ],
+            );
+  }
+
+  Container buildNotFavourite() {
+    return Container(
+      padding:EdgeInsets.all(getProportionateScreenWidth(10),),
+      width: getProportionateScreenWidth(55),
+      decoration: BoxDecoration(
+        color: Color(0xFFF5F6F9),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          bottomLeft: Radius.circular(20),
         ),
-      ],
+      ),
+      child: GestureDetector(
+        onTap: () {
+          addToFavourite(product);
+        },
+        child: Icon(Icons.favorite,
+          size: 25,
+          color: Color(0xFFDBDEE4),
+        ),
+      ),
     );
   }
 
@@ -132,7 +174,7 @@ class ProductDescription extends StatelessWidget {
 
     final userCardDoc = await userRef.get();
     if (userCardDoc.exists) {
-      final userCardData = userCardDoc.data();
+      await userRef.delete();
     }else{
       await userRef.set({
         'first_Collection': product['first_collection'],

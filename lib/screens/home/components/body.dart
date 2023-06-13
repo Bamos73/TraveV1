@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shopapp/screens/category/category_screen.dart';
 import 'package:shopapp/screens/category_details/details_categorie_screen.dart';
@@ -9,6 +10,7 @@ import 'package:shopapp/screens/home/components/home_header.dart';
 import 'package:shopapp/screens/home/components/products_list.dart';
 import 'package:shopapp/screens/home/components/section_title.dart';
 import 'package:shopapp/screens/home/components/special_offers.dart';
+import 'package:shopapp/service/local_notifications.dart';
 import 'package:shopapp/size_config.dart';
 
 class Body extends StatefulWidget {
@@ -26,6 +28,57 @@ class _BodyState extends State<Body> {
   late Stream<QuerySnapshot<Map<String, dynamic>>> _productsStream3;
   late Stream<QuerySnapshot<Map<String, dynamic>>> _productsStream4;
 
+  String notificationMsg="Wait for notification";
+
+  @override
+  void initState() {
+    super.initState();
+    _productsStream1 =
+        FirebaseFirestore.instance.collection('Home_Collection').doc(
+            "Home_NewCollection_product").collection(
+            'Home_NewCollection_product').snapshots();
+    _productsStream2 =
+        FirebaseFirestore.instance.collection('Home_Collection').doc(
+            "Home_WomanCollection_product").collection(
+            'Home_WomanCollection_product').snapshots();
+    _productsStream3 =
+        FirebaseFirestore.instance.collection('Home_Collection').doc(
+            "Home_MenCollection_product").collection(
+            'Home_MenCollection_product').snapshots();
+    _productsStream4 =
+        FirebaseFirestore.instance.collection('Home_Collection').doc(
+            "Home_AccessoireCollection_product").collection(
+            'Home_AccessoireCollection_product').snapshots();
+
+
+      //lorsque l'appli est fermé
+      FirebaseMessaging.instance.getInitialMessage().then((event) {
+
+        if(event!=null){
+          setState(() {
+            notificationMsg= "${event.notification!.title} ${event.notification!.body} I am coming from terminated";
+          });
+        }
+
+      });
+
+      //lorsque l'appli est en cours
+      FirebaseMessaging.onMessage.listen((event) {
+        LocalNotificationService.showNotificationOnForeground(event);
+        setState(() {
+          notificationMsg= "${event.notification!.title} ${event.notification!.body} I am coming from forground";
+        });
+      });
+       //lorsque l'apli est en arrière plan
+      FirebaseMessaging.onMessageOpenedApp.listen((event) {
+        setState(() {
+          notificationMsg= "${event.notification!.title} ${event.notification!.body} I am coming from background";
+        });
+      });
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -34,8 +87,7 @@ class _BodyState extends State<Body> {
          SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: getProportionateScreenWidth(50),),
-              SizedBox(height: getProportionateScreenWidth(30),),
+              SizedBox(height: getProportionateScreenWidth(80),),
               SectionTitle1(text: "Spécialement pour toi", press: () {},),
               SpecialOffers(),
               SizedBox(height: getProportionateScreenWidth(30),),
@@ -110,24 +162,5 @@ class _BodyState extends State<Body> {
       ),
     );
   }
-  @override
-  void initState() {
-    super.initState();
-    _productsStream1 =
-        FirebaseFirestore.instance.collection('Home_Collection').doc(
-            "Home_NewCollection_product").collection(
-            'Home_NewCollection_product').snapshots();
-    _productsStream2 =
-        FirebaseFirestore.instance.collection('Home_Collection').doc(
-            "Home_WomanCollection_product").collection(
-            'Home_WomanCollection_product').snapshots();
-    _productsStream3 =
-        FirebaseFirestore.instance.collection('Home_Collection').doc(
-            "Home_MenCollection_product").collection(
-            'Home_MenCollection_product').snapshots();
-    _productsStream4 =
-        FirebaseFirestore.instance.collection('Home_Collection').doc(
-            "Home_AccessoireCollection_product").collection(
-            'Home_AccessoireCollection_product').snapshots();
-  }
+
 }

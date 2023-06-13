@@ -99,20 +99,7 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
                           .saveDataToSharedPreferences()
                           .then((value) => sp.setSignIn().then((value) {})));
 
-                      await FirebaseAuth.instance.verifyPhoneNumber(
-                        phoneNumber: '+225${_ctrphonenumber.text.trim()}',
-                        verificationCompleted: (PhoneAuthCredential credential) {},
-                        verificationFailed: (FirebaseAuthException e) {},
-                        codeSent: (String verificationId, int? resendToken) {
-                          Navigator.pushNamed(context, OTPScreen.routeName,
-                              arguments: {
-                            'verificationId': verificationId,
-                          });
-                        },
-                        codeAutoRetrievalTimeout: (String verificationId) {},
-                      );
-
-                      print('+225${_ctrphonenumber.text.trim()}');
+                      sendOTP(_ctrphonenumber.text.trim());
 
                     }
                   }
@@ -151,7 +138,6 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
   TextFormField buildLastNameFormField() {
     return TextFormField(
       controller: _ctrlastname,
-      // onSaved: (newValue) => LastName=newValue!,
       decoration: const InputDecoration(
         labelText: "Nom",
         hintText: "Entrez votre nom",
@@ -219,26 +205,25 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
     );
   }
 
-
   void sendOTP(String phoneNumber) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-
-    await auth.verifyPhoneNumber(
-      phoneNumber: phoneNumber,
-      verificationCompleted: (PhoneAuthCredential credential) async {},
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: '+225$phoneNumber',
+      timeout: Duration(minutes: 2,seconds: 30),
+      verificationCompleted: (PhoneAuthCredential credential) {},
       verificationFailed: (FirebaseAuthException e) {
         showCustomSnackBar("erreur sur le numero fourni.",ContentType.failure);
       },
       codeSent: (String verificationId, int? resendToken) {
-
         Navigator.pushNamed(context, OTPScreen.routeName,
             arguments: {
               'verificationId': verificationId,
+              'phoneNumber':phoneNumber,
             });
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
     );
   }
+
 
   void showCustomSnackBar(String message, ContentType Content) {
     ScaffoldMessenger.of(context as BuildContext).showSnackBar(
@@ -247,7 +232,7 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
         backgroundColor: Color(0x00FFFFFF),
         elevation: 0,
         content: AwesomeSnackbarContent(
-          title: 'Code OTP incorrect',
+          title: 'Numero',
           message: message,
           contentType: Content,
           messageFontSize: getProportionateScreenWidth(15),

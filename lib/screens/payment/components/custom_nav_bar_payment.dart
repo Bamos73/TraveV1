@@ -3,7 +3,9 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:shopapp/components/default_button.dart';
+import 'package:shopapp/components/shimmer_box.dart';
 import 'package:shopapp/constants.dart';
 import 'package:shopapp/screens/payment/components/cart_empty.dart';
 import 'package:shopapp/size_config.dart';
@@ -107,14 +109,14 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
                         builder: (BuildContext context,
                             AsyncSnapshot<DocumentSnapshot> userSnapshot) {
                           if (!userSnapshot.hasData) {
-                            return Container();
+                            return ShimmerPaiementResume();
                           } else if (userSnapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return Container();
+                            return ShimmerPaiementResume();
                           }
                           else if (!userSnapshot.data!.exists ||
                               userSnapshot.data!.get('frais_de_livraison') == null || userSnapshot.data!.get('mode_de_paiement') == null) {
-                            return Container();
+                            return ShimmerPaiementResume();
                           }
 
                           final userModeLivraison = userSnapshot.data?.get(
@@ -127,7 +129,6 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
                               ? userData['code_reduction_actif'] as num? ?? 0
                               : 0;
                           return Column(
-
                             children: [
                               SizedBox(height: getProportionateScreenHeight(10)),
                               Row(
@@ -250,7 +251,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
                         SizedBox(height: getProportionateScreenHeight(10)),
                         AnimatedContainer(
                           height: _showSecondContainer
-                              ?getProportionateScreenHeight(97)
+                              ?getProportionateScreenHeight(105)
                               :getProportionateScreenHeight(0),
                           width: double.infinity,
                           color: Colors.transparent,
@@ -301,14 +302,14 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
                                 builder: (BuildContext context,
                                     AsyncSnapshot<DocumentSnapshot> userSnapshot) {
                                   if (!userSnapshot.hasData) {
-                                    return Container();
+                                    return ShimmerPaiementCommande();
                                   } else if (userSnapshot.connectionState ==
                                       ConnectionState.waiting) {
-                                    return Container();
+                                    return ShimmerPaiementCommande();
                                   }
                                   else if (!userSnapshot.data!.exists ||
                                       userSnapshot.data!.get('frais_de_livraison') == null || userSnapshot.data!.get('mode_de_paiement') == null) {
-                                    return Container();
+                                    return ShimmerPaiementCommande();
                                   }
 
                                   final userModeLivraison = userSnapshot.data?.get(
@@ -322,34 +323,34 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
                                       : 0;
 
                                return Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text.rich(
-                                      TextSpan(
-                                        text: "Total:\n",
-                                        children: [
-                                          TextSpan(
-                                            text: "${userModeLivraison + total - userReduction} FCFA",
-                                            style: TextStyle(
-                                              fontSize: getProportionateScreenWidth(16),
-                                              color: Colors.black,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: getProportionateScreenWidth(190),
-                                      child: DefaultButton(
-                                          text: "Commande", press: () {
-                                          num totalCmd=userModeLivraison + total - userReduction;
-                                          verificationOrder(context, totalCmd );
-                                          nextScreenReplace(context, EmptyCart());
-                                      }
-                                      ),
-                                    )
-                                ],
-                              );
+                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                 children: [
+                                   Text.rich(
+                                     TextSpan(
+                                       text: "Total:\n",
+                                       children: [
+                                         TextSpan(
+                                           text: "${userModeLivraison + total - userReduction} FCFA",
+                                           style: TextStyle(
+                                             fontSize: getProportionateScreenWidth(16),
+                                             color: Colors.black,
+                                           ),
+                                         )
+                                       ],
+                                     ),
+                                   ),
+                                   SizedBox(
+                                     width: getProportionateScreenWidth(190),
+                                     child: DefaultButton(
+                                         text: "Commande", press: () {
+                                       num totalCmd=userModeLivraison + total - userReduction;
+                                       verificationOrder(context, totalCmd );
+                                       nextScreenReplace(context, EmptyCart());
+                                     }
+                                     ),
+                                   )
+                                 ],
+                               );
                               },
                               );
                               },
@@ -361,8 +362,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
                       ],
                     ),
                   ),
-
-          ]
+          ],
         ),
       ],
     );
@@ -370,14 +370,14 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
 
   }
 
-  void ReductQuantite(String Code_commande) async {
+  void ReductQuantite(String codeCommande) async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
 
     final userOrderCardRef = FirebaseFirestore.instance
         .collection('Order')
         .doc(userId)
-        .collection(Code_commande)
-        .doc(Code_commande)
+        .collection(codeCommande)
+        .doc(codeCommande)
         .collection('Articles');
 
     final userOrderHistoryQuerySnapshot = await userOrderCardRef.get();
@@ -415,7 +415,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
 
 
 
-  void AddOrderUserHistory(String Code_commande, num montant) async {
+  void AddOrderUserHistory(String codeCommande, num montant) async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId == null) {
       print("Utilisateur non connecté.");
@@ -426,7 +426,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
         .collection('users')
         .doc(userId)
         .collection('commande')
-        .doc(Code_commande);
+        .doc(codeCommande);
 
     final userRef = await FirebaseFirestore.instance
         .collection('users')
@@ -437,14 +437,14 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
         .collection('users')
         .doc(userId)
         .collection('commande')
-        .doc(Code_commande)
-        .collection(Code_commande);
+        .doc(codeCommande)
+        .collection(codeCommande);
 
     final userOrderCardRef = FirebaseFirestore.instance
         .collection('Order')
         .doc(userId)
-        .collection(Code_commande)
-        .doc(Code_commande)
+        .collection(codeCommande)
+        .doc(codeCommande)
         .collection('Articles');
 
     final userOrderHistoryQuerySnapshot = await userOrderCardRef.get();
@@ -462,7 +462,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
           final userData=  userRef.data();
 
           transaction.set(userHistoryRef, {
-            'code_commande': Code_commande,
+            'code_commande': codeCommande,
             'date': FieldValue.serverTimestamp(),
             'statut': 'en Cours',
             'montant': montant,
@@ -514,7 +514,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
 
 
 
-  void verificationOrder(BuildContext context,num total_commande) async {
+  void verificationOrder(BuildContext context,num totalCommande) async {
     try {
       final userId = FirebaseAuth.instance.currentUser?.uid;
       if (userId == null) {
@@ -565,13 +565,13 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
             .get();
 
         if (promoCodeData.exists && promoCodeData['montant'] == userData['code_reduction_actif']) {
-          addOrderWithCodePromo(context,total_commande);
+          addOrderWithCodePromo(context,totalCommande);
 
         } else {
           showCustomSnackBar(context, "Erreur sur la valeur du bon de réduction, veuillez utiliser un autre bon de réduction", ContentType.failure);
         }
       } else {
-        addOrderWithOutCodePromo(context,total_commande);
+        addOrderWithOutCodePromo(context,totalCommande);
       }
     } catch (e) {
       print(e);
@@ -616,7 +616,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
   }
 
 
-  void addOrderWithCodePromo(BuildContext context,num total_commande) async {
+  void addOrderWithCodePromo(BuildContext context,num totalCommande) async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
 
     if (userId != null) {
@@ -651,7 +651,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
           'reduction': userData['code_reduction_actif'],
           'mode_de_paiement': userData['mode_de_paiement'],
           'date_de_commande': FieldValue.serverTimestamp(),
-          'total_commande': total_commande,
+          'total_commande': totalCommande,
         });
 
         // Copier les documents de la sous-collection "Card" vers la sous-collection "Order"
@@ -661,7 +661,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
         }
 
         //Ajouter le resumé de la commande dans la collection "users"
-        AddOrderUserHistory(orderNumber,total_commande);
+        AddOrderUserHistory(orderNumber,totalCommande);
         ReductQuantite(orderNumber);
 
 
@@ -709,7 +709,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
     }
   }
 
-  void addOrderWithOutCodePromo(BuildContext context,num total_commande) async {
+  void addOrderWithOutCodePromo(BuildContext context,num totalCommande) async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
 
     if (userId != null) {
@@ -744,7 +744,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
           'reduction': 0,
           'mode_de_paiement': userData['mode_de_paiement'],
           'date_de_commande': FieldValue.serverTimestamp(),
-          'total_commande': total_commande,
+          'total_commande': totalCommande,
         });
 
         // Copier les documents de la sous-collection "Card" vers la sous-collection "Order"
@@ -754,7 +754,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
         }
 
         //Ajouter le resumé de la commande dans la collection "users"
-        AddOrderUserHistory(orderNumber,total_commande);
+        AddOrderUserHistory(orderNumber,totalCommande);
         ReductQuantite(orderNumber);
 
         // Supprimer la sous-collection dans card

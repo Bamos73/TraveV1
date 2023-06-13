@@ -232,8 +232,10 @@ class _BodyState extends State<Body> {
 
       _ctrfirstname.text = name;
       _ctremail.text = email;
-      _ctrphonenumber.text = phoneNumber;
-      _ctradresse.text = address;
+      if (data['Phonenumber'] != null){
+        _ctrphonenumber.text = phoneNumber;
+        _ctradresse.text = address;
+      }
 
     }
   }
