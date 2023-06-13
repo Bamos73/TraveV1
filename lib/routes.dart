@@ -21,6 +21,7 @@ import 'package:shopapp/screens/payment/payment_screen.dart';
 import 'package:shopapp/screens/plus/profil_screen.dart';
 import 'package:shopapp/screens/sign_in/sign_in_screen.dart';
 import 'package:shopapp/screens/sign_up/sign_up_screen.dart';
+import 'package:shopapp/screens/special_offers/special_screen.dart';
 import 'package:shopapp/screens/splash_screen.dart';
 import 'package:shopapp/screens/splash_screen_first.dart';
 
@@ -49,5 +50,6 @@ final Map<String, WidgetBuilder> routes = {
         OrderScreen.routeName:(context) => OrderScreen(),
         OrderDetailScreen.routeName:(context) =>OrderDetailScreen(),
         AddressScreen.routeName:(context) =>AddressScreen(),
+        SpecialScreen.routeName:(context) =>SpecialScreen(),
 
 };

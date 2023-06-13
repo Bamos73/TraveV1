@@ -1,7 +1,5 @@
-import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shopapp/provider/internet_provider.dart';
 import 'package:shopapp/provider/sign_in_provider.dart';
@@ -11,10 +9,7 @@ import 'package:shopapp/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_performance/firebase_performance.dart';
 
-@pragma('vm:entry-point')
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message)async {
-  await Firebase.initializeApp();
-}
+
 
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +18,11 @@ void main()async {
   runApp(MyApp());
 }
 FirebasePerformance performance = FirebasePerformance.instance;
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message)async {
+  await Firebase.initializeApp();
+}
 
 class MyApp extends StatelessWidget {
   @override

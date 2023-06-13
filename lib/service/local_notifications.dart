@@ -1,15 +1,14 @@
 
-
 import 'dart:io';
 import 'dart:math';
-
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shopapp/constants.dart';
+import 'package:shopapp/screens/special_offers/special_screen.dart';
 
 
 class NotificationServices {
@@ -19,7 +18,6 @@ class NotificationServices {
 
   //initialising firebase message plugin
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin  = FlutterLocalNotificationsPlugin();
-
 
 
   //function to initialise flutter local notification plugin to show notifications for android when app is active
@@ -95,7 +93,7 @@ class NotificationServices {
     }
   }
 
-  // function to show visible notification when app is active
+  // fonction pour afficher une notification visible lorsque l'application est active
   Future<void> showNotification(RemoteMessage message)async{
 
     AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -103,8 +101,6 @@ class NotificationServices {
         message.notification!.android!.channelId.toString() ,
         importance: Importance.max  ,
         showBadge: true ,
-        playSound: true,
-        sound: const RawResourceAndroidNotificationSound('jetsons_doorbell')
     );
 
     AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
@@ -113,9 +109,7 @@ class NotificationServices {
         channelDescription: 'your channel description',
         importance: Importance.high,
         priority: Priority.high ,
-        playSound: true,
         ticker: 'ticker' ,
-        sound: channel.sound
       //     sound: RawResourceAndroidNotificationSound('jetsons_doorbell')
       //  icon: largeIconPath
     );
@@ -142,7 +136,7 @@ class NotificationServices {
 
   }
 
-  //function to get device token on which we will send the notifications
+  //fonction pour obtenir le jeton de l'appareil sur lequel nous enverrons les notifications
   Future<String> getDeviceToken() async {
     String? token = await messaging.getToken();
     return token!;
@@ -157,7 +151,7 @@ class NotificationServices {
     });
   }
 
-  //handle tap on notification when app is in background or terminated
+  //gérer le clic sur la notification lorsque l'application est en arrière-plan ou terminée
   Future<void> setupInteractMessage(BuildContext context)async{
 
     // when app is terminated
@@ -167,8 +161,7 @@ class NotificationServices {
       handleMessage(context, initialMessage);
     }
 
-
-    //when app ins background
+    //when app in background
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
       handleMessage(context, event);
     });
@@ -176,12 +169,13 @@ class NotificationServices {
   }
 
   void handleMessage(BuildContext context, RemoteMessage message) {
-
     if(message.data['type'] =='msj'){
-
+      Navigator.pushNamed(context, SpecialScreen.routeName,
+          arguments: {
+            'id': message.data['id'],
+          });
     }
   }
-
 
   Future forgroundMessage() async {
     await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
