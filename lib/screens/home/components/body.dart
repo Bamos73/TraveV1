@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shopapp/screens/category/category_screen.dart';
 import 'package:shopapp/screens/category_details/details_categorie_screen.dart';
@@ -28,8 +29,7 @@ class _BodyState extends State<Body> {
   late Stream<QuerySnapshot<Map<String, dynamic>>> _productsStream3;
   late Stream<QuerySnapshot<Map<String, dynamic>>> _productsStream4;
 
-  String notificationMsg="Wait for notification";
-
+  NotificationServices notificationServices = NotificationServices();
   @override
   void initState() {
     super.initState();
@@ -50,31 +50,19 @@ class _BodyState extends State<Body> {
             "Home_AccessoireCollection_product").collection(
             'Home_AccessoireCollection_product').snapshots();
 
+    notificationServices.requestNotificationPermission();
+    notificationServices.forgroundMessage();
+    notificationServices.firebaseInit(context);
+    notificationServices.setupInteractMessage(context);
+    notificationServices.isTokenRefresh();
 
-      //lorsque l'appli est fermé
-      FirebaseMessaging.instance.getInitialMessage().then((event) {
+    notificationServices.getDeviceToken().then((value){
+      if (kDebugMode) {
+        print('device token');
+        print(value);
+      }
+    });
 
-        if(event!=null){
-          setState(() {
-            notificationMsg= "${event.notification!.title} ${event.notification!.body} I am coming from terminated";
-          });
-        }
-
-      });
-
-      //lorsque l'appli est en cours
-      FirebaseMessaging.onMessage.listen((event) {
-        LocalNotificationService.showNotificationOnForeground(event);
-        setState(() {
-          notificationMsg= "${event.notification!.title} ${event.notification!.body} I am coming from forground";
-        });
-      });
-       //lorsque l'apli est en arrière plan
-      FirebaseMessaging.onMessageOpenedApp.listen((event) {
-        setState(() {
-          notificationMsg= "${event.notification!.title} ${event.notification!.body} I am coming from background";
-        });
-      });
 
   }
 

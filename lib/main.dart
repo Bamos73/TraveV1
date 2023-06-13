@@ -6,20 +6,20 @@ import 'package:provider/provider.dart';
 import 'package:shopapp/provider/internet_provider.dart';
 import 'package:shopapp/provider/sign_in_provider.dart';
 import 'package:shopapp/routes.dart';
-import 'package:shopapp/screens/splash_screen.dart';
 import 'package:shopapp/screens/splash_screen_first.dart';
 import 'package:shopapp/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_performance/firebase_performance.dart';
 
-Future<void> BackgroundMessageHandler(RemoteMessage message) async {
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message)async {
+  await Firebase.initializeApp();
 }
 
-
-Future<void> main() async {
+void main()async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(BackgroundMessageHandler);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(MyApp());
 }
 FirebasePerformance performance = FirebasePerformance.instance;
