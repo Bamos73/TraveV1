@@ -11,7 +11,6 @@ class DetailCtgScreen extends StatefulWidget {
 
 class _DetailCtgScreenState extends State<DetailCtgScreen> {
 
-
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;

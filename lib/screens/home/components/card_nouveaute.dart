@@ -44,6 +44,7 @@ class CardNouveaute extends StatelessWidget {
                   Navigator.pushNamed(context, DetailCtgScreen.routeName, arguments: {
                     'nom_document': document['nom_document'],
                     'titre_categorie': document['titre_categorie'],
+                    'first_collection': document['nom_first_collection'],
                   });
                 },
                 child: FutureBuilder(

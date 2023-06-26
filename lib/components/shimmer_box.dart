@@ -372,7 +372,6 @@ class ShimmerNouveaute extends StatelessWidget {
       width: double.infinity,
       child: GridView.builder(
         shrinkWrap: true,
-        itemCount: 6,
         physics: NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
