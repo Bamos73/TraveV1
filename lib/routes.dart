@@ -12,7 +12,6 @@ import 'package:shopapp/screens/category_details/details_categorie_screen.dart';
 import 'package:shopapp/screens/favory/favorie_screen.dart';
 import 'package:shopapp/screens/forgot_password/forgot_password_screen.dart';
 import 'package:shopapp/screens/home/home_screen.dart';
-import 'package:shopapp/screens/login_success/login_success_screen.dart';
 import 'package:shopapp/screens/my_account/my_account_screen.dart';
 import 'package:shopapp/screens/order/order_screen.dart';
 import 'package:shopapp/screens/order_details/order_detail_screen.dart';
@@ -30,7 +29,6 @@ final Map<String, WidgetBuilder> routes = {
         SplashScreenFirst.routeName : (context) => SplashScreenFirst(),
         SignInScreen.routeName: (context) => SignInScreen(),
         ForgotPasswordScreen.routeName: (context) => ForgotPasswordScreen(),
-        LoginSuccessScreen.routeName: (context) => LoginSuccessScreen(),
         SignUpScreen.routeName:(context) => SignUpScreen(),
         TermAndConditionScreen.routeName: (context) =>  TermAndConditionScreen(),
         PrivacyPolicyScreen.routeName:(context) => PrivacyPolicyScreen(),

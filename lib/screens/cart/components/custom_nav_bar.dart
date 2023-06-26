@@ -211,10 +211,7 @@ class _CheckOurCardState extends State<CheckOurCard>
               ),
             ]
         ),
-
-
       ],
-
     );
   }
 }

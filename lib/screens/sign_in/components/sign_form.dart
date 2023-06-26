@@ -178,7 +178,7 @@ class _SignFormState extends State<SignForm> {
         return null;
       },
       decoration: InputDecoration(
-        labelText: "mot de passe",
+        labelText: "Mot de passe",
         hintText: "Entrer votre mot de passe",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: GestureDetector(

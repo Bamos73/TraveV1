@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">shopApp</string>
+    <string name="app_name">Trave</string>
     <string name="facebook_app_id">758610189260815</string>
     <string name="fb_login_protocol_scheme">fb758610189260815</string>
     <string name="facebook_client_token">74c689784a0b795bc95fba2420a56af2</string>
     <color name="com_facebook_button_background_color_focused_disabled">#808080</color>
     <color name="com_facebook_button_background_color_focused">#3b5998</color>
     <color name="com_facebook_button_border_color_focused">#3b5998</color>
-
-
-
-
 
 </resources>

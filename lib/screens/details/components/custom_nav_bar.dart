@@ -100,7 +100,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
       final userCardData = userCardDoc.data();
       if (userCardData != null && userCardData['taille'] == product['tailles'][index])  {
         // La taille du produit est la même que celle de la base, alors on vérifie si la quantité est pareil
-        if (userCardData != null && userCardData['quantite'] != quantiteSelectionnee) {
+        if (userCardData['quantite'] != quantiteSelectionnee) {
           // la quantité est différente
           userCardRef.update({
             'quantite': quantiteSelectionnee,
