@@ -16,7 +16,9 @@ class CardNouveaute extends StatelessWidget {
           .where('isNew', isEqualTo: true)
           .snapshots(),
       builder: (context, snapshot) {
-        if (snapshot.hasError || snapshot.data == null || snapshot.data!.docs.isEmpty) {
+        if (snapshot.hasError ||
+            snapshot.data == null ||
+            snapshot.data!.docs.isEmpty) {
           return ShimmerNouveaute();
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return ShimmerNouveaute();
@@ -41,11 +43,12 @@ class CardNouveaute extends StatelessWidget {
 
               return GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, DetailCtgScreen.routeName, arguments: {
-                    'nom_document': document['nom_document'],
-                    'titre_categorie': document['titre_categorie'],
-                    'first_collection': document['nom_first_collection'],
-                  });
+                  Navigator.pushNamed(context, DetailCtgScreen.routeName,
+                      arguments: {
+                        'nom_document': document['nom_document'],
+                        'titre_categorie': document['titre_categorie'],
+                        'first_collection': document['nom_first_collection'],
+                      });
                 },
                 child: FutureBuilder(
                   future: checkImage(imageUrl),
@@ -86,7 +89,9 @@ class CardNouveaute extends StatelessWidget {
                                     ),
                                     textAlign: TextAlign.center,
                                   ),
-                                  SizedBox(height: 5,),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
                                   Container(
                                     color: Colors.black,
                                     width: getProportionateScreenWidth(80),
@@ -94,7 +99,8 @@ class CardNouveaute extends StatelessWidget {
                                       child: Text(
                                         "Magasine",
                                         style: TextStyle(
-                                          fontSize: getProportionateScreenWidth(13),
+                                          fontSize:
+                                              getProportionateScreenWidth(13),
                                           color: Colors.white,
                                         ),
                                       ),

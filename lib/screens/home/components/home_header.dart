@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:delayed_display/delayed_display.dart';
 import 'package:flutter/material.dart';
+import 'package:shopapp/components/buttom_bell.dart';
 import 'package:shopapp/components/buttom_card.dart';
 import 'package:shopapp/constants.dart';
 import 'package:shopapp/screens/cart/cart_screen.dart';
 import 'package:shopapp/screens/cart/components/test.dart';
-import 'package:shopapp/components/buttom_bell.dart';
 import 'package:shopapp/size_config.dart';
-import 'package:flutter/services.dart';
 
 class HomeHeader extends StatefulWidget {
   const HomeHeader({Key? key}) : super(key: key);
@@ -50,7 +49,7 @@ class _HomeHeaderState extends State<HomeHeader> {
       children: [
         Container(
           width: double.infinity,
-          color: Colors.white,
+          color: isSearching ? Color(0xFFF5F6F9) : Colors.transparent,
           child: Padding(
             padding: EdgeInsets.symmetric(
                 horizontal: getProportionateScreenWidth(20),
@@ -89,53 +88,54 @@ class _HomeHeaderState extends State<HomeHeader> {
                     ),
                   ),
                 ),
-                if (isSearching==false)
-                DelayedDisplay(
-                  delay: Duration(milliseconds: 10),
-                      fadingDuration: Duration(milliseconds: 70),
-                      child: ButtomCard(
-                        svgSrc: "assets/icons/shopping_bag.svg",
-                        press: () {
-                          Navigator.pushNamed(context, CartScreen.routeName);
-                          CartUpdateLivraison();
-                        },
-                        height: 46,
-                        width: 46,
-                        padding: 10,
-                      ),
+                if (isSearching == false)
+                  DelayedDisplay(
+                    delay: Duration(milliseconds: 10),
+                    fadingDuration: Duration(milliseconds: 70),
+                    child: ButtomCard(
+                      svgSrc: "assets/icons/shopping_bag.svg",
+                      press: () {
+                        Navigator.pushNamed(context, CartScreen.routeName);
+                        CartUpdateLivraison();
+                      },
+                      height: 46,
+                      width: 46,
+                      padding: 10,
                     ),
-
-                if (isSearching==false)
-                DelayedDisplay(
-                  delay: Duration(milliseconds: 10),
-                  fadingDuration: Duration(milliseconds: 70),
-                  child: ButtomBell(
-                    svgSrc: "assets/icons/notifications_active.svg",
-                    numOfItems: 3, // le nombre de Notification a parametrer après
-                    press: () {
-                      nextScreenReplace(context, MyApp());
-                    },
-                    height: 46,
-                    width: 46,
-                    padding: 10,
                   ),
-                ),
-                if (isSearching==true)
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      isSearching = false;
-                      _ctrresearch.text="";
-                    });
-                  },
-                    child: Text("Annuler",
+                if (isSearching == false)
+                  DelayedDisplay(
+                    delay: Duration(milliseconds: 10),
+                    fadingDuration: Duration(milliseconds: 70),
+                    child: ButtomBell(
+                      svgSrc: "assets/icons/notifications_active.svg",
+                      numOfItems:
+                          3, // le nombre de Notification a parametrer après
+                      press: () {
+                        nextScreenReplace(context, MyApp());
+                      },
+                      height: 46,
+                      width: 46,
+                      padding: 10,
+                    ),
+                  ),
+                if (isSearching == true)
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isSearching = false;
+                        _ctrresearch.text = "";
+                      });
+                    },
+                    child: Text(
+                      "Annuler",
                       style: TextStyle(
-                          color: kPrimaryColor,
-                          fontSize: getProportionateScreenWidth(16),
-                          fontWeight: FontWeight.w400,
+                        color: kPrimaryColor,
+                        fontSize: getProportionateScreenWidth(16),
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
-                ),
+                  ),
               ],
             ),
           ),
@@ -147,14 +147,16 @@ class _HomeHeaderState extends State<HomeHeader> {
               child: ListView.builder(
                 itemCount: searchResult.length,
                 itemBuilder: (context, index) {
-
                   final categoryData = searchResult[index];
                   String title = categoryData['titre_categorie'] ?? "Nouveauté";
-                  String image = categoryData['image'] ?? "https://firebasestorage.googleapis.com/v0/b/singup-a9273.appspot.com/o/Cat%C3%A9gorie%2FAbaya%2FAY0001%2Fjilbab.jpg?alt=media&token=0537c680-7fed-443b-963a-61e43f7eec2d";
+                  String image = categoryData['image'] ??
+                      "https://firebasestorage.googleapis.com/v0/b/singup-a9273.appspot.com/o/Cat%C3%A9gorie%2FAbaya%2FAY0001%2Fjilbab.jpg?alt=media&token=0537c680-7fed-443b-963a-61e43f7eec2d";
 
                   return Column(
                     children: [
-                      SizedBox(height: getProportionateScreenHeight(10),),
+                      SizedBox(
+                        height: getProportionateScreenHeight(10),
+                      ),
                       ListTile(
                         leading: CircleAvatar(
                           backgroundColor: Colors.grey[300],
