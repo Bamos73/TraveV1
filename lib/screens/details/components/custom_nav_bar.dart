@@ -66,8 +66,6 @@ class _CustomNavBarState extends State<CustomNavBar> {
                       onTap: () {
                         _lastSelectedSizeIndex = index;
                         addToCard(widget.product, index);
-
-
                       }
                   ),
                   Divider(thickness: 1, height: 1),
@@ -88,20 +86,44 @@ class _CustomNavBarState extends State<CustomNavBar> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        Future.delayed(Duration(milliseconds: 2000), () {
+          Navigator.pop(context); // Fermer la boîte de dialogue après 3 secondes
+        });
+
         return Dialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
           child: Container(
+            width: 150,
             height: 200,
-            width: 100,
-            color: Colors.greenAccent,
-            child: Lottie.asset("assets/lottiefiles/116422-shopping-cart.json",),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+
+              children: [
+                Lottie.asset("assets/lottiefiles/80594-add-to-cart.json"),
+                SizedBox(height: 5),
+                Text(
+                  "Votre article a été ajouté au panier !",
+                  style: TextStyle(
+                    fontSize: getProportionateScreenWidth(15),
+                    fontWeight: FontWeight.bold,
+                    color: kPrimaryColor,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
           ),
         );
       },
     );
   }
+
+
+
+
 
   void addToCard(DocumentSnapshot<Map<String, dynamic>>? product, int index) async {
     if (product == null) {
@@ -164,6 +186,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
             'quantite': quantiteSelectionnee,
           });
         }
+
       }
     } else {
 
@@ -180,10 +203,13 @@ class _CustomNavBarState extends State<CustomNavBar> {
         'quantite_Max': product['quantite'],
         'first_document': product['first_document'],
         'first_collection': product['first_collection'],
+
       });
+      Navigator.of(context).pop();
+      showCustomDialog(context);
     }
-    Navigator.of(context).pop();
-    showCustomDialog(context);
+
+
   }
 
 }
