@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shopapp/components/default_button.dart';
 import 'package:shopapp/constants.dart';
 import 'package:shopapp/screens/details/components/color_dots.dart';
@@ -65,6 +66,8 @@ class _CustomNavBarState extends State<CustomNavBar> {
                       onTap: () {
                         _lastSelectedSizeIndex = index;
                         addToCard(widget.product, index);
+
+
                       }
                   ),
                   Divider(thickness: 1, height: 1),
@@ -77,6 +80,27 @@ class _CustomNavBarState extends State<CustomNavBar> {
       );
     }
 
+  }
+
+
+
+  void showCustomDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Container(
+            height: 200,
+            width: 100,
+            color: Colors.greenAccent,
+            child: Lottie.asset("assets/lottiefiles/116422-shopping-cart.json",),
+          ),
+        );
+      },
+    );
   }
 
   void addToCard(DocumentSnapshot<Map<String, dynamic>>? product, int index) async {
@@ -159,7 +183,9 @@ class _CustomNavBarState extends State<CustomNavBar> {
       });
     }
     Navigator.of(context).pop();
+    showCustomDialog(context);
   }
 
 }
+
 
