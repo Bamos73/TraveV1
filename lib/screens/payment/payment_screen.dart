@@ -27,7 +27,7 @@ class PaymentScreen extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
-            nextScreenReplace(context, CartScreen()) ;
+            Navigator.pushNamed(context, CartScreen.routeName);
           },
         ),
       ),

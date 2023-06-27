@@ -28,7 +28,7 @@ class _ColorDotsState extends State<ColorDots> {
   int NmbreArticle = 1; // ajout d'un état pour le nombre d'articles
 
   void addItemCount(DocumentSnapshot<Map<String, dynamic>> product) async{
-    if(NmbreArticle< product['quantité']){
+    if(NmbreArticle< product['quantite']){
       setState(() {
         NmbreArticle++;
       });

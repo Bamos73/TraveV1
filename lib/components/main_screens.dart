@@ -57,7 +57,8 @@ class _MainScreenState extends State<MainScreen> {
             type: BottomNavigationBarType.fixed,
             items: [
               BottomNavigationBarItem(
-                  icon: Icon(Icons.polymer), label: "Acceuil"),
+                  icon: Icon(Icons.polymer),
+                  label: "Acceuil"),
               BottomNavigationBarItem(
                   icon: Icon(
                     Icons.local_mall,

@@ -69,14 +69,14 @@ class _BodyState extends State<Body> {
             text: "Politique de confidentialité",
             icon: LineAwesomeIcons.user_shield,
             press: () {
-              nextScreenReplace(context, const PrivacyPolicyScreen());
+              Navigator.pushNamed(context, PrivacyPolicyScreen.routeName);
             },
           ),
           ProfilMenu(
             text: "Conditions d'utilisation",
             icon: LineAwesomeIcons.copyright,
             press: () {
-              nextScreenReplace(context, const TermAndConditionScreen());
+              Navigator.pushNamed(context, TermAndConditionScreen.routeName);
             },
           ),
           ProfilMenu(
@@ -89,7 +89,7 @@ class _BodyState extends State<Body> {
               icon: LineAwesomeIcons.alternate_sign_out,
               press: () async {
                 sp.userSignOut();
-                nextScreenReplace(context, SignInScreen());
+                Navigator.pushNamed(context, SignInScreen.routeName);
               }),
         ],
       ),

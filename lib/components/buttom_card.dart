@@ -104,7 +104,6 @@ class CardButton extends StatelessWidget {
       ),
     );
   }
-
 }
 
 class CartUpdateLivraison {

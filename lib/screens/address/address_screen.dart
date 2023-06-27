@@ -6,6 +6,7 @@ import 'package:shopapp/components/default_button.dart';
 import 'package:shopapp/constants.dart';
 import 'package:shopapp/screens/address/components/adresse_new_livraison.dart';
 import 'package:shopapp/size_config.dart';
+
 class Address {
   String commune;
   String nom;
@@ -163,7 +164,8 @@ class _AddressScreenState extends State<AddressScreen> {
         child: DefaultButtonEmpty(
           text: "AJOUTER UNE ADRESSE",
           press: () {
-            nextScreenReplace(context, NewAdresse());
+
+            Navigator.pushNamed(context, NewAdresse.routeName);
           },
         ),
       ),

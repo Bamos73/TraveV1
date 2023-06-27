@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:shopapp/components/default_button.dart';
 import 'package:shopapp/constants.dart';
 import 'package:shopapp/screens/details/components/color_dots.dart';
@@ -108,15 +107,16 @@ class _CustomNavBarState extends State<CustomNavBar> {
           });
           print("quantité modifié");
         }
-        Navigator.of(context).pop();
       } else {
         /* La taille du produit est différente de celle de la base alors on creer un autre document
         * avec le nom du code */
+
         final userCardCollectionRef = FirebaseFirestore.instance
             .collection('Card')
             .doc(userId)
             .collection(userId)
-            .doc(userCardData!['code'].toString());
+            .doc(userCardData!['code'].toString() + "-1");
+
 
         final userCardRefDoc = await userCardCollectionRef.get();
         final userCardRefData = userCardRefDoc.data();
@@ -124,25 +124,23 @@ class _CustomNavBarState extends State<CustomNavBar> {
         // La taille du produit est différente de celle de la base
         await userCardCollectionRef.set({
           'userID': FirebaseAuth.instance.currentUser?.uid,
-          'code': product['code'],
+          'code': product['code']+"-1",
           'title': product['title'],
           'image': product['images'][0],
           'color': product['color'],
           'price': product['price'],
-          'style': userCardData['style'] + 1,
+          'style': product['style'] + 1,
           'taille': product['tailles'][_lastSelectedSizeIndex],
           'quantite': quantiteSelectionnee,
-          'quantite_Max': product['quantité'],
+          'quantite_Max': product['quantite'],
         });
         if (userCardRefData != null && userCardRefData['quantite'] != quantiteSelectionnee) {
           // la quantité est différente
           userCardCollectionRef.update({
             'quantite': quantiteSelectionnee,
           });
-          print("quantité modifié");
         }
       }
-      Navigator.of(context).pop();
     } else {
 
       await userCardRef.set({
@@ -155,65 +153,13 @@ class _CustomNavBarState extends State<CustomNavBar> {
         'style': product['style'],
         'taille': product['tailles'][index],
         'quantite': quantiteSelectionnee,
-        'quantite_Max': product['quantité'],
+        'quantite_Max': product['quantite'],
         'first_document': product['first_document'],
         'first_collection': product['first_collection'],
       });
-      Navigator.of(context).pop();
     }
+    Navigator.of(context).pop();
   }
 
-  void showCustomDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Container(
-            padding: EdgeInsets.all(15),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Lottie.asset("assets/lottiefiles/116422-shopping-cart.json",),
-                SizedBox(height: getProportionateScreenHeight(15)),
-                Divider(thickness: 1,height: 1),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: TextButton(
-                        child: Text('Non',style: TextStyle(color: Color(0xFF858585),fontWeight:FontWeight.bold,fontSize: getProportionateScreenWidth(14)),),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ),
-                    Container(
-                      width: 1,
-                      height: 25,
-                      color: Color(0xFF858585),
-                      margin: EdgeInsets.symmetric(horizontal: 10),
-                    ),
-                    Expanded(
-                      child: TextButton(
-                        child: Text('Oui',style: TextStyle(color: Colors.red,fontWeight:FontWeight.bold,fontSize: getProportionateScreenWidth(14)),),
-                        onPressed: () {
-                          // Action à effectuer lorsque l'icône est "Icons.delete"
-
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
 }
 

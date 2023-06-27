@@ -28,7 +28,7 @@ class _SplashScreenFirstState extends State<SplashScreenFirst> {
 
     Timer(const Duration(seconds :2) ,(){
       sp.isSignedIn==false
-          ? nextScreenReplace(context,SplashScreen())
+          ?nextScreenReplace(context,SplashScreen())
           :nextScreenReplace(context, MainScreen());
     });
   }

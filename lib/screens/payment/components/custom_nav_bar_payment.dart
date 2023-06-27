@@ -345,7 +345,6 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
                                          text: "Commande", press: () {
                                        num totalCmd=userModeLivraison + total - userReduction;
                                        verificationOrder(context, totalCmd );
-                                       nextScreenReplace(context, EmptyCart());
                                      }
                                      ),
                                    )
@@ -399,7 +398,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
 
         if (ProductData != null) {
           final int quantiteDemandee = docData['quantite'];
-          final int quantiteDisponible = ProductData['quantité'];
+          final int quantiteDisponible = ProductData['quantite'];
 
           if (quantiteDemandee <= quantiteDisponible) {
             ProductRef.update({
@@ -566,12 +565,14 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
 
         if (promoCodeData.exists && promoCodeData['montant'] == userData['code_reduction_actif']) {
           addOrderWithCodePromo(context,totalCommande);
+          Navigator.pushNamed(context, EmptyCart.routeName);
 
         } else {
           showCustomSnackBar(context, "Erreur sur la valeur du bon de réduction, veuillez utiliser un autre bon de réduction", ContentType.failure);
         }
       } else {
         addOrderWithOutCodePromo(context,totalCommande);
+        Navigator.pushNamed(context, EmptyCart.routeName);
       }
     } catch (e) {
       print(e);

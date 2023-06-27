@@ -91,7 +91,7 @@ class _ListPaymentAdresseState extends State<ListPaymentAdresse> {
             ) ,
             GestureDetector(
               onTap: () {
-                nextScreenReplace(context, AddressScreen());
+                Navigator.pushNamed(context, AddressScreen.routeName);
               },
               child: Text("MODIFIER",style: TextStyle(
                 fontSize: getProportionateScreenHeight(13),

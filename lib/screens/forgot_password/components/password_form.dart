@@ -129,7 +129,7 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
         try {
           await FirebaseAuth.instance
               .sendPasswordResetEmail(email: _emailController.text.trim());
-          nextScreenReplace(context, SignInScreen());
+          Navigator.pushNamed(context, SignInScreen.routeName);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             behavior: SnackBarBehavior.floating,
             backgroundColor: Color(0x00FFFFFF),

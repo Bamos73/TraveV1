@@ -57,12 +57,12 @@ class _BodyState extends State<Body> {
     notificationServices.setupInteractMessage(context);
     notificationServices.isTokenRefresh();
 
-    notificationServices.getDeviceToken().then((value) {
-      if (kDebugMode) {
-        print('device token');
-        print(value);
-      }
-    });
+    // notificationServices.getDeviceToken().then((value) {
+    //   if (kDebugMode) {
+    //     print('device token');
+    //     print(value);
+    //   }
+    // });
   }
 
   @override

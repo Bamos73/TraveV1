@@ -193,7 +193,7 @@ class _CheckOurCardState extends State<CheckOurCard>
                           child: DefaultButton(
                             text: "Caisse",
                             press: () {
-                              nextScreenReplace(context, PaymentScreen());
+                              Navigator.pushNamed(context, PaymentScreen.routeName);
                             },
                           ),
                         )

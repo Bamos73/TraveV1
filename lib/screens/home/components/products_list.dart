@@ -48,7 +48,7 @@ class _ProductsListState extends State<ProductsList> {
               children: List.generate(
                 products.length,
                     (index) {
-                  final quantity = products[index]['quantité'] ?? 0;
+                  final quantity = products[index]['quantite'] ?? 0;
                   return Padding(
                     padding: EdgeInsets.only(left: getProportionateScreenWidth(20)),
                     child: GestureDetector(
@@ -57,7 +57,8 @@ class _ProductsListState extends State<ProductsList> {
                         MaterialPageRoute(
                           builder: (context) => DetailsScreen(
                             productId: products[index].id,
-                            product: products[index] as DocumentSnapshot<Map<String, dynamic>>?,
+                            product: products[index] as DocumentSnapshot<Map<String, dynamic>>
+                            ?,
                             collectionName: widget.collectionName,
                             FirstcollectionName: 'Home_Collection',
                           ),

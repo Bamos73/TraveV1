@@ -205,7 +205,7 @@ class _BodyState extends State<Body> {
 //handle after sign in
   handleAfterSignIn() {
     Future.delayed(const Duration(milliseconds: 1000)).then((value) {
-      nextScreenReplace(context, MainScreen());
+      Navigator.pushNamed(context, MainScreen.routeName);
     });
   }
 }
