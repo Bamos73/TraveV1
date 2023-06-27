@@ -46,16 +46,29 @@ class CardCategorie extends StatelessWidget {
                           ),
                         ),
                         if (products[index]['quantité'] == 0)
-                          Positioned.fill(
+                          Positioned(
                             child: Container(
                               color: Colors.black54.withOpacity(0.3),
                               child: Center(
-                                child: Text(
-                                  "ÉPUISÉ",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: getProportionateScreenWidth(18),
-                                    fontWeight: FontWeight.bold,
+                                
+                                child: Container(
+                                  width : getProportionateScreenWidth(80),
+                                  height : getProportionateScreenHeight(30),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                      borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                        "ÉPUISÉ",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: getProportionateScreenWidth(14),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      textAlign: TextAlign.center ,
+
+                                      ),
                                   ),
                                 ),
                               ),
