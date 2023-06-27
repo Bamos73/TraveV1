@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shopapp/screens/category/category_screen.dart';
 import 'package:shopapp/screens/category_details/details_categorie_screen.dart';
+import 'package:shopapp/screens/home/components/card_nouveaute.dart';
 import 'package:shopapp/screens/home/components/categorie_popular.dart';
 import 'package:shopapp/screens/home/components/home_cover.dart';
 import 'package:shopapp/screens/home/components/home_header.dart';
@@ -222,7 +223,7 @@ class _BodyState extends State<Body> {
                 SizedBox(
                   height: getProportionateScreenWidth(20),
                 ),
-                //CardNouveaute(),
+                CardNouveaute(),
                 SizedBox(
                   height: getProportionateScreenWidth(20),
                 ),

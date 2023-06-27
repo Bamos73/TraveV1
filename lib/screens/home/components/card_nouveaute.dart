@@ -16,9 +16,7 @@ class CardNouveaute extends StatelessWidget {
           .where('isNew', isEqualTo: true)
           .snapshots(),
       builder: (context, snapshot) {
-        if (snapshot.hasError ||
-            snapshot.data == null ||
-            snapshot.data!.docs.isEmpty) {
+        if (snapshot.hasError || snapshot.data == null || snapshot.data!.docs.isEmpty) {
           return ShimmerNouveaute();
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return ShimmerNouveaute();
@@ -50,70 +48,59 @@ class CardNouveaute extends StatelessWidget {
                         'first_collection': document['nom_first_collection'],
                       });
                 },
-                child: FutureBuilder(
-                  future: checkImage(imageUrl),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return ShimmerNouveaute();
-                    } else if (snapshot.hasError || snapshot.data == null) {
-                      return ShimmerNouveaute();
-                    } else {
-                      return Stack(
-                        children: [
-                          Container(
-                            width: double.maxFinite,
-                            child: Image.network(
-                              imageUrl,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            top: 0,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black54.withOpacity(0.1),
+                child: Stack(
+                  children: [
+                    Container(
+                      width: double.maxFinite,
+                      child: Image.network(
+                        imageUrl,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      top: 0,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.black54.withOpacity(0.1),
+                        ),
+                        padding: EdgeInsets.symmetric(vertical: 8),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              title.toString().toUpperCase(),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: getProportionateScreenWidth(20),
+                                fontWeight: FontWeight.bold,
                               ),
-                              padding: EdgeInsets.symmetric(vertical: 8),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    title.toString().toUpperCase(),
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: getProportionateScreenWidth(20),
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Container(
-                                    color: Colors.black,
-                                    width: getProportionateScreenWidth(80),
-                                    child: Center(
-                                      child: Text(
-                                        "Magasine",
-                                        style: TextStyle(
-                                          fontSize:
-                                              getProportionateScreenWidth(13),
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
+                              textAlign: TextAlign.center,
                             ),
-                          ),
-                        ],
-                      );
-                    }
-                  },
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Container(
+                              color: Colors.black,
+                              width: getProportionateScreenWidth(80),
+                              child: Center(
+                                child: Text(
+                                  "Magasine",
+                                  style: TextStyle(
+                                    fontSize:
+                                    getProportionateScreenWidth(13),
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               );
             },

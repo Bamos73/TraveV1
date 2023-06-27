@@ -379,6 +379,7 @@ class ShimmerNouveaute extends StatelessWidget {
           crossAxisSpacing: getProportionateScreenHeight(7),
           mainAxisExtent: getProportionateScreenHeight(250),
         ),
+        itemCount: 6,
         itemBuilder: (context, index) {
           return Shimmer.fromColors(
             baseColor: Colors.grey[300]!,
@@ -386,7 +387,6 @@ class ShimmerNouveaute extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                   color: Colors.grey[300],
-
               ),
 
             ),
@@ -394,6 +394,29 @@ class ShimmerNouveaute extends StatelessWidget {
         },
       ),
     );
+  }
+}
+
+
+
+class ShimmerNouveauteCard extends StatelessWidget {
+  const ShimmerNouveauteCard({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Container(
+              width: getProportionateScreenWidth(100),
+              height: getProportionateScreenHeight(200),
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+              ),
+            ),
+          );
   }
 }
 
