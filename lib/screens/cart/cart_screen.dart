@@ -14,37 +14,35 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  bool isEmpty = false;
-
-  @override
-  void initState() {
-    super.initState();
-    checkCartIsEmpty();
-  }
-
-  Future<void> checkCartIsEmpty() async {
-    final userId = FirebaseAuth.instance.currentUser?.uid;
-    final collectionRef = FirebaseFirestore.instance
-        .collection('Card')
-        .doc(userId)
-        .collection(userId!);
-
-    final snapshot = await collectionRef.get();
-
-    setState(() {
-      isEmpty = snapshot.docs.isEmpty;
-    });
-  }
+  Stream<QuerySnapshot> cartItemsStream = FirebaseFirestore.instance
+      .collection('Card')
+      .doc(FirebaseAuth.instance.currentUser?.uid)
+      .collection(FirebaseAuth.instance.currentUser?.uid ?? '')
+      .snapshots();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFF5F6F9),
       body: Body(),
-      bottomNavigationBar: isEmpty ? null : CheckOurCard(),
+      bottomNavigationBar: StreamBuilder<QuerySnapshot>(
+        stream: cartItemsStream,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final isEmpty = snapshot.data?.docs.isEmpty ?? true;
+            return isEmpty ? SizedBox.shrink() : CheckOurCard();
+          } else if (snapshot.hasError) {
+            return SizedBox.shrink();
+          } else {
+            return SizedBox.shrink();
+          }
+        },
+      ),
     );
   }
 }
+
+
 
 
 
