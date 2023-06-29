@@ -94,10 +94,6 @@ class _HomeHeaderState extends State<HomeHeader> {
                     fadingDuration: Duration(milliseconds: 70),
                     child: ButtomCard(
                       svgSrc: "assets/icons/shopping_bag.svg",
-                      press: () {
-                        Navigator.pushNamed(context, CartScreen.routeName);
-                        CartUpdateLivraison();
-                      },
                       height: 46,
                       width: 46,
                       padding: 10,

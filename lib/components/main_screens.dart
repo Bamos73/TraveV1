@@ -9,7 +9,7 @@ import '../screens/plus/profil_screen.dart';
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
 
-  static String routeName = "/component";
+  static String routeName = "/components";
 
   @override
   State<MainScreen> createState() => _MainScreenState();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopapp/components/button_close.dart';
 import '../../../size_config.dart';
+import '../../favory/favorie_screen.dart';
 
 class HeaderCart extends StatelessWidget {
   const HeaderCart({
@@ -28,7 +29,9 @@ class HeaderCart extends StatelessWidget {
         Expanded(
           child: Align(
             alignment: Alignment.centerRight,
-            child: Icon(Icons.favorite,color: Color(0xFFDBDEE4),fill:null),
+            child: GestureDetector(
+              onTap: () => Navigator.pushNamed(context, FavorieScreen.routeName),
+                child: Icon(Icons.favorite,color: Color(0xFFDBDEE4),fill:null)),
           ),
         ),
       ],

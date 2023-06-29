@@ -63,10 +63,6 @@ class _HeaderCategorieState extends State<HeaderCategorie> {
                   Spacer(),
                   ButtomCard(
                     svgSrc: "assets/icons/shopping_bag.svg",
-                    press: () {
-                      Navigator.pushNamed(context, CartScreen.routeName);
-                      UpdateLivraisonAndPaiement();
-                      },
                     height: 35,
                     width: 35,
                     padding: 5,

@@ -7,16 +7,16 @@ import 'package:shopapp/constants.dart';
 import 'package:shopapp/screens/order/order_screen.dart';
 import 'package:shopapp/size_config.dart';
 
-class EmptyCart extends StatefulWidget {
+class CommandeValide extends StatefulWidget {
   static String routeName = 'payment/components';
 
-  const EmptyCart({Key? key}) : super(key: key);
+  const CommandeValide({Key? key}) : super(key: key);
 
   @override
-  State<EmptyCart> createState() => _EmptyCartState();
+  State<CommandeValide> createState() => _CommandeValideState();
 }
 
-class _EmptyCartState extends State<EmptyCart> {
+class _CommandeValideState extends State<CommandeValide> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

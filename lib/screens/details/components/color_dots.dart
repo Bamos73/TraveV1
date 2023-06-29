@@ -16,46 +16,12 @@ class ColorDots extends StatefulWidget {
   @override
   State<ColorDots> createState() => _ColorDotsState();
 }
-class MyAppState {
-  static int nmbreArticleState = 1;
-}
+
 
 class _ColorDotsState extends State<ColorDots> {
 
   User? user = FirebaseAuth.instance.currentUser;
-
   int selectedColor=0;
-  int NmbreArticle = 1; // ajout d'un état pour le nombre d'articles
-
-  void addItemCount(DocumentSnapshot<Map<String, dynamic>> product) async{
-    if(NmbreArticle< product['quantite']){
-      setState(() {
-        NmbreArticle++;
-      });
-      return addItemInCard(product);
-    }
-  }
-
-
-  void removeItemCount(DocumentSnapshot<Map<String, dynamic>> product) async{
-    if (NmbreArticle > 1) {
-      setState(() {
-        NmbreArticle--;
-      });
-      return addItemInCard(product);
-    }
-  }
-
-  void addItemInCard(DocumentSnapshot<Map<String, dynamic>> product) {
-  if (product == null) {
-  print("erreur");
-  } else {
-    setState(() {
-  MyAppState.nmbreArticleState = NmbreArticle;
-    });
-  }
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -69,18 +35,8 @@ class _ColorDotsState extends State<ColorDots> {
                   (index) => buildColorDot(widget.product,index)
           ),
           Spacer(),
-          RoundedIconBtn(iconData: Icons.remove, press: () => removeItemCount(widget.product)),
-          SizedBox(width: getProportionateScreenWidth(10),),
-          Text(NmbreArticle.toString().padLeft(2, '0'), // afficher le nombre d'articles
-            style: TextStyle(
-              fontSize: getProportionateScreenWidth(19),
-              fontWeight: FontWeight.w500,
-              color: kPrimaryColor,
-            ),
-          ),
-          SizedBox(width: getProportionateScreenWidth(10),),
-          RoundedIconBtn(iconData: Icons.add, press: () => addItemCount(widget.product)), // ajouter l'appel de la fonction addItemCount()
-        ],
+
+           ],
       ),
     );
   }

@@ -7,7 +7,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:shopapp/components/default_button.dart';
 import 'package:shopapp/components/shimmer_box.dart';
 import 'package:shopapp/constants.dart';
-import 'package:shopapp/screens/payment/components/cart_empty.dart';
+import 'package:shopapp/screens/payment/components/commande_valide.dart';
 import 'package:shopapp/size_config.dart';
 
 class CustomNavBarPayment extends StatefulWidget {
@@ -226,7 +226,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
                                   _toggleSecondContainer();
                                 },
                                 child: Text(_showSecondContainer
-                                     ?"RESUME DE LA COMMANDE"
+                                    ? "RESUME DE LA COMMANDE"
                                     :"RESUME DE LA COMMANDE",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -385,7 +385,6 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
         .toList();
 
     if (userOrderHistoryQuerySnapshot.docs.isNotEmpty) {
-      // Réduire la quantité du produit
       for (var docData in userHistoryOrderData) {
         final ProductRef = FirebaseFirestore.instance
             .collection(docData['first_collection'] as String)
@@ -398,19 +397,51 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
 
         if (ProductData != null) {
           final int quantiteDemandee = docData['quantite'];
-          final int quantiteDisponible = ProductData['quantite'];
+          final int IndexQuantite = docData['quantite_index'];
+          final quantiteDisponible = ProductData['quantite'][IndexQuantite];
 
           if (quantiteDemandee <= quantiteDisponible) {
-            ProductRef.update({
-              'quantite': quantiteDisponible - quantiteDemandee,
-            });
+            final quantiteArray =
+            List.from(ProductData['quantite'] as List<dynamic>);
+
+            if (IndexQuantite >= quantiteArray.length) {
+              final diff = IndexQuantite - quantiteArray.length + 1;
+              for (var i = 0; i < diff; i++) {
+                quantiteArray.add(0);
+              }
+            }
+
+            quantiteArray[IndexQuantite] =
+                quantiteDisponible - quantiteDemandee;
+
+            // Vérifier si tous les éléments du tableau quantite sont égaux à 0
+            final allQuantitiesZero =
+            quantiteArray.every((quantity) => quantity == 0);
+            final updatedData = {'quantite': quantiteArray};
+
+            // Mettre à jour le champ isActive en false si tous les éléments de quantite sont égaux à 0
+            if (allQuantitiesZero) {
+              await ProductRef.update({
+                'isActive': false,
+              });
+            }
+
+            await ProductRef.update(updatedData);
           } else {
-            showCustomSnackBar(context, "La quantité demandée n'est plus disponible.", ContentType.failure);
+            showCustomSnackBar(
+                context,
+                "La quantité demandée n'est plus disponible.",
+                ContentType.failure);
           }
         }
       }
     }
   }
+
+
+
+
+
 
 
 
@@ -452,6 +483,7 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
 
     final userHistoryDoc = await userHistoryRef.get();
     if (!userHistoryDoc.exists) {
+
       // Utilisation d'une transaction
       await FirebaseFirestore.instance.runTransaction((transaction) async {
         final userHistoryDoc = await transaction.get(userHistoryRef);
@@ -477,7 +509,8 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
           // Copier les documents de la sous-collection "Card" vers la sous-collection "Order"
           for (var docData in userHistoryOrderData) {
             final code = docData['code'];
-            await userHistoryCardRef.doc(code).set(docData);
+            final taille = docData['taille'];
+            await userHistoryCardRef.doc(code.toString()+"-"+taille.toString()).set(docData);
           }
 
           // Au cas où l'utilisateur a un code de réduction
@@ -565,14 +598,14 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
 
         if (promoCodeData.exists && promoCodeData['montant'] == userData['code_reduction_actif']) {
           addOrderWithCodePromo(context,totalCommande);
-          Navigator.pushNamed(context, EmptyCart.routeName);
+          Navigator.pushNamed(context, CommandeValide.routeName);
 
         } else {
           showCustomSnackBar(context, "Erreur sur la valeur du bon de réduction, veuillez utiliser un autre bon de réduction", ContentType.failure);
         }
       } else {
         addOrderWithOutCodePromo(context,totalCommande);
-        Navigator.pushNamed(context, EmptyCart.routeName);
+        Navigator.pushNamed(context, CommandeValide.routeName);
       }
     } catch (e) {
       print(e);
@@ -658,7 +691,8 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
         // Copier les documents de la sous-collection "Card" vers la sous-collection "Order"
         for (var docData in userCardData) {
           final code = docData['code'];
-          await userOrderCardRef.doc(code).set(docData);
+          final taille = docData['taille'];
+          await userOrderCardRef.doc(code.toString()+"-"+taille.toString()).set(docData);
         }
 
         //Ajouter le resumé de la commande dans la collection "users"
@@ -751,7 +785,8 @@ class _CustomNavBarPaymentState extends State<CustomNavBarPayment>
         // Copier les documents de la sous-collection "Card" vers la sous-collection "Order"
         for (var docData in userCardData) {
           final code = docData['code'];
-          await userOrderCardRef.doc(code).set(docData);
+          final taille = docData['taille'];
+          await userOrderCardRef.doc(code.toString()+"-"+taille.toString()).set(docData);
         }
 
         //Ajouter le resumé de la commande dans la collection "users"

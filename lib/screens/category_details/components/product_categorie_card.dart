@@ -62,8 +62,10 @@ class _ProductsCategorieCardState extends State<ProductsCategorieCard> {
                       ),
                       itemCount: products.length,
                       itemBuilder: (context, index) {
+                        final IsActive = products[index]['isActive'] ;
                         return GestureDetector(
-                          onTap: () => Navigator.of(context).push(
+                          onTap: IsActive == true
+                              ? () => Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => DetailsScreen(
                                 productId: products[index].id,
@@ -72,7 +74,8 @@ class _ProductsCategorieCardState extends State<ProductsCategorieCard> {
                                 FirstcollectionName: widget.firstcollectionName,
                               ),
                             ),
-                          ),
+                          )
+                              : null,
                           child: GridTile(
                             child: CardCategorie(products: products, index: index,),
                           ),

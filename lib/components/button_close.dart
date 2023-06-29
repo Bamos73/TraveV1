@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shopapp/constants.dart';
 import 'package:shopapp/size_config.dart';
 
+import 'main_screens.dart';
+
 
 class ButtonClose extends StatelessWidget {
   const ButtonClose({
@@ -22,7 +24,7 @@ class ButtonClose extends StatelessWidget {
           backgroundColor: Colors.white,
           padding: EdgeInsets.zero,
         ),
-        onPressed: () => Navigator.pop(context),
+        onPressed: () => Navigator.pushNamed(context, MainScreen.routeName),
         child: Icon(Icons.close,
           color: kPrimaryColor,
           size: getProportionateScreenWidth(20),

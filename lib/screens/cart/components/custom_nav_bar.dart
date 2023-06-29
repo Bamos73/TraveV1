@@ -127,7 +127,7 @@ class _CheckOurCardState extends State<CheckOurCard>
                       duration: const Duration(milliseconds: 300),
                       height: _showSecondContainer
                           ? getProportionateScreenHeight(70)
-                          :getProportionateScreenHeight(20),
+                          : getProportionateScreenHeight(20),
                     ),
 
                     Row(
@@ -149,13 +149,6 @@ class _CheckOurCardState extends State<CheckOurCard>
                               } else if (snapshot.connectionState == ConnectionState.waiting) {
                                 return Container();
                               } else if (snapshot.data!.docs.isEmpty) {
-                                // Le document est vide, naviguer vers une autre page
-                                WidgetsBinding.instance.addPostFrameCallback((_) {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => EmptyCart()),
-                                  );
-                                });
                                 return Container(); // Ou tout autre widget vide
                               }
 

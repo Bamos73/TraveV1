@@ -48,11 +48,11 @@ class _ProductsListState extends State<ProductsList> {
               children: List.generate(
                 products.length,
                     (index) {
-                  final quantity = products[index]['quantite'] ?? 0;
+                  final IsActive = products[index]['isActive'] ;
                   return Padding(
                     padding: EdgeInsets.only(left: getProportionateScreenWidth(20)),
                     child: GestureDetector(
-                      onTap: quantity > 0
+                      onTap: IsActive == true
                           ? () => Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => DetailsScreen(

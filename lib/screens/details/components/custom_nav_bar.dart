@@ -55,18 +55,25 @@ class _CustomNavBarState extends State<CustomNavBar> {
           child: ListView.builder(
             itemCount: product['tailles'].length,
             itemBuilder: (context, index) {
+              final isUnavailable = product['quantite'][index] == 0;
               return Column(
                 children: [
                   ListTile(
-                      title: Text(
-                        product['tailles'][index],
-                        style: TextStyle(fontWeight: FontWeight.w500),
-                        textAlign: TextAlign.center,
+                    title: Text(
+                      isUnavailable
+                          ? product['tailles'][index] + " ( Indisponible )"
+                          : product['tailles'][index],
+                      style: TextStyle(
+                        fontWeight: isUnavailable ? FontWeight.bold : FontWeight.w500,
+                        color: isUnavailable ? Colors.red : null,
                       ),
-                      onTap: () {
-                        _lastSelectedSizeIndex = index;
-                        addToCard(widget.product, index);
-                      }
+                      textAlign: TextAlign.center,
+                    ),
+                    onTap: isUnavailable ? null : () {
+                      _lastSelectedSizeIndex = index;
+                      addToCard(widget.product, index);
+                    },
+                    enabled: !isUnavailable,
                   ),
                   Divider(thickness: 1, height: 1),
                   // séparateur en bas de la tuile
@@ -77,17 +84,68 @@ class _CustomNavBarState extends State<CustomNavBar> {
         ),
       );
     }
-
   }
 
 
 
-  void showCustomDialog(BuildContext context) {
+
+
+  void addToCard(DocumentSnapshot<Map<String, dynamic>>? product, int index) async {
+    if (product == null) {
+      return;
+    }
+    final userId = user?.uid;
+
+    final userCardRef = FirebaseFirestore.instance
+        .collection('Card')
+        .doc(userId)
+        .collection(userId!)
+        .doc(product['code'].toString()+ "-" + product['tailles'][_lastSelectedSizeIndex].toString());
+
+    await FirebaseFirestore.instance.runTransaction((transaction) async {
+      final userCardDoc = await transaction.get(userCardRef);
+
+      if (userCardDoc.exists) {
+        final userCardData = userCardDoc.data();
+        if (userCardData != null && userCardData['taille'] == product['tailles'][_lastSelectedSizeIndex])  {
+          // La taille du produit est la même que celle de la base, alors on vérifie si la quantité est pareille
+
+          if (userCardData['quantite_Max'] > userCardData['quantite']){
+          transaction.update(userCardRef, {
+            'quantite': userCardData['quantite'] + 1,
+          });
+        }
+        }
+      } else {
+        transaction.set(userCardRef, {
+          'userID': FirebaseAuth.instance.currentUser?.uid,
+          'code': product['code'],
+          'title': product['title'],
+          'image': product['images'][0],
+          'color': product['color'],
+          'price': product['price'],
+          'style': product['style'],
+          'taille': product['tailles'][_lastSelectedSizeIndex],
+          'quantite': 1,
+          'quantite_index':_lastSelectedSizeIndex,
+          'quantite_Max': product['quantite'][_lastSelectedSizeIndex],
+          'first_document': product['first_document'],
+          'first_collection': product['first_collection'],
+        });
+
+      }
+    });
+    Navigator.of(context).pop();
+    showSuccessDialog(context);
+  }
+
+  void showSuccessDialog(BuildContext context) {
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
-        Future.delayed(Duration(milliseconds: 2000), () {
-          Navigator.pop(context); // Fermer la boîte de dialogue après 3 secondes
+        Future.delayed(Duration(milliseconds: 2500), () {
+          Navigator.pop(context);
         });
 
         return Dialog(
@@ -120,98 +178,6 @@ class _CustomNavBarState extends State<CustomNavBar> {
       },
     );
   }
-
-
-
-
-
-  void addToCard(DocumentSnapshot<Map<String, dynamic>>? product, int index) async {
-    if (product == null) {
-      return;
-    }
-    final userId = user?.uid;
-    // Utilisez la valeur de quantiteSelectionnee comme vous le souhaitez
-    int quantiteSelectionnee = MyAppState.nmbreArticleState;
-
-
-    final userCardRef = FirebaseFirestore.instance
-        .collection('Card')
-        .doc(userId)
-        .collection(userId!)
-        .doc(product['code'].toString());
-
-    final userCardDoc = await userCardRef.get();
-
-    if (userCardDoc.exists) {
-      final userCardData = userCardDoc.data();
-      if (userCardData != null && userCardData['taille'] == product['tailles'][index])  {
-        // La taille du produit est la même que celle de la base, alors on vérifie si la quantité est pareil
-        if (userCardData['quantite'] != quantiteSelectionnee) {
-          // la quantité est différente
-          userCardRef.update({
-            'quantite': quantiteSelectionnee,
-          });
-          print("quantité modifié");
-        }
-      } else {
-        /* La taille du produit est différente de celle de la base alors on creer un autre document
-        * avec le nom du code */
-
-        final userCardCollectionRef = FirebaseFirestore.instance
-            .collection('Card')
-            .doc(userId)
-            .collection(userId)
-            .doc(userCardData!['code'].toString() + "-1");
-
-
-        final userCardRefDoc = await userCardCollectionRef.get();
-        final userCardRefData = userCardRefDoc.data();
-
-        // La taille du produit est différente de celle de la base
-        await userCardCollectionRef.set({
-          'userID': FirebaseAuth.instance.currentUser?.uid,
-          'code': product['code']+"-1",
-          'title': product['title'],
-          'image': product['images'][0],
-          'color': product['color'],
-          'price': product['price'],
-          'style': product['style'] + 1,
-          'taille': product['tailles'][_lastSelectedSizeIndex],
-          'quantite': quantiteSelectionnee,
-          'quantite_Max': product['quantite'],
-        });
-        if (userCardRefData != null && userCardRefData['quantite'] != quantiteSelectionnee) {
-          // la quantité est différente
-          userCardCollectionRef.update({
-            'quantite': quantiteSelectionnee,
-          });
-        }
-
-      }
-    } else {
-
-      await userCardRef.set({
-        'userID': FirebaseAuth.instance.currentUser?.uid,
-        'code': product['code'],
-        'title': product['title'],
-        'image': product['images'][0],
-        'color': product['color'],
-        'price': product['price'],
-        'style': product['style'],
-        'taille': product['tailles'][index],
-        'quantite': quantiteSelectionnee,
-        'quantite_Max': product['quantite'],
-        'first_document': product['first_document'],
-        'first_collection': product['first_collection'],
-
-      });
-      Navigator.of(context).pop();
-      showCustomDialog(context);
-    }
-
-
-  }
-
 }
 
 

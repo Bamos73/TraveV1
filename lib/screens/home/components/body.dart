@@ -51,7 +51,7 @@ class _BodyState extends State<Body> {
         .collection('Home_AccessoireCollection_product')
         .snapshots();
 
-    notificationServices.requestNotificationPermission();
+
     notificationServices.forgroundMessage();
     notificationServices.firebaseInit(context);
     notificationServices.setupInteractMessage(context);

@@ -169,7 +169,7 @@ class _CardProductState extends State<CardProduct> {
         .collection('Card')
         .doc(FirebaseAuth.instance.currentUser?.uid)
         .collection(FirebaseAuth.instance.currentUser!.uid)
-        .doc(widget.documentId)
+        .doc(widget.documentId+"-"+widget.cardTailles)
         .update({'quantite': newQuantity})
         .then((value) {
       print('Quantity updated successfully!');
@@ -225,7 +225,7 @@ class _CardProductState extends State<CardProduct> {
                               .collection('Card')
                               .doc(FirebaseAuth.instance.currentUser?.uid)
                               .collection(FirebaseAuth.instance.currentUser!.uid)
-                              .where('code', isEqualTo: widget.cardCodes) // Filtrez par le champ 'code'
+                              .where('taille', isEqualTo: widget.cardTailles) // Filtrez par le champ 'taille'
                               .get()
                               .then((querySnapshot) {
                             querySnapshot.docs.forEach((document) {

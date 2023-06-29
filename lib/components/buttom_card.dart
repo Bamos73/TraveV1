@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopapp/constants.dart';
+import 'package:shopapp/screens/cart/cart_screen.dart';
 import 'package:shopapp/size_config.dart';
 
 
@@ -10,14 +11,12 @@ class ButtomCard extends StatefulWidget {
   const ButtomCard({
     Key? key,
     required this.svgSrc,
-    required this.press,
     required this.height,
     required this.width,
     required this.padding,
   }) : super(key: key);
 
   final String svgSrc;
-  final GestureTapCallback press;
   final double height, width, padding;
 
   @override
@@ -60,7 +59,13 @@ class CardButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: widget.press,
+      onTap: () {
+        Navigator.pushNamed(context, CartScreen.routeName,
+            arguments: {
+          'NbreArticle': numOfItems,
+        });
+        UpdateLivraisonAndPaiement();
+      },
       borderRadius: BorderRadius.circular(50),
       child: Stack(
         clipBehavior: Clip.none,
@@ -106,7 +111,7 @@ class CardButton extends StatelessWidget {
   }
 }
 
-class CartUpdateLivraison {
+
 
   void UpdateLivraisonAndPaiement() async {
 
@@ -135,4 +140,4 @@ class CartUpdateLivraison {
       }
     }
   }
-}
+

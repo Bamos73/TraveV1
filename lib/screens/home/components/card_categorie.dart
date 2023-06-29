@@ -45,7 +45,7 @@ class CardCategorie extends StatelessWidget {
                             fit: BoxFit.cover,
                           ),
                         ),
-                        if (products[index]['quantite'] == 0)
+                        if (products[index]['isActive'] == false)
                           Positioned(
                             child: Container(
                               color: Colors.black54.withOpacity(0.3),

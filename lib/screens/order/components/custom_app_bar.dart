@@ -42,10 +42,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 Text("MA COMMANDE",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
                 ButtomCard(
                   svgSrc: "assets/icons/shopping_bag.svg",
-                  press: () {
-                    Navigator.pushNamed(context, CartScreen.routeName);
-                    CartUpdateLivraison();
-                  },
                   height: 35,
                   width: 35,
                   padding: 5,

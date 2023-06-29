@@ -37,10 +37,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
               Text("LISTE"),
               ButtomCard(
                 svgSrc: "assets/icons/shopping_bag.svg",
-                press: () {
-                  Navigator.pushNamed(context, CartScreen.routeName);
-                  CartUpdateLivraison();
-                },
                 height: 35,
                 width: 35,
                 padding: 5,
