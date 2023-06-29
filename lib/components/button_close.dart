@@ -24,7 +24,7 @@ class ButtonClose extends StatelessWidget {
           backgroundColor: Colors.white,
           padding: EdgeInsets.zero,
         ),
-        onPressed: () => Navigator.pushNamed(context, MainScreen.routeName),
+        onPressed: () => Navigator.pushNamed(context, MainScreen.routeName,arguments: 0),
         child: Icon(Icons.close,
           color: kPrimaryColor,
           size: getProportionateScreenWidth(20),

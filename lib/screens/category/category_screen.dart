@@ -30,7 +30,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
       await FirebaseFirestore.instance.collection('Category').get();
 
       // Attendre un court instant pour simuler un chargement
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(Duration(seconds: 1));
 
       // Mettre à jour l'état pour arrêter l'affichage du Shimmer effect
       setState(() {

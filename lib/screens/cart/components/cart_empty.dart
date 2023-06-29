@@ -31,7 +31,7 @@ class EmptyCart extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: getProportionateScreenHeight(50)),
               child: DefaultButtonEmpty(text: "MAGASINE", press: (){
-                Navigator.pushNamed(context, MainScreen.routeName);
+                Navigator.pushNamed(context, MainScreen.routeName,arguments: 0);
               }),
             ),
             SizedBox(height: getProportionateScreenHeight(20),),

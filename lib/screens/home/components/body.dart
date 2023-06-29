@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shopapp/components/main_screens.dart';
 import 'package:shopapp/screens/category/category_screen.dart';
 import 'package:shopapp/screens/category_details/details_categorie_screen.dart';
 import 'package:shopapp/screens/home/components/card_nouveaute.dart';
@@ -87,7 +88,7 @@ class _BodyState extends State<Body> {
                 SectionTitle(
                   text: "Catégorie Populaire",
                   press: () {
-                    Navigator.pushNamed(context, CategoryScreen.routeName);
+                    Navigator.pushNamed(context, MainScreen.routeName,arguments: 1);
                   },
                 ),
                 SizedBox(

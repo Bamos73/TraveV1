@@ -5,7 +5,6 @@ import 'package:shopapp/screens/favory/favorie_screen.dart';
 import 'package:shopapp/screens/otp/otp_screen.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/plus/profil_screen.dart';
-
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
 
@@ -23,6 +22,25 @@ class _MainScreenState extends State<MainScreen> {
     FavorieScreen(),
     ProfileScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      final arguments = ModalRoute.of(context)!.settings.arguments;
+      if (arguments != null && arguments is int) {
+        setState(() {
+          pageIndex = arguments;
+        });
+      }
+    });
+  }
+
+  void navigateToPageIndex(int index) {
+    setState(() {
+      pageIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,30 +68,26 @@ class _MainScreenState extends State<MainScreen> {
             currentIndex: pageIndex,
             selectedItemColor: Colors.black,
             onTap: (value) {
-              setState(() {
-                pageIndex = value;
-              });
+              navigateToPageIndex(value);
             },
             type: BottomNavigationBarType.fixed,
             items: [
               BottomNavigationBarItem(
-                  icon: Icon(Icons.polymer),
-                  label: "Acceuil"),
+                icon: Icon(Icons.polymer),
+                label: "Acceuil",
+              ),
               BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.local_mall,
-                  ),
-                  label: "Categories"),
+                icon: Icon(Icons.local_mall),
+                label: "Categories",
+              ),
               BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.favorite_border,
-                  ),
-                  label: "Favorie"),
+                icon: Icon(Icons.favorite_border),
+                label: "Favorie",
+              ),
               BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.more_horiz,
-                  ),
-                  label: "Plus"),
+                icon: Icon(Icons.more_horiz),
+                label: "Plus",
+              ),
             ],
           ),
         ),

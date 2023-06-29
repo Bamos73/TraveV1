@@ -194,7 +194,7 @@ class _OtpFormState extends State<OtpForm> {
       FirebaseAuth auth = FirebaseAuth.instance;
       UserCredential userCredential = await auth.signInWithCredential(credential);
 
-      Navigator.pushNamed(context, MainScreen.routeName);
+      Navigator.pushNamed(context, MainScreen.routeName,arguments: 0);
     } catch (e) {
       showCustomSnackBar("Veuillez saisir le code OTP correct.", ContentType.failure);
     }
