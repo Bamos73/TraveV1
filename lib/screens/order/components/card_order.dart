@@ -47,7 +47,9 @@ class _CardOrderState extends State<CardOrder> {
               //     MaterialPageRoute(builder: (context) => EmptyOrder()),
               //   );
               // });
-            return EmptyOrder();
+            return Expanded(
+                child: EmptyOrder(),
+            );
         }
         final List<DocumentSnapshot> userOrderData = snapshot.data!.docs;
         return Expanded(

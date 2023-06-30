@@ -34,22 +34,23 @@ class _CardFavorieState extends State<CardFavorie> {
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) {
           return Expanded(
-            child: ShimmerCard(),
+              child: ShimmerCard()
           );
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return Expanded(
-            child: ShimmerCard(),
+              child: ShimmerCard()
           );
         } else if (snapshot.data!.docs.isEmpty) {
 
-            // Le document est vide, naviguer vers une autre page
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => EmptyFavorie()),
-                );
-              });
-            return Container();
+            // // Le document est vide, naviguer vers une autre page
+            //   WidgetsBinding.instance.addPostFrameCallback((_) {
+            //     Navigator.pushReplacement(
+            //       context,
+            //       MaterialPageRoute(builder: (context) => EmptyFavorie()),
+            //     );
+            //   });
+            return Expanded(
+                child: EmptyFavorie());
 
         }
 

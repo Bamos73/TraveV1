@@ -14,34 +14,30 @@ class EmptyFavorie extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
-        child: Stack(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Lottie.asset("assets/lottiefiles/29384-favorite-heart.json",),
-                Text("TA LISTE DE PREFS NE CONTIENT AUCUN ARTICLE. DÉCOUVRE LES NOUVEAUTÉS.",
-                  style: TextStyle(
-                      color:Colors.black.withOpacity(0.8),
-                      fontWeight: FontWeight.bold,
-                      fontSize: getProportionateScreenWidth(15)
-                  ),
-                  textAlign: TextAlign.center,),
-                Spacer(),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: getProportionateScreenHeight(50),),
-                  child: DefaultButtonEmpty(text: "MAGASINE", press: (){
-                    Navigator.pushNamed(context, MainScreen.routeName,arguments: 0);
-                  }),
-                ),
-                SizedBox(height: getProportionateScreenHeight(20),)
-              ],
-          ),
-            CustomAppBar(),
+            Lottie.asset("assets/lottiefiles/29384-favorite-heart.json",),
+            Text("TA LISTE DE PREFS NE CONTIENT AUCUN ARTICLE. DÉCOUVRE LES NOUVEAUTÉS.",
+              style: TextStyle(
+                  color:Colors.black.withOpacity(0.8),
+                  fontWeight: FontWeight.bold,
+                  fontSize: getProportionateScreenWidth(15)
+              ),
+              textAlign: TextAlign.center,),
+            Spacer(),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: getProportionateScreenHeight(50),),
+              child: DefaultButtonEmpty(text: "MAGASINE", press: (){
+                Navigator.pushNamed(context, MainScreen.routeName,arguments: 0);
+              }),
+            ),
+            SizedBox(height: getProportionateScreenHeight(20),)
           ],
-        ),
+          ),
       ),
     );
   }

@@ -31,77 +31,74 @@ class _BodyState extends State<Body> {
         child: Stack(
           children: [
            SingleChildScrollView(
-            child: Container(
-              width: double.infinity,
-              child: Column(
-                children: [
-                  SizedBox(height: getProportionateScreenHeight(70)),
-                  FutureBuilder(
-                    future: checkImage(coverDoc.data()['image']),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return shimmer_cover();
-                      } else if (snapshot.hasError || !snapshot.data!) {
-                        return shimmer_cover();
-                      } else {
-                        return Image.network(
-                          coverDoc.data()['image'] ?? "",
-                          width: MediaQuery.of(context).size.width,
-                          fit: BoxFit.cover,
-                          height: getProportionateScreenHeight(200),
-                        );
-                      }
-                    },
-                  ),
-                  SizedBox(height: getProportionateScreenHeight(10)),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: categoryDocs.length,
-                    itemBuilder: (context, index) {
-
-                      final CategoryData = categoryDocs[index].data();
-
-                      String title = CategoryData['titre_categorie'] ?? "Nouveauté";
-
-                      String image = CategoryData['image'] ?? "https://firebasestorage.googleapis.com/v0/b/singup-a9273.appspot.com/o/Cat%C3%A9gorie%2FAbaya%2FAY0001%2Fjilbab.jpg?alt=media&token=0537c680-7fed-443b-963a-61e43f7eec2d";
-
-                      String collectionName = CategoryData['nom_first_collection'] ?? "Category"; // Récupérer le nom de la collection
-
-                      return Column(
-                        children: [
-                          SizedBox(height: getProportionateScreenHeight(5),),
-                          ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: Colors.grey[300],
-                              radius: 25,
-                              backgroundImage: NetworkImage(image),
-                            ),
-                            title: Text(
-                              title,
-                              style: TextStyle(fontWeight: FontWeight.w500),
-                            ),
-                            trailing: Icon(
-                              Icons.chevron_right,
-                              color: kSecondaryColor,
-                            ),
-                            onTap: () {
-                              Navigator.pushNamed(context, DetailCtgScreen.routeName,
-                                  arguments: {
-                                    'nom_document': categoryDocs[index].id,
-                                    'titre_categorie': categoryDocs[index]['titre_categorie'],
-                                    'first_collection': collectionName,
-                                  });
-                            },
-                          ),
-                          SizedBox(height: getProportionateScreenHeight(5),),
-                          Divider(thickness: 1, height: 1),
-                        ],
+            child: Column(
+              children: [
+                SizedBox(height: getProportionateScreenHeight(70)),
+                FutureBuilder(
+                  future: checkImage(coverDoc.data()['image']),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return shimmer_cover();
+                    } else if (snapshot.hasError || !snapshot.data!) {
+                      return shimmer_cover();
+                    } else {
+                      return Image.network(
+                        coverDoc.data()['image'] ?? "",
+                        width: MediaQuery.of(context).size.width,
+                        fit: BoxFit.cover,
+                        height: getProportionateScreenHeight(200),
                       );
-                    },
-                  ),
-                ],
-              ),
+                    }
+                  },
+                ),
+                SizedBox(height: getProportionateScreenHeight(10)),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: categoryDocs.length,
+                  itemBuilder: (context, index) {
+
+                    final CategoryData = categoryDocs[index].data();
+
+                    String title = CategoryData['titre_categorie'] ?? "Nouveauté";
+
+                    String image = CategoryData['image'] ?? "https://firebasestorage.googleapis.com/v0/b/singup-a9273.appspot.com/o/Cat%C3%A9gorie%2FAbaya%2FAY0001%2Fjilbab.jpg?alt=media&token=0537c680-7fed-443b-963a-61e43f7eec2d";
+
+                    String collectionName = CategoryData['nom_first_collection'] ?? "Category"; // Récupérer le nom de la collection
+
+                    return Column(
+                      children: [
+                        SizedBox(height: getProportionateScreenHeight(5),),
+                        ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: Colors.grey[300],
+                            radius: 25,
+                            backgroundImage: NetworkImage(image),
+                          ),
+                          title: Text(
+                            title,
+                            style: TextStyle(fontWeight: FontWeight.w500),
+                          ),
+                          trailing: Icon(
+                            Icons.chevron_right,
+                            color: kSecondaryColor,
+                          ),
+                          onTap: () {
+                            Navigator.pushNamed(context, DetailCtgScreen.routeName,
+                                arguments: {
+                                  'nom_document': categoryDocs[index].id,
+                                  'titre_categorie': categoryDocs[index]['titre_categorie'],
+                                  'first_collection': collectionName,
+                                });
+                          },
+                        ),
+                        SizedBox(height: getProportionateScreenHeight(5),),
+                        Divider(thickness: 1, height: 1),
+                      ],
+                    );
+                  },
+                ),
+              ],
             ),
           ),
             HomeHeader(),
