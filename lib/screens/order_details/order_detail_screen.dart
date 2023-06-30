@@ -1,9 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:shopapp/screens/order_details/components/body.dart';
 
-class OrderDetailScreen extends StatelessWidget {
+import '../../service/internet_check.dart';
+
+class OrderDetailScreen extends StatefulWidget {
   const OrderDetailScreen({Key? key});
   static String routeName = "/order_details";
+
+  @override
+  State<OrderDetailScreen> createState() => _OrderDetailScreenState();
+}
+
+class _OrderDetailScreenState extends State<OrderDetailScreen> {
+
+  InternetCheck internetCheck = InternetCheck();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    internetCheck.startStreaming(context); // Passer le contexte
+  }
 
   @override
   Widget build(BuildContext context) {

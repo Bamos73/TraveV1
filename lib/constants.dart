@@ -6,6 +6,7 @@ const kPrimaryColor = Color(0xFF7e55f2);
 // 0xFF0FADFF bleu
 // 0xFF7e55f2 violet
 const kPrimaryLightColor = Color(0xFFFFECDF);
+const kErrorColor = Color(0xFFEF2E5B);
 const kPrimaryGradientColor = LinearGradient(
   begin: Alignment.topLeft,
   end: Alignment.bottomRight,

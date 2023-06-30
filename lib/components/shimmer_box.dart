@@ -273,6 +273,92 @@ class ShimmerCard extends StatelessWidget {
   }
 }
 
+class ShimmerOrder extends StatelessWidget {
+  const ShimmerOrder({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: 9,
+      itemBuilder: (BuildContext context, int index) {
+        return Shimmer.fromColors(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
+          child: Container(
+            color: Colors.transparent,
+            child: Column(
+              children: [
+                SizedBox(height: 10,),
+                Padding(
+                  padding:  EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(17)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+
+                        children: [
+                          Container(
+                            height: getProportionateScreenHeight(19),
+                            width: getProportionateScreenWidth(200),
+                            color: Colors.grey[300],
+                          ),
+                          SizedBox(height: 4,),
+                          Container(
+                            height: getProportionateScreenHeight(18),
+                            width: getProportionateScreenWidth(100),
+                            color: Colors.grey[300],
+                          ),
+                          SizedBox(height: 4,),
+                          Container(
+                            height: getProportionateScreenHeight(18),
+                            width: getProportionateScreenWidth(80),
+                            color: Colors.grey[300],
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Container(
+                                height: getProportionateScreenHeight(18),
+                                width: getProportionateScreenWidth(80),
+                                color: Colors.grey[300],
+                              ),
+                              SizedBox(height: 4,),
+                              Container(
+                                height: getProportionateScreenHeight(18),
+                                width: getProportionateScreenWidth(50),
+                                color: Colors.grey[300],
+                              ),
+                              SizedBox(height: 4,),
+                              Container(
+                                height: getProportionateScreenHeight(18),
+                                width: getProportionateScreenWidth(70),
+                                color: Colors.grey[300],
+                              ),
+                            ],
+                          ),
+                          Icon(Icons.chevron_right),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 10,),
+                Divider(height: 1,thickness: 1,)
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
 
 class ShimmerPopular extends StatelessWidget {
   const ShimmerPopular({

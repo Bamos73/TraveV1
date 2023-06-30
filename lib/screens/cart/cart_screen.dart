@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopapp/screens/cart/components/body.dart';
 import 'package:shopapp/screens/cart/components/custom_nav_bar.dart';
+import 'package:shopapp/service/internet_check.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -19,6 +20,15 @@ class _CartScreenState extends State<CartScreen> {
       .doc(FirebaseAuth.instance.currentUser?.uid)
       .collection(FirebaseAuth.instance.currentUser?.uid ?? '')
       .snapshots();
+
+  InternetCheck internetCheck = InternetCheck();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    internetCheck.startStreaming(context); // Passer le contexte
+  }
 
   @override
   Widget build(BuildContext context) {

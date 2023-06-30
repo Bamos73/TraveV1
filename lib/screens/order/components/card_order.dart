@@ -35,19 +35,19 @@ class _CardOrderState extends State<CardOrder> {
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) {
           return Expanded(
-            child: ShimmerCard(),
+            child: ShimmerOrder(),
           );
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return Expanded(
-            child: ShimmerCard(),
+            child: ShimmerOrder(),
           );
         } else if (snapshot.data!.docs.isEmpty) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => EmptyOrder()),
-                );
-              });
-            return Container();
+              // WidgetsBinding.instance.addPostFrameCallback((_) {
+              //   Navigator.pushReplacement(context,
+              //     MaterialPageRoute(builder: (context) => EmptyOrder()),
+              //   );
+              // });
+            return EmptyOrder();
         }
         final List<DocumentSnapshot> userOrderData = snapshot.data!.docs;
         return Expanded(
@@ -70,22 +70,22 @@ class _CardOrderState extends State<CardOrder> {
               final numero_de_livraison= favDoc['numero_de_livraison'];
               final code_reduction= favDoc['code_reduction'];
 
-                  return  card_item_order(
-                      CodeCommande: CodeCommande,
-                      Quantite: Quantite,
-                      Montant: Montant,
-                      statut: statut,
-                      formattedDate: formattedDate,
-                      formattedTime: formattedTime,
-                      nom_de_livraison:nom_de_livraison,
-                      adresse:adresse_de_livraison,
-                      mode_livraison:mode_de_livraison,
-                      mode_paiement:mode_de_paiement,
-                      fraie_livraison:frais_de_livraison,
-                      code_promo:code_reduction,
-                      numero: numero_de_livraison,
+              return  card_item_order(
+                CodeCommande: CodeCommande,
+                Quantite: Quantite,
+                Montant: Montant,
+                statut: statut,
+                formattedDate: formattedDate,
+                formattedTime: formattedTime,
+                nom_de_livraison:nom_de_livraison,
+                adresse:adresse_de_livraison,
+                mode_livraison:mode_de_livraison,
+                mode_paiement:mode_de_paiement,
+                fraie_livraison:frais_de_livraison,
+                code_promo:code_reduction,
+                numero: numero_de_livraison,
 
-                  );
+              );
             },
           ),
         );

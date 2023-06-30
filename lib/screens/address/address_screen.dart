@@ -5,6 +5,7 @@ import 'package:lottie/lottie.dart';
 import 'package:shopapp/components/default_button.dart';
 import 'package:shopapp/constants.dart';
 import 'package:shopapp/screens/address/components/adresse_new_livraison.dart';
+import 'package:shopapp/service/internet_check.dart';
 import 'package:shopapp/size_config.dart';
 
 class Address {
@@ -33,11 +34,21 @@ class AddressScreen extends StatefulWidget {
 
 class _AddressScreenState extends State<AddressScreen> {
   String _selectedOption = "";
+  InternetCheck internetCheck = InternetCheck();
 
   CollectionReference addressesCollection = FirebaseFirestore.instance
       .collection('users')
       .doc(FirebaseAuth.instance.currentUser!.uid)
       .collection('adresse_livraison');
+
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    internetCheck.startStreaming(context); // Passer le contexte
+  }
 
   @override
   Widget build(BuildContext context) {

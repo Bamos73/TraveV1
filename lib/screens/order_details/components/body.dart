@@ -71,7 +71,7 @@ class _BodyState extends State<Body> {
                           });
                         },
                         child: Text(
-                          "CODE-BARRES",
+                          "Afficher Code-barre",
                         ),
                       ),
                     ],
@@ -81,7 +81,7 @@ class _BodyState extends State<Body> {
                 Center(
                   child: AnimatedContainer(
                     duration: Duration(milliseconds: 300),
-                    height: _showContainer ? getProportionateScreenHeight(50) : 10,
+                    height: _showContainer ? getProportionateScreenHeight(50) : 0.01,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
                       child: BarcodeWidget(

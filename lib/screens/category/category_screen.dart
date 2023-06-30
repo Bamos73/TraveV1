@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shopapp/screens/Category/components/body.dart';
 import 'package:shopapp/screens/Category/components/category_shimmer.dart';
+import 'package:shopapp/service/internet_check.dart';
 
 class CategoryScreen extends StatefulWidget {
   static const String routeName = "/category";
@@ -11,6 +12,8 @@ class CategoryScreen extends StatefulWidget {
 
 class _CategoryScreenState extends State<CategoryScreen> {
   bool isLoading = true;
+  InternetCheck internetCheck = InternetCheck();
+
   late QueryDocumentSnapshot<Map<String, dynamic>> coverDoc;
   late List<QueryDocumentSnapshot<Map<String, dynamic>>> categoryDocs;
 
@@ -18,6 +21,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   void initState() {
     super.initState();
     getData();
+    internetCheck.startStreaming(context);
   }
 
   Future<void> getData() async {

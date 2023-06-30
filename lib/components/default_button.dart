@@ -72,3 +72,37 @@ class DefaultButtonEmpty extends StatelessWidget {
     );
   }
 }
+
+class DefaultButtonError extends StatelessWidget {
+  const DefaultButtonError({
+    super.key,
+    required this.text,
+    required this.press,
+  });
+  final String? text;
+  final Function? press;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: getProportionateScreenHeight(40),
+      child: TextButton(
+        style: TextButton.styleFrom(
+          foregroundColor: Colors.white,
+          shape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          backgroundColor: kErrorColor,
+        ),
+        onPressed: press as void Function()?,
+        child: Text(
+          text!,
+          style: TextStyle(
+            fontSize: getProportionateScreenWidth(16),
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+}

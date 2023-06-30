@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shopapp/screens/details/components/custom_nav_bar.dart';
 import 'package:shopapp/screens/details/components/body.dart';
+import 'package:shopapp/service/internet_check.dart';
 
 class DetailsScreen extends StatefulWidget {
   static const routeName = '/details';
@@ -33,11 +34,13 @@ class DetailsScreen extends StatefulWidget {
 }
 class _DetailsScreenState extends State<DetailsScreen> {
   late Future<DocumentSnapshot<Map<String, dynamic>>> _productDocFuture;
+  InternetCheck internetCheck = InternetCheck();
 
   @override
   void initState() {
     super.initState();
     _productDocFuture = _getProductData(widget.productId);
+    internetCheck.startStreaming(context);
   }
 
   Future<DocumentSnapshot<Map<String, dynamic>>> _getProductData(String productId) async {

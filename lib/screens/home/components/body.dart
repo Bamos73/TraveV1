@@ -11,6 +11,7 @@ import 'package:shopapp/screens/home/components/home_header.dart';
 import 'package:shopapp/screens/home/components/products_list.dart';
 import 'package:shopapp/screens/home/components/section_title.dart';
 import 'package:shopapp/screens/home/components/special_offers.dart';
+import 'package:shopapp/service/internet_check.dart';
 import 'package:shopapp/service/local_notifications.dart';
 import 'package:shopapp/size_config.dart';
 
@@ -57,6 +58,7 @@ class _BodyState extends State<Body> {
     notificationServices.firebaseInit(context);
     notificationServices.setupInteractMessage(context);
     notificationServices.isTokenRefresh();
+
 
     // notificationServices.getDeviceToken().then((value) {
     //   if (kDebugMode) {
